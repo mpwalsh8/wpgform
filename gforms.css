@@ -1,0 +1,41 @@
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+/**
+ * CSS declarations for Google Docs Forms
+ *
+ * These can be copied and modified to fit the needs of
+ * a theme.  By default the only change is to make all of
+ * the fihttp://localhost/wp-content/plugins/inline-google-forms-embedder/css/gforms.css?ver=3.2.1elds wider than their default width.
+ */
+
+body.ss-base-body {}
+div.errorbox-good {}
+div.ss-attribution {}
+div.ss-footer {}
+div.ss-form {}
+div.ss-form-container {
+    font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+div.ss-form-desc {}
+div.ss-form-entry {}
+div.ss-form-entry>input {
+    background-color: #e0e0e0;
+    font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+div.ss-form-heading {}
+div.ss-item {}
+div.ss-legal {}
+div.ss-navigate {}
+div.ss-no-ignore-whitespace {}
+div.ss-text {}
+form#ss-form {}
+h1.ss-form-title {}
+hr.ss-email-break {}
+input.ss-q-short {
+	width: 250px;
+}
+label.ss-q-help {}
+label.ss-q-title {
+    font-weight: bold;
+}
+span.ss-powered-by {}
+span.ss-terms {}
