@@ -214,6 +214,8 @@ class wpGForm
            ,'h1' => array('class' => array())
            ,'label' => array('class' => array(), 'for' => array())
            ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array())
+           ,'select' => array('name' => array(), 'for' => array())
+           ,'option' => array('value' => array(), 'checked' => array())
            ,'form' => array('id' => array(), 'class' => array(), 'action' => array(), 'method' => array(), 'target' => array(), 'onsubmit' => array())
            ,'script' => array('type' => array())
         );
