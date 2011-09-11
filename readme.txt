@@ -158,9 +158,14 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.5 =
+
+* Fixed problem with tabs not working correctly on Settings page.
+* Corrected default setting on donation link.
+
 = Version 0.4 =
 
-* Added support for missing Google Forms fields (
+* Added support for missing Google Forms fields.
 * Added more CSS styles based on new form fields.
 * Added FAQs and Usage content by retrieving it from the WordPress repository.
 * Removed some debug code.
