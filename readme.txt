@@ -20,6 +20,8 @@ For example, suppose you want to integrate the form at `https://docs.google.com/
 
 Currently, this plugin only supports Google Forms that are "Published as a web page" and therefore public. Private Google Forms are not supported.
 
+[Demo](http://michaelwalsh.org/wordpress/wordpress-plugins/wpgform/)
+
 == Installation ==
 
 1. Install using the WordPress Pluin Installer (search for `WordPress Google Form`) or download `WordPress Google Form`, extract the `wpgforms` folder and upload `wpgforms` to the `/wp-content/plugins/` directory.
@@ -49,6 +51,9 @@ Yes, there are two ways to change the style (aka apearance) of the form.
 1. Through the WordPress Google Form custom CSS setting.
 
 Google Forms include plenty of [CSS](http://en.wikipedia.org/wiki/Cascading_Style_Sheets) hooks. Refer to the **CSS** section for further details on styling the form.
+
+= Do you have a demo running? =
+Yes, see a demo here:  [Demo](http://michaelwalsh.org/wordpress/wordpress-plugins/wpgform/)  Feel free to submit a response and then view other responses as well.
 
 = Content appears, but it's not my form and it looks weird! =
 You should triple-check that you've published your Form. Google provides instructions for doing this. Be sure to follow steps 1 and 2 in [Google Spreadsheets Help: Publishing to the Web](http://docs.google.com/support/bin/answer.py?hl=en&answer=47134) as the same process applies to Forms and Spreadsheets.
@@ -120,6 +125,8 @@ No known upgrade issues.
 = Version 0.3 =
 
 * Added support for `<select>` and `<option>` tags.
+* Fixed Plugin URI path
+* Added links to demo content
 
 = Version 0.2 =
 
