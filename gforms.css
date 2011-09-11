@@ -4,7 +4,8 @@
  *
  * These can be copied and modified to fit the needs of
  * a theme.  By default the only change is to make all of
- * the fihttp://localhost/wp-content/plugins/inline-google-forms-embedder/css/gforms.css?ver=3.2.1elds wider than their default width.
+ * the fields wider than their default width and to set the
+ * default font.
  */
 
 body.ss-base-body {}
@@ -26,6 +27,8 @@ div.ss-item {}
 div.ss-legal {}
 div.ss-navigate {}
 div.ss-no-ignore-whitespace {}
+div.ss-required-asterisk {}
+div.ss-scale {}
 div.ss-text {}
 form#ss-form {}
 h1.ss-form-title {}
@@ -34,8 +37,23 @@ input.ss-q-short {
 	width: 250px;
 }
 label.ss-q-help {}
+label.ss-q-radio {}
 label.ss-q-title {
     font-weight: bold;
 }
 span.ss-powered-by {}
 span.ss-terms {}
+td.ss-gridnumber {}
+td.ss-gridnumbers {}
+td.ss-gridrow
+td.ss-gridrow-leftlabel
+td.ss-leftlabel {}
+td.ss-rightlabel {}
+td.ss-scalerow {}
+td.ss-scalenumber {}
+td.ss-scalenumbers {}
+textarea.ss-q-long {
+    background-color: #e0e0e0;
+    font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+tr.ss-gridrow {}

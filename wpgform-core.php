@@ -218,6 +218,12 @@ class wpGForm
            ,'option' => array('value' => array(), 'checked' => array())
            ,'form' => array('id' => array(), 'class' => array(), 'action' => array(), 'method' => array(), 'target' => array(), 'onsubmit' => array())
            ,'script' => array('type' => array())
+           ,'table' => array()
+           ,'tbody' => array()
+           ,'textarea' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'rows' => array(), 'cols' => array())
+           ,'thead' => array()
+           ,'tr' => array('class' => array())
+           ,'td' => array('class' => array(), 'style' => array())
         );
 
         $html = wp_kses($html, $allowed_tags) ;
