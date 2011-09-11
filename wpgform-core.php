@@ -86,7 +86,7 @@ function wpgform_register_activation_hook()
        ,'default_css' => 1
        ,'custom_css' => 0
        ,'custom_css_styles' => ''
-       ,'donation_message' => 1
+       ,'donation_message' => 0
     ) ;
 
     add_option('wpgform_options', $default_wpgform_options);
