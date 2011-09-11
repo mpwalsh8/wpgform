@@ -67,7 +67,7 @@ function wpgform_options_page()
         <ul>
             <li><a href="#gform-tabs-1">Options</a></li>
             <li><a href="#gform-tabs-2">FAQs</a></li>
-            <li><a href="#gform-tabs-3">Usage Manual</a></li>
+            <li><a href="#gform-tabs-3">Usage</a></li>
             <li><a href="#gform-tabs-4">About</a></li>
         </ul>
         <div id="gform-tabs-1">
@@ -78,12 +78,134 @@ function wpgform_options_page()
             </form>
         </div>
         <div id="gform-tabs-2">
-            <h4>FAQ</h4>
-            <p>FAQ goes here.</p>
+<?php
+    //  Instead of duplicating the FAQ content in the ReadMe.txt file,
+    //  let's simply extract it from the WordPress plugin repository!
+    //
+    //  This solutution is derived from a discussion found on www.DevNetwork.net.
+    //  See full discussion:  http://www.devnetwork.net/viewtopic.php?f=38&t=102670
+    //
+
+    /*
+    //  Commented regex to extract contents from <div class="main">contents</div>
+    //  where "contents" may contain nested <div>s.
+    //  Regex uses PCRE's recursive (?1) sub expression syntax to recurs group 1
+
+    $pattern_long = '{                    # recursive regex to capture contents of "main" DIV
+    <div\s+class="main"\s*>               # match the "main" class DIV opening tag
+      (                                   # capture "main" DIV contents into $1
+        (?:                               # non-cap group for nesting * quantifier
+          (?: (?!<div[^>]*>|</div>). )++  # possessively match all non-DIV tag chars
+        |                                 # or 
+          <div[^>]*>(?1)</div>            # recursively match nested <div>xyz</div>
+        )*                                # loop however deep as necessary
+      )                                   # end group 1 capture
+    </div>                                # match the "main" class DIV closing tag
+    }six';  // single-line (dot matches all), ignore case and free spacing modes ON
+    */
+
+    //  WordPress plugin repository places the content in DIV with a class of
+    //  "block-content" but there are actually several DIVs that have the same class.
+    //  We only want the first one.
+
+    $url = 'http://wordpress.org/extend/plugins/wpgform/faq/' ;
+    $response= wp_remote_get($url) ;
+
+    if (is_wp_error($response))
+    {
+?>
+<div class="updated error">Unable to retrive FAQ content from WordPress plugin repository.</div>
+<?php
+    }
+    else
+    {
+?>
+<?php
+        $data = &$response['body'] ;
+        $pattern_short = '{<div\s+[^>]*?class="block-content"[^>]*>((?:(?:(?!<div[^>]*>|</div>).)++|<div[^>]*>(?1)</div>)*)</div>}si';
+        $matchcount = preg_match_all($pattern_short, $data, $matches);
+
+        //  Did we find something?
+        if ($matchcount > 0)
+        {
+            //  The content we want will be the first match
+            echo($matches[1][0]); // print 1st capture group for match number i
+        }
+        else
+        {
+?>
+<div class="updated error">Unable to retrive FAQ content from WordPress plugin repository.</div>
+<?php
+        }
+        //echo("\n</pre>");
+    }
+        
+?>
         </div>
         <div id="gform-tabs-3">
-            <h4>Usage</h4>
-            <p>Usage goes here.</p>
+<?php
+    //  Instead of duplicating the FAQ content in the ReadMe.txt file,
+    //  let's simply extract it from the WordPress plugin repository!
+    //
+    //  This solutution is derived from a discussion found on www.DevNetwork.net.
+    //  See full discussion:  http://www.devnetwork.net/viewtopic.php?f=38&t=102670
+    //
+
+    /*
+    //  Commented regex to extract contents from <div class="main">contents</div>
+    //  where "contents" may contain nested <div>s.
+    //  Regex uses PCRE's recursive (?1) sub expression syntax to recurs group 1
+
+    $pattern_long = '{                    # recursive regex to capture contents of "main" DIV
+    <div\s+class="main"\s*>               # match the "main" class DIV opening tag
+      (                                   # capture "main" DIV contents into $1
+        (?:                               # non-cap group for nesting * quantifier
+          (?: (?!<div[^>]*>|</div>). )++  # possessively match all non-DIV tag chars
+        |                                 # or 
+          <div[^>]*>(?1)</div>            # recursively match nested <div>xyz</div>
+        )*                                # loop however deep as necessary
+      )                                   # end group 1 capture
+    </div>                                # match the "main" class DIV closing tag
+    }six';  // single-line (dot matches all), ignore case and free spacing modes ON
+    */
+
+    //  WordPress plugin repository places the content in DIV with a class of
+    //  "block-content" but there are actually several DIVs that have the same class.
+    //  We only want the first one.
+
+    $url = 'http://wordpress.org/extend/plugins/wpgform/other_notes/' ;
+    $response= wp_remote_get($url) ;
+
+    if (is_wp_error($response))
+    {
+?>
+<div class="updated error">Unable to retrive FAQ content from WordPress plugin repository.</div>
+<?php
+    }
+    else
+    {
+?>
+<?php
+        $data = &$response['body'] ;
+        $pattern_short = '{<div\s+[^>]*?class="block-content"[^>]*>((?:(?:(?!<div[^>]*>|</div>).)++|<div[^>]*>(?1)</div>)*)</div>}si';
+        $matchcount = preg_match_all($pattern_short, $data, $matches);
+
+        //  Did we find something?
+        if ($matchcount > 0)
+        {
+            //  The content we want will be the first match
+            echo($matches[1][0]); // print 1st capture group for match number i
+        }
+        else
+        {
+?>
+<div class="updated error">Unable to retrive FAQ content from WordPress plugin repository.</div>
+<?php
+        }
+        //echo("\n</pre>");
+    }
+        
+?>
         </div>
         <div id="gform-tabs-4">
             <h4>About WordPress Google Form</h4>
@@ -106,7 +228,6 @@ function wpgform_options_page()
 function wpgform_settings_input()
 {
     $wpgform_options = get_option('wpgform_options') ; ?>
-<?php var_dump($wpgform_options) ; ?>
     <table class="form-table">
         <tr valign="top">
             <th scope="row"><label><b><i>gform</i></b> Shortcode</label></th>
