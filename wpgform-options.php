@@ -17,7 +17,7 @@
  */
 
 /**
- * wpgform_options_admin_head()
+ * wpgform_options_admin_footer()
  *
  * Hook into Admin head when showing the options page
  * so the necessary jQuery script that controls the tabs
@@ -25,8 +25,9 @@
  *
  * @return null
  */
-function wpgform_options_admin_head()
+function wpgform_options_admin_footer()
 {
+    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 ?>
 <!-- Setup jQuery Tabs -->
 <script type="text/javascript">
@@ -35,7 +36,41 @@ function wpgform_options_admin_head()
     }) ;
 </script>
 <?php
-} /* function wpgform_options_admin_head() */
+    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+} /* function wpgform_options_admin_footer() */
+
+/**
+ * wpgform_options_print_scripts()
+ *
+ * Hook into Admin Print Scripts when showing the options page
+ * so the necessary scripts that controls the tabs are loaded.
+ *
+ * @return null
+ */
+function wpgform_options_print_scripts()
+{
+    //  Need to load jQuery UI Tabs to make the page work!
+
+    wp_enqueue_script('jquery-ui-tabs') ;
+}
+
+/**
+ * wpgform_options_print_styles()
+ *
+ * Hook into Admin Print Styles when showing the options page
+ * so the necessary style sheets that control the tabs are
+ * loaded.
+ *
+ * @return null
+ */
+function wpgform_options_print_styles()
+{
+    //  Need the jQuery UI CSS to make the tabs look correct.
+    //  Load them from Google - should not be an issue since
+    //  this plugin is all about consuming Google content!
+
+    wp_enqueue_style('xtra-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css') ;
+}
 
 /**
  * wpgform_options_page()
@@ -215,7 +250,7 @@ function wpgform_options_page()
     </div>
 </div>
 <?php
-} /* Function wpgform_options_page() */
+}
 
 
 /**

@@ -53,7 +53,9 @@ function wpgform_admin_menu()
 
     $wpgform_options_page = add_options_page('WP Google Form', 'WP Google Form ',
         'manage_options', 'wpgform-options.php', 'wpgform_options_page');
-    add_action('admin_head-'.$wpgform_options_page, 'wpgform_options_admin_head');
+    add_action('admin_footer-'.$wpgform_options_page, 'wpgform_options_admin_footer');
+    add_action('admin_print_scripts-'.$wpgform_options_page, 'wpgform_options_print_scripts');
+    add_action('admin_print_styles-'.$wpgform_options_page, 'wpgform_options_print_styles');
 }
 
 /**
