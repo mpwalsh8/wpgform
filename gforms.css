@@ -26,15 +26,20 @@ div.ss-form-heading {}
 div.ss-item {}
 div.ss-legal {}
 div.ss-navigate {}
-div.ss-no-ignore-whitespace {}
-div.ss-required-asterisk {}
+div.ss-no-ignore-whitespace {
+    white-space: pre-wrap;
+}
+div.ss-required-asterisk {
+    color: red;
+    font-weight: bold;
+}
 div.ss-scale {}
 div.ss-text {}
 form#ss-form {}
 h1.ss-form-title {}
 hr.ss-email-break {}
 input.ss-q-short {
-	width: 250px;
+	width: 300px;
 }
 label.ss-q-help {}
 label.ss-q-radio {}
