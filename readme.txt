@@ -85,18 +85,8 @@ There are two ways to customize the Google Form CSS.
 
 = Default Google Form CSS =
 
-As of 2011-09-11, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
-
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-/**
- * CSS declarations for Google Docs Forms
- *
- * These can be copied and modified to fit the needs of
- * a theme.  By default the only change is to make all of
- * the fihttp://localhost/wp-content/plugins/inline-google-forms-embedder/css/gforms.css?ver=3.2.1elds wider than their default width.
- */
-
-`body.ss-base-body {}
+As of 2011-09-22, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
+body.ss-base-body {}
 div.errorbox-good {}
 div.ss-attribution {}
 div.ss-footer {}
@@ -114,15 +104,20 @@ div.ss-form-heading {}
 div.ss-item {}
 div.ss-legal {}
 div.ss-navigate {}
-div.ss-no-ignore-whitespace {}
-div.ss-required-asterisk {}
+div.ss-no-ignore-whitespace {
+    white-space: pre-wrap;
+}
+div.ss-required-asterisk {
+    color: red;
+    font-weight: bold;
+}
 div.ss-scale {}
 div.ss-text {}
 form#ss-form {}
 h1.ss-form-title {}
 hr.ss-email-break {}
 input.ss-q-short {
-	width: 250px;
+	width: 300px;
 }
 label.ss-q-help {}
 label.ss-q-radio {}
@@ -144,7 +139,8 @@ textarea.ss-q-long {
     background-color: #e0e0e0;
     font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
-tr.ss-gridrow {}`
+tr.ss-gridrow {}
+`
 
 == Screenshots ==
 
@@ -155,6 +151,13 @@ Coming soon!
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.7 =
+
+* Added new shortcode attribute *br* which can be set to *on* or *off*.  The *br* attribute will insert <br> tags between the labels and the input fields causing them to render on top of one another much they appear on Google Forms.  The default setting is *off*.
+* Fixed problem due to Javascript embedded in Google Form.  It isn't necessary so it is stripped out.
+* Tweaked several default CSS settings, most notably the default width of text entry fields.
+* Cleaned up a bunch of debug code.
 
 = Version 0.6 =
 
