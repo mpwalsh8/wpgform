@@ -10,9 +10,7 @@ Embeds a published, public Google Form in a WordPress post, page, or widget.
 
 == Description ==
 
-**NOTE - This plugin is very much _In Development_!**  Some functionality may not work as expected (yet).
-
-Fetches a published Google Form using a `[gform form='']` WordPress shortcode, removes the Gooogle wrapper HTML and then renders it as an HTML form embedded in your blog post or page. The only required parameter is `url`, which specifies the form you'd like to retrieve. Recommended but optional, you can also pass a URL for a confirmation page.  The confirmation page will override the default Google`Thank You` page and offers better integration with your WordPress site.  You can also supply a customized `class` value for styling the form.
+Fetches a published Google Form using a `[gform form='']` WordPress shortcode, removes the Gooogle wrapper HTML and then renders it as an HTML form embedded in your blog post or page. The only required parameter is `form`, which specifies the form you'd like to retrieve. Recommended but optional, you can also pass a URL for a confirmation page.  The confirmation page will override the default Google`Thank You` page and offers better integration with your WordPress site.  You can also supply a customized `class` value for styling the form.
 
 For example, suppose you want to integrate the form at `https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0`, (not a real URL) use the following shortcode in your WordPress post or page:
 
@@ -157,6 +155,11 @@ Coming soon!
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.6 =
+
+* Fixed problem with CSS text from Google form theme appearing as text on the embedded form.  This text should have been stripped and in some cases it wasn't.
+* Fixed typos in ReadMe.txt file.
 
 = Version 0.5 =
 
