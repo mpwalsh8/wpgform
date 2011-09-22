@@ -38,6 +38,8 @@ function wpgform_init()
 
     if ($wpgform_options['default_css'] == 1)
         add_action('template_redirect', 'wpgform_head');
+
+    //add_action('wp_footer', 'wpgform_footer') ;
 }
 
 /**
@@ -92,12 +94,9 @@ function wpgform_register_activation_hook()
     add_option('wpgform_options', $default_wpgform_options);
     //add_shortcode('wpgform', 'wpgform_shortcode');
     add_filter('widget_text', 'do_shortcode');
-
-    //$wpgform = new wpGForm();
-    //printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
-    //add_shortcode('gform', array($wpgform, 'RenderGForm'));
 }
-    add_shortcode('gform', array('wpGForm', 'RenderGForm'));
+
+add_shortcode('gform', array('wpGForm', 'RenderGForm'));
 
 
 /**
@@ -128,7 +127,6 @@ class wpGForm
      */
     function ConstructGForm($options)
     {
-        //var_dump($options) ;
         //  If no URL then return as nothing useful can be done.
         if (!$options['form'])
         {
@@ -177,6 +175,9 @@ class wpGForm
         {
             $suffix = $options['suffix'] ;
         }
+
+        //  Breaks between labels and inputs?
+        $br = $options['br'] === 'on' ;
 
         //  Google Legal Stuff?
         $legal = $options['legal'] !== 'off' ;
@@ -245,27 +246,32 @@ class wpGForm
         if ($first_div !== 0)
             $html = substr($html, $first_div) ;
 
+        //  The Google Forms have some Javascript embedded in them which needs to be
+        //  stripped out.  I am not sure why it is in there, it doesn't appear to do
+        //  much of anything useful.
+
+        $html = preg_replace('#<script[^>]*>.*?</script>#is',
+            '<!-- Google Forms unnessary Javascript removed -->' . PHP_EOL, $html);
+
         //  Augment class names with some sort of a prefix?
+
         if (!is_null($prefix))
-        {
-            //printf('<h4>%s::%s</h4>', basename(__FILE__), __LINE__) ;
             $html = preg_replace('/ class="/i', " class=\"{$prefix}", $html) ;
-        }
 
         //  Augment labels with some sort of a suffix?
+
         if (!is_null($suffix))
-        {
-            //printf('<h4>%s::%s</h4>', basename(__FILE__), __LINE__) ;
             $html = preg_replace('/<\/label>/i', "{$suffix}</label>", $html) ;
-        }
+
+        //  Insert breaks between labels and input fields?
+
+        if ($br)
+            $html = preg_replace('/<\/label>[\w\n]*<input/i', '</label><br/><input', $html) ;
 
         //  Hide Google Legal Stuff?
 
         if (!$legal)
-        {
-            //printf('<h4>%s::%s</h4>', basename(__FILE__), __LINE__) ;
             $html = preg_replace('/<div class="ss-legal"/i', '<div class="ss-legal" style="display:none;"', $html) ;
-        }
 
         //  By default Google will display it's own confirmation page which can't
         //  be styled and is not contained within the web site.  The plugin can
@@ -279,7 +285,6 @@ class wpGForm
             //  Need to modify the FORM tag and add some new attributes.
             $xtra_form_attrs = 'target="gform_iframe" onsubmit="submitted=true;"' ;
             $html = preg_replace("/<form/i", "<form {$xtra_form_attrs}", $html) ;
-            //$form = str_replace(array('&#038;','&#38;','&amp;'), '&', $form) ;
 
             //  Need some extra HTML which must be inserted before the extract FORM HTML.
             $xtra_html = '<script type="text/javascript">var submitted=false;</script>' ;
@@ -293,13 +298,7 @@ class wpGForm
         $wpgform_options = get_option('wpgform_options');
 
         if ($wpgform_options['custom_css'] == 1)
-        {
-            //printf('<h4>%s::%s</h4>', basename(__FILE__), __LINE__) ;
-            //var_dump($wpgform_options['custom_css_styles']) ;
-            //$css = safecss_filter_attr('<style>' . $wpgform_options['custom_css_styles'] . '</style>') ;
             $css = '<style>' . $wpgform_options['custom_css_styles'] . '</style>' ;
-            //var_dump($css) ;
-        }
         else
             $css = '' ;
 
@@ -317,19 +316,47 @@ class wpGForm
             'confirm'  => false,                // Optional URL to redirect to instead of Google confirmation
             'class'    => 'gform',              // Container element's custom class value
             'legal'    => 'on',                 // Display Google Legal Stuff
+            'br'       => 'off',                // Insert <br> tags between labels and inputs
             'suffix'   => null,                 // Add suffix character(s) to all labels
             'prefix'   => null                  // Add suffix character(s) to all labels
-        ), $atts);
+        ), $atts) ;
 
-        return wpGForm::ConstructGForm($params);
+        return wpGForm::ConstructGForm($params) ;
     }
 }
 
+/**
+ * wpgform_head()
+ *
+ * WordPress header actions
+ */
 function wpgform_head()
 {
+    //  Need default gForm CSS
     wp_enqueue_style('gform',
         plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
 }
 
-
+/**
+ * wpgform_footer()
+ *
+ * WordPress footer actions
+ */
+function wpgform_footer()
+{
+    //  Need jQuery to dink with DIV content
+    wp_enqueue_script('jquery') ;
+?>
+<script type="text/javascript">
+//
+//  jQuery script to decode any HTML entities found in the
+//  ss-section-description classes.
+//
+jQuery(document).ready(function($) {
+    alert('GForm jQuery goes here.') ;
+    //  Placeholder to do some processing on the Google form content if/when needed.
+});
+</script>
+<?php
+}
 ?>
