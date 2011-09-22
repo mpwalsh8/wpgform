@@ -230,6 +230,21 @@ class wpGForm
 
         $html = wp_kses($html, $allowed_tags) ;
 
+        //  Did we end up with anything prior to the first DIV?  If so, remove it as
+        //  it should have been removed by wp_kses() but sometimes stuff slips through!
+
+        $first_div = strpos($html, '<div') ;
+
+        //  If there are no DIVs, then we have garbage and should stop now!
+
+        if ($first_div === false)
+            return '<div class="gform-error">Unable to retrieve Google Form.</div>' ;
+
+        //  Strip off anything prior to the first  DIV, we don't want it.
+
+        if ($first_div !== 0)
+            $html = substr($html, $first_div) ;
+
         //  Augment class names with some sort of a prefix?
         if (!is_null($prefix))
         {
