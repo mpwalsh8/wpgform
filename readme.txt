@@ -31,15 +31,17 @@ Currently, this plugin only supports Google Forms that are "Published as a web p
 
 The WordPress Google Form shortcode `gform` suupports a number of attributes that allow further control and customization of the Google Form.
 
-`[gform form='<full_url_to_Google_Form>' confirm='<full_url_to_confirmation_page>' class='<value>' legal='on|off' prefix='<value>']`
+`[gform form='<full_url_to_Google_Form>' confirm='<full_url_to_confirmation_page>' class='<value>' legal='on|off' br='on|off' prefix='<value>' suffix='<value>']`
 
 * __form__:  The full URL to the published Google Form.  You must be able to open this URL successfully from a browser for the __gform__ shortcode to work properly.
 * __confirm__:  A full URL to the confirmation (e.g. _Thanks for your submission!_) page.  Be default Google displays a very basic confirmation page which cannot be integrated easily with your WordPress site.  The _confirm_ attribute allows the form submission to land on a page of your choosing.  **It is strongly encouraged that you make use of a confirmation page.**  It will make the form submission process cleaner and clearer to the end user.
 * __class__:  Google Forms are full of classes but the WordPress Google Form plugin does not bring their definitions into page when importing the form.  The _class_ attribute allows the addition of one or more CSS classes to the DIV which wraps the Google Form.  To add multiple classes, simply separate the class names with spaces.
 * __legal__:  By default Google Forms have a _Powered by Google Docs_ section at the bottom of the form which includes links to Google TOS and other Google information.  If you do not want to see this information as part of the form, add `legal='off'` to your shortcode usage.  The content remains in the form, it is simply hidden from the end user using CSS.
+* __br__:  For a <br> tag to be inserted between the form label and the input text box by setting the *br* attribute to *on*.  This will result in the form label and the input box being stacked on top of one another.
 * __prefix__:  Google Forms make use 20+ CSS classes.  If you use multiple forms and want to style them each differently, you can add a _prefix_ which will be added to beginning of each class name used in the Google Form.
+* __suffix__:  Append a character string to the end of each form label.  This can also be accomplished using CSS, refer to the CSS section.
 
-`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' class='mygform' legal='off' prefix='mygform-']`
+`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' class='mygform' legal='off' prefix='mygform-' br='on']`
 
 == Frequently Asked Questions ==
 
@@ -74,7 +76,7 @@ Sure.  You can use the following CSS to have the colon character appear after al
 
 == CSS ==
 
-As of 2011-09-11, Google Forms make use of 20+ CSS class definitions.  By default, the WordPress Google Form plugin includes CSS declarations for all of the classes however the bulk of them are empty.  The default CSS sets the font and makes the entry boxes wider.  The default CSS that ships with WordPress Google Form can optionally be turned off via the WordPress Google Form settings.
+As of 2011-09-21, Google Forms make use of 20+ CSS class definitions.  By default, the WordPress Google Form plugin includes CSS declarations for all of the classes however the bulk of them are empty.  The default CSS sets the font and makes the entry boxes wider.  The default CSS that ships with WordPress Google Form can optionally be turned off via the WordPress Google Form settings.
 
 = Customizing Google Form CSS =
 
@@ -86,7 +88,8 @@ There are two ways to customize the Google Form CSS.
 = Default Google Form CSS =
 
 As of 2011-09-22, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
-body.ss-base-body {}
+
+'body.ss-base-body {}
 div.errorbox-good {}
 div.ss-attribution {}
 div.ss-footer {}
@@ -139,8 +142,7 @@ textarea.ss-q-long {
     background-color: #e0e0e0;
     font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
-tr.ss-gridrow {}
-`
+tr.ss-gridrow {}`
 
 == Screenshots ==
 
@@ -151,6 +153,11 @@ Coming soon!
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.8 =
+
+* Fixed formatting of CSS section in ReadMe.txt file.
+* Added documention for *br* and *suffix* short code attributes.
 
 = Version 0.7 =
 
