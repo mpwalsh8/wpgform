@@ -146,13 +146,19 @@ tr.ss-gridrow {}`
 
 == Screenshots ==
 
-Coming soon!
+1. Standard Google Form
+2. Same Google Form embedded in WordPress
+3. Setting Page
 
 == Upgrade Notice ==
 
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.9 =
+
+* Added screenshots.
 
 = Version 0.8 =
 
