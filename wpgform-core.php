@@ -39,7 +39,7 @@ function wpgform_init()
     if ($wpgform_options['default_css'] == 1)
         add_action('template_redirect', 'wpgform_head');
 
-    //add_action('wp_footer', 'wpgform_footer') ;
+    add_action('wp_footer', 'wpgform_footer') ;
 }
 
 /**
@@ -335,6 +335,15 @@ function wpgform_head()
     //  Need default gForm CSS
     wp_enqueue_style('gform',
         plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
+    //  Need jQuery to dink with DIV content
+    wp_enqueue_script('jquery') ;
+
+    //  Load the jQuery Validate from the Microsoft CDN, it isn't
+    //  available from the Google CDN or I'd load it from there!
+    wp_register_script('jquery-validate',
+        'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js',
+        array('jquery'), false, true) ;
+    wp_enqueue_script('jquery-validate');
 }
 
 /**
@@ -344,17 +353,26 @@ function wpgform_head()
  */
 function wpgform_footer()
 {
-    //  Need jQuery to dink with DIV content
-    wp_enqueue_script('jquery') ;
+    //
+    //  jQuery script to initialize the form validation
+    //  neccessary so bad or missing data is submitted.
+    //  When required fields are blank the normal Google
+    //  processing for form errors doesn't occur, this
+    //  jQuery script handles it gracefully.  The fields
+    //  have only rudimentary validation.
+    //
 ?>
+
 <script type="text/javascript">
-//
-//  jQuery script to decode any HTML entities found in the
-//  ss-section-description classes.
-//
 jQuery(document).ready(function($) {
-    alert('GForm jQuery goes here.') ;
-    //  Placeholder to do some processing on the Google form content if/when needed.
+    $("div > .ss-item-required input").addClass("gform-required");
+    $("div > .ss-item-required textarea").addClass("gform-required");
+    $.validator.addClassRules("gform-required", {
+        required: true
+    });
+    $("#ss-form").validate({
+        errorClass: "gform-error"
+    }) ;
 });
 </script>
 <?php
