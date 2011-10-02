@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: trunk
+Stable tag: 0.9
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -89,7 +89,13 @@ There are two ways to customize the Google Form CSS.
 
 As of 2011-09-22, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
 
-'body.ss-base-body {}
+`
+label.gform-error {
+    float: right;
+    color: red;
+    font-weight: bold;
+}
+body.ss-base-body {}
 div.errorbox-good {}
 div.ss-attribution {}
 div.ss-footer {}
@@ -142,7 +148,8 @@ textarea.ss-q-long {
     background-color: #e0e0e0;
     font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
-tr.ss-gridrow {}`
+tr.ss-gridrow {}
+`
 
 == Screenshots ==
 
@@ -155,6 +162,11 @@ tr.ss-gridrow {}`
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.10 =
+
+* Added support for required fields using the jQuery Validate plugin.
+* Added CSS classes to support jQuery required field validation.
 
 = Version 0.9 =
 
