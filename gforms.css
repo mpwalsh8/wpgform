@@ -8,6 +8,11 @@
  * default font.
  */
 
+label.gform-error {
+    float: right;
+    color: red;
+    font-weight: bold;
+}
 body.ss-base-body {}
 div.errorbox-good {}
 div.ss-attribution {}
