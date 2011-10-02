@@ -27,7 +27,7 @@
  */
 function wpgform_options_admin_footer()
 {
-    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+    //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 ?>
 <!-- Setup jQuery Tabs -->
 <script type="text/javascript">
@@ -36,7 +36,7 @@ function wpgform_options_admin_footer()
     }) ;
 </script>
 <?php
-    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+    //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 } /* function wpgform_options_admin_footer() */
 
 /**
