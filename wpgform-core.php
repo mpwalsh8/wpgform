@@ -28,16 +28,15 @@ define('WPGFORM_PATH', WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__))) ;
  */
 function wpgform_init()
 {
-    $wpgform_options = get_option('wpgform_options');
+    $wpgform_options = get_option('wpgform_options') ;
 
     if ($wpgform_options['sc_posts'] == 1)
-        add_shortcode('wpgform', 'wpgform_shortcode');
+        add_shortcode('wpgform', 'wpgform_shortcode') ;
 
     if ($wpgform_options['sc_widgets'] == 1)
-        add_filter('widget_text', 'do_shortcode');
+        add_filter('widget_text', 'do_shortcode') ;
 
-    if ($wpgform_options['default_css'] == 1)
-        add_action('template_redirect', 'wpgform_head');
+    add_action('template_redirect', 'wpgform_head') ;
 
     add_action('wp_footer', 'wpgform_footer') ;
 }
@@ -54,10 +53,10 @@ function wpgform_admin_menu()
     require_once(WPGFORM_PATH . '/wpgform-options.php') ;
 
     $wpgform_options_page = add_options_page('WP Google Form', 'WP Google Form ',
-        'manage_options', 'wpgform-options.php', 'wpgform_options_page');
-    add_action('admin_footer-'.$wpgform_options_page, 'wpgform_options_admin_footer');
-    add_action('admin_print_scripts-'.$wpgform_options_page, 'wpgform_options_print_scripts');
-    add_action('admin_print_styles-'.$wpgform_options_page, 'wpgform_options_print_styles');
+        'manage_options', 'wpgform-options.php', 'wpgform_options_page') ;
+    add_action('admin_footer-'.$wpgform_options_page, 'wpgform_options_admin_footer') ;
+    add_action('admin_print_scripts-'.$wpgform_options_page, 'wpgform_options_print_scripts') ;
+    add_action('admin_print_styles-'.$wpgform_options_page, 'wpgform_options_print_styles') ;
 }
 
 /**
@@ -91,12 +90,12 @@ function wpgform_register_activation_hook()
        ,'donation_message' => 0
     ) ;
 
-    add_option('wpgform_options', $default_wpgform_options);
-    //add_shortcode('wpgform', 'wpgform_shortcode');
-    add_filter('widget_text', 'do_shortcode');
+    add_option('wpgform_options', $default_wpgform_options) ;
+    //add_shortcode('wpgform', 'wpgform_shortcode') ;
+    add_filter('widget_text', 'do_shortcode') ;
 }
 
-add_shortcode('gform', array('wpGForm', 'RenderGForm'));
+add_shortcode('gform', array('wpGForm', 'RenderGForm')) ;
 
 
 /**
@@ -227,7 +226,7 @@ class wpGForm
            ,'thead' => array()
            ,'tr' => array('class' => array())
            ,'td' => array('class' => array(), 'style' => array())
-        );
+        ) ;
 
         $html = wp_kses($html, $allowed_tags) ;
 
@@ -251,7 +250,7 @@ class wpGForm
         //  much of anything useful.
 
         $html = preg_replace('#<script[^>]*>.*?</script>#is',
-            '<!-- Google Forms unnessary Javascript removed -->' . PHP_EOL, $html);
+            '<!-- Google Forms unnessary Javascript removed -->' . PHP_EOL, $html) ;
 
         //  Augment class names with some sort of a prefix?
 
@@ -295,7 +294,7 @@ class wpGForm
 
         //  Output custom CSS?
  
-        $wpgform_options = get_option('wpgform_options');
+        $wpgform_options = get_option('wpgform_options') ;
 
         if ($wpgform_options['custom_css'] == 1)
             $css = '<style>' . $wpgform_options['custom_css_styles'] . '</style>' ;
@@ -332,18 +331,21 @@ class wpGForm
  */
 function wpgform_head()
 {
-    //  Need default gForm CSS
-    wp_enqueue_style('gform',
-        plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
-    //  Need jQuery to dink with DIV content
-    wp_enqueue_script('jquery') ;
+    $wpgform_options = get_option('wpgform_options') ;
+
+    //  Load default gForm CSS?
+    if ($wpgform_options['default_css'] == 1)
+    {
+        wp_enqueue_style('gform',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
+    }
 
     //  Load the jQuery Validate from the Microsoft CDN, it isn't
     //  available from the Google CDN or I'd load it from there!
     wp_register_script('jquery-validate',
         'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js',
         array('jquery'), false, true) ;
-    wp_enqueue_script('jquery-validate');
+    wp_enqueue_script('jquery-validate') ;
 }
 
 /**
