@@ -29,7 +29,7 @@ Currently, this plugin only supports Google Forms that are "Published as a web p
 
 == Usage ==
 
-The WordPress Google Form shortcode `gform` suupports a number of attributes that allow further control and customization of the Google Form.
+The WordPress Google Form shortcode `gform` supports a number of attributes that allow further control and customization of the Google Form.
 
 `[gform form='<full_url_to_Google_Form>' confirm='<full_url_to_confirmation_page>' class='<value>' legal='on|off' br='on|off' prefix='<value>' suffix='<value>']`
 
