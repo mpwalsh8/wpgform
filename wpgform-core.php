@@ -28,7 +28,7 @@ define('WPGFORM_PATH', WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__))) ;
  */
 function wpgform_init()
 {
-    $wpgform_options = get_option('wpgform_options') ;
+    $wpgform_options = wpgform_get_plugin_options() ;
 
     if ($wpgform_options['sc_posts'] == 1)
         add_shortcode('wpgform', 'wpgform_shortcode') ;
@@ -38,7 +38,42 @@ function wpgform_init()
 
     add_action('template_redirect', 'wpgform_head') ;
 
-    add_action('wp_footer', 'wpgform_footer') ;
+    //add_action('wp_footer', 'wpgform_footer') ;
+}
+
+/**
+ * Returns the default options for wpGForm.
+ *
+ * @since wpGForm 0.11
+ */
+function wpgform_get_default_plugin_options()
+{
+	$default_plugin_options = array(
+        'sc_posts' => 1
+       ,'sc_widgets' => 1
+       ,'default_css' => 1
+       ,'custom_css' => 0
+       ,'custom_css_styles' => ''
+       ,'donation_message' => 0
+	) ;
+
+	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
+}
+
+/**
+ * Returns the options array for the wpGForm plugin.
+ *
+ * @since wpGForm 0.11
+ */
+function wpgform_get_plugin_options()
+{
+    //  Get the default options in case anything new has been added
+    $default_options = wpgform_get_default_plugin_options() ;
+
+    //  Merge the default with any options currently saves by WordPress
+    $plugin_options = wp_parse_args(get_option('wpgform_options', array()), $default_options) ;
+
+    return $plugin_options ;
 }
 
 /**
@@ -165,6 +200,7 @@ class wpGForm
         {
             $prefix = $options['prefix'] ;
         }
+
         //  Label Suffix?  Optional
         if (!$options['suffix'])
         {
@@ -180,6 +216,9 @@ class wpGForm
 
         //  Google Legal Stuff?
         $legal = $options['legal'] !== 'off' ;
+
+        //  Should form be set to readonly?
+        $readonly = $options['readonly'] === 'on' ;
 
         //  WordPress converts all of the ampersand characters to their
         //  appropriate HTML entity or some variety of it.  Need to undo
@@ -294,14 +333,37 @@ class wpGForm
 
         //  Output custom CSS?
  
-        $wpgform_options = get_option('wpgform_options') ;
+        $wpgform_options = wpgform_get_plugin_options() ;
 
         if ($wpgform_options['custom_css'] == 1)
             $css = '<style>' . $wpgform_options['custom_css_styles'] . '</style>' ;
         else
             $css = '' ;
 
-        return $css . $xtra_html . $html ;
+        //  Output Javscript for form validation
+        $js = '
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $("div > .ss-item-required input").addClass("gform-required");
+    $("div > .ss-item-required textarea").addClass("gform-required");
+    $.validator.addClassRules("gform-required", {
+        required: true
+    });
+    $("#ss-form").validate({
+        errorClass: "gform-error"
+    }) ;' ;
+
+        //  Before closing the <script> tag, is the form read only?
+        if ($readonly) $js .= '
+    $("div.ss-form-container :input").attr("disabled", true);
+        ' ;
+
+        $js .= '
+});
+</script>
+        ' ;
+
+        return $js . $css . $xtra_html . $html ;
     }
 
     /**
@@ -317,7 +379,8 @@ class wpGForm
             'legal'    => 'on',                 // Display Google Legal Stuff
             'br'       => 'off',                // Insert <br> tags between labels and inputs
             'suffix'   => null,                 // Add suffix character(s) to all labels
-            'prefix'   => null                  // Add suffix character(s) to all labels
+            'prefix'   => null,                 // Add suffix character(s) to all labels
+            'readonly' => 'off'                 // Set all form elements to disabled
         ), $atts) ;
 
         return wpGForm::ConstructGForm($params) ;
@@ -331,7 +394,7 @@ class wpGForm
  */
 function wpgform_head()
 {
-    $wpgform_options = get_option('wpgform_options') ;
+    $wpgform_options = wpgform_get_plugin_options() ;
 
     //  Load default gForm CSS?
     if ($wpgform_options['default_css'] == 1)
