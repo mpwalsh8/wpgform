@@ -220,18 +220,22 @@ class wpGForm
         //  Should form be set to readonly?
         $readonly = $options['readonly'] === 'on' ;
 
+        //  Should form be set to readonly?
+        $multipage = $options['multipage'] === 'yes' ;
+
         //  WordPress converts all of the ampersand characters to their
         //  appropriate HTML entity or some variety of it.  Need to undo
         //  that so the URL can be actually be used.
 
         $form = str_replace(array('&#038;','&#38;','&amp;'), '&', $form) ;
-        $confirm = str_replace(array('&#038;','&#38;','&amp;'), '&', $confirm) ;
+        if (!is_null($confirm))
+            $confirm = str_replace(array('&#038;','&#38;','&amp;'), '&', $confirm) ;
         
         //  Retrieve the HTML from the URL
         $response = wp_remote_get($form, array('sslverify' => false)) ;
 
         if (is_wp_error($response))
-            return '<div class="gform-error">Unable to retrieve Google Form.</div>' ;
+            return '<div class="gform-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
         else
             $html = $response['body'] ;
 
@@ -320,6 +324,7 @@ class wpGForm
 
         if (!is_null($confirm))
         {
+            error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             //  Need to modify the FORM tag and add some new attributes.
             $xtra_form_attrs = 'target="gform_iframe" onsubmit="submitted=true;"' ;
             $html = preg_replace("/<form/i", "<form {$xtra_form_attrs}", $html) ;
@@ -329,8 +334,26 @@ class wpGForm
             $xtra_html .= '<iframe name="gform_iframe" id="gform_iframe" style="display:none;" onload="if(submitted){window.location=\'' . $confirm . '\';}"></iframe>' ;
         }
         else
+        {
+            error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             $xtra_html = '' ;
+        }
 
+        //  Gracefully handle multipage Google Forms
+
+        if ($multipage)
+        {
+            $slug = get_permalink() ;
+            error_log(sprintf('%s::%s::%s', basename(__FILE__), __LINE__, $slug)) ;
+            //  Need to modify the FORM tag and add some new attributes.
+            $xtra_form_attrs = 'target="gform_iframe" onsubmit="continuedorback=true;"' ;
+            $html = preg_replace("/<form/i", "<form {$xtra_form_attrs}", $html) ;
+
+            //  Need some extra HTML which must be inserted before the extract FORM HTML.
+            $xtra_html = '<script type="text/javascript">var continuedorback=false;</script>' ;
+            $xtra_html .= '<iframe name="gform_iframe" id="gform_iframe" style="display:none;" onload="if(continuedorback){window.location=\'' . $slug . '\';}"></iframe>' ;
+        }
+ 
         //  Output custom CSS?
  
         $wpgform_options = wpgform_get_plugin_options() ;
@@ -363,7 +386,9 @@ jQuery(document).ready(function($) {
 </script>
         ' ;
 
-        return $js . $css . $xtra_html . $html ;
+        $gformresponse = '<iframe style="border: 2px solid yellow;" id="gformresponse" width="500" height="200"></iframe>' ;
+
+        return $js . $css . $xtra_html . $html . $gformresponse ;
     }
 
     /**
@@ -373,14 +398,16 @@ jQuery(document).ready(function($) {
      */
     function RenderGForm($atts) {
         $params = shortcode_atts(array(
-            'form'     => false,                // Google Form URL
-            'confirm'  => false,                // Optional URL to redirect to instead of Google confirmation
-            'class'    => 'gform',              // Container element's custom class value
-            'legal'    => 'on',                 // Display Google Legal Stuff
-            'br'       => 'off',                // Insert <br> tags between labels and inputs
-            'suffix'   => null,                 // Add suffix character(s) to all labels
-            'prefix'   => null,                 // Add suffix character(s) to all labels
-            'readonly' => 'off'                 // Set all form elements to disabled
+            'form'      => false,                // Google Form URL
+            'confirm'   => false,                // Optional URL to redirect to instead of Google confirmation
+            'class'     => 'gform',              // Container element's custom class value
+            'legal'     => 'on',                 // Display Google Legal Stuff
+            'br'        => 'off',                // Insert <br> tags between labels and inputs
+            'suffix'    => null,                 // Add suffix character(s) to all labels
+            'prefix'    => null,                 // Add suffix character(s) to all labels
+            'readonly'  => 'off',                // Set all form elements to disabled
+            'embedded'  => 'no',                 // By default, the form is not embedded
+            'multipage' => 'no'                  // By default, the form is not multipage
         ), $atts) ;
 
         return wpGForm::ConstructGForm($params) ;
