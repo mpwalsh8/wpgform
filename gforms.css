@@ -17,6 +17,10 @@ body.ss-base-body {}
 div.errorbox-good {}
 div.ss-attribution {}
 div.ss-footer {}
+div.ss-footer-txt, div.ss-logo {
+    display: none;
+}
+
 div.ss-form {}
 div.ss-form-container {
     font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
