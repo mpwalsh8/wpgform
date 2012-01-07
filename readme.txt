@@ -3,7 +3,7 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
-Tested up to: 3.2.1
+Tested up to: 3.3.1
 Stable tag: 0.10
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
@@ -51,7 +51,7 @@ Yes, there are two ways to change the style (aka apearance) of the form.
 1. By adding the necessary CSS to your theme's style sheet.
 1. Through the WordPress Google Form custom CSS setting.
 
-Google Forms include plenty of [CSS](http://en.wikipedia.org/wiki/Cascading_Style_Sheets) hooks. Refer to the **CSS** section for further details on styling the form.
+Google Forms include plenty of [CSS](http://en.wikipedia.org/wiki/Cascading_Style_Sheets) hooks. Refer to the **CSS** section for further details on styling the form.  There are also some CSS solutions posted to questions users have raised in the Tips and Tricks section of [this page](http://michaelwalsh.org/wordpress/wordpress-plugins/wpgform/).
 
 = Do you have a demo running? =
 Yes, see a demo here:  [Demo of WordPress Google Form plugin](http://michaelwalsh.org/wordpress/wordpress-plugins/wpgform/)
@@ -89,7 +89,7 @@ There are two ways to customize the Google Form CSS.
 
 = Default Google Form CSS =
 
-As of 2011-10-07, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
+As of 2012-01-07, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
 
 `
 label.gform-error {
@@ -101,6 +101,10 @@ body.ss-base-body {}
 div.errorbox-good {}
 div.ss-attribution {}
 div.ss-footer {}
+div.ss-footer-txt, div.ss-logo {
+    display: none;
+}
+
 div.ss-form {}
 div.ss-form-container {
     font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
@@ -164,6 +168,12 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.11 =
+* Re-architected plugin to support multi-page Google Forms.
+* Fixed bug which resulted in form being redisplayed when using default confirmation.
+* Deprecated use of jQuery Validaor plugin, it is no longer needed as Google is now doing required field checking and validation as part of the new architecture.
+* New CSS styles added to support new architecture and confirmation page rendering.
 
 = Version 0.10 =
 
