@@ -139,6 +139,7 @@ add_shortcode('gform', array('wpGForm', 'RenderGForm')) ;
  * @author Mike Walsh <mike@walshcrew.com>
  * @access public
  * @see wp_remote_get()
+ * @see wp_remote_post()
  * @see RenderGForm()
  * @see ConstructGForm()
  */
@@ -220,9 +221,6 @@ class wpGForm
         //  Should form be set to readonly?
         $readonly = $options['readonly'] === 'on' ;
 
-        //  Should form be set to readonly?
-        $multipage = $options['multipage'] === 'yes' ;
-
         //  WordPress converts all of the ampersand characters to their
         //  appropriate HTML entity or some variety of it.  Need to undo
         //  that so the URL can be actually be used.
@@ -231,20 +229,65 @@ class wpGForm
         if (!is_null($confirm))
             $confirm = str_replace(array('&#038;','&#38;','&amp;'), '&', $confirm) ;
         
+        //  If we arrive here as a result of a POST then the Google Form was
+        //  submitted (either completely or partially) so we need to act on
+        //  the posted data appropriately.  The user "submitting" the form
+        //  doesn't actually do anything - it just tells us that the form was
+        //  submitted and now the plugin needs to "really" submit it to Google,
+        //  get the response, and display it as part of the WordPress content.
+
+        if (!empty($_POST))
+        {
+            $posted = true ;
+            //echo '<h1>Posted!</h1>' ;
+            //var_dump($_POST) ;
+            //var_dump($form) ;
+            $action = $_POST['gform-action'] ;
+            //var_dump($action) ;
+            unset($_POST['gform-action']) ;
+
+            $params = array() ;
+
+            foreach ($_POST as $key => $value)
+            {
+                $params[str_replace('_', '.', $key)] = $value ;
+            }
+
+            $form = str_replace($action, 'action=""', $form) ;
+
+            $response = wp_remote_post($action, array('sslverify' => false, 'body' => $params)) ;
+            //var_dump($response) ;
+
+            /*
+            if( is_wp_error( $response ) ) {
+                echo 'Something went wrong!';
+            } else {
+                echo 'Response:<pre>';
+                //print_r( $response );
+                echo '</pre>';
+            }
+             */
+        }
+        else
+        {
+            $posted = false ;
+            //echo '<h1>Not Posted!</h1>' ;
+            $response = wp_remote_get($form, array('sslverify' => false)) ;
+        }
+
         //  Retrieve the HTML from the URL
-        $response = wp_remote_get($form, array('sslverify' => false)) ;
 
         if (is_wp_error($response))
             return '<div class="gform-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
         else
             $html = $response['body'] ;
 
-
         //  Need to filter the HTML retrieved from the form and strip off the stuff
         //  we don't want.  This gets rid of the HTML wrapper from the Google page.
 
         $allowed_tags = array(
             'a' => array('href' => array(), 'title' => array(), 'target' => array())
+           ,'b' => array()
            ,'abbr' => array('title' => array()),'acronym' => array('title' => array())
            ,'code' => array()
            ,'pre' => array()
@@ -257,6 +300,7 @@ class wpGForm
            ,'br' => array()
            ,'div' => array('class' => array())
            ,'h1' => array('class' => array())
+           ,'i' => array()
            ,'label' => array('class' => array(), 'for' => array())
            ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array())
            ,'select' => array('name' => array(), 'for' => array())
@@ -313,7 +357,34 @@ class wpGForm
         //  Hide Google Legal Stuff?
 
         if (!$legal)
-            $html = preg_replace('/<div class="ss-legal"/i', '<div class="ss-legal" style="display:none;"', $html) ;
+            $html = preg_replace('/<div class="ss-legal"/i',
+                '<div class="ss-legal" style="display:none;"', $html) ;
+
+        //  Need to extract form action and rebuild form tag,
+        //  and add hidden field which contains the original
+        //  action.  This action is used to submit the form via
+        //  wp_remote_post().
+
+        if (preg_match_all('/(action(\\s*)=(\\s*)([\"\'])?(?(1)(.*?)\\2|([^\s\>]+)))/', $html, $matches)) 
+        { 
+            for ($i=0; $i< count($matches[0]); $i++)
+            {
+                //echo "<h1>matched $i: ".$matches[0][$i]."</h1>"; 
+                $action = $matches[0][$i] ;
+            }
+
+            $html = str_replace($action, 'action=""', $html) ;
+            $action = preg_replace('/^action/i', 'value', $action) ;
+
+            $html = preg_replace('/<\/form>/i',
+                "<input type=\"hidden\" {$action} name=\"gform-action\"></form>", $html) ;
+        } 
+        else 
+        {
+            $action = null ;
+            //print "<h1>A match was not found.</h1>"; 
+        }
+        
 
         //  By default Google will display it's own confirmation page which can't
         //  be styled and is not contained within the web site.  The plugin can
@@ -322,38 +393,28 @@ class wpGForm
  
         //  Redirect to a custom confirmation page instead of the Google default?
 
+        /*
         if (!is_null($confirm))
         {
             error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             //  Need to modify the FORM tag and add some new attributes.
-            $xtra_form_attrs = 'target="gform_iframe" onsubmit="submitted=true;"' ;
-            $html = preg_replace("/<form/i", "<form {$xtra_form_attrs}", $html) ;
+            //$xtra_form_attrs = 'onsubmit="submitted=true;"' ;
+            //$xtra_form_attrs = 'target="gform_iframe" onsubmit="submitted=true;"' ;
+            //$html = preg_replace("/<form/i", "<form {$xtra_form_attrs}", $html) ;
 
             //  Need some extra HTML which must be inserted before the extract FORM HTML.
+            //$xtra_html = '<script type="text/javascript">var submitted=false;</script>' ;
+            //$xtra_html .= '<iframe name="gform_iframe" id="gform_iframe" width="500" height="300" style="border: 2px solid yellow;display:block;" onload="if(submitted){window.location=\'' . $confirm . '\';}"></iframe>' ;
             $xtra_html = '<script type="text/javascript">var submitted=false;</script>' ;
-            $xtra_html .= '<iframe name="gform_iframe" id="gform_iframe" style="display:none;" onload="if(submitted){window.location=\'' . $confirm . '\';}"></iframe>' ;
         }
         else
         {
             error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             $xtra_html = '' ;
         }
+         */
+            $xtra_html = '' ;
 
-        //  Gracefully handle multipage Google Forms
-
-        if ($multipage)
-        {
-            $slug = get_permalink() ;
-            error_log(sprintf('%s::%s::%s', basename(__FILE__), __LINE__, $slug)) ;
-            //  Need to modify the FORM tag and add some new attributes.
-            $xtra_form_attrs = 'target="gform_iframe" onsubmit="continuedorback=true;"' ;
-            $html = preg_replace("/<form/i", "<form {$xtra_form_attrs}", $html) ;
-
-            //  Need some extra HTML which must be inserted before the extract FORM HTML.
-            $xtra_html = '<script type="text/javascript">var continuedorback=false;</script>' ;
-            $xtra_html .= '<iframe name="gform_iframe" id="gform_iframe" style="display:none;" onload="if(continuedorback){window.location=\'' . $slug . '\';}"></iframe>' ;
-        }
- 
         //  Output custom CSS?
  
         $wpgform_options = wpgform_get_plugin_options() ;
@@ -367,28 +428,36 @@ class wpGForm
         $js = '
 <script type="text/javascript">
 jQuery(document).ready(function($) {
+
+    /*
     $("div > .ss-item-required input").addClass("gform-required");
     $("div > .ss-item-required textarea").addClass("gform-required");
     $.validator.addClassRules("gform-required", {
         required: true
     });
-    $("#ss-form").validate({
-        errorClass: "gform-error"
-    }) ;' ;
+    //$("#ss-form").validate({
+        //errorClass: "gform-error"
+    //}) ;*/' ;
 
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= '
     $("div.ss-form-container :input").attr("disabled", true);
         ' ;
 
+        //  Before closing the <script> tag, is this the confirmation
+        //  AND do we have a custom confiormation page?
+        if ($posted && is_null($action) && !is_null($confirm))
+            $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
+
         $js .= '
 });
 </script>
         ' ;
 
-        $gformresponse = '<iframe style="border: 2px solid yellow;" id="gformresponse" width="500" height="200"></iframe>' ;
+        //$gformontent = '<iframe style="border: 2px solid yellow;" id="gform-content" width="500" height="200"></iframe>' ;
+        //$gformresponse = '<iframe style="border: 2px solid yellow;" id="gform-response" width="500" height="200"></iframe>' ;
 
-        return $js . $css . $xtra_html . $html . $gformresponse ;
+        return $js . $css . $xtra_html . $html /*. $gformresponse*/ ;
     }
 
     /**
@@ -405,9 +474,7 @@ jQuery(document).ready(function($) {
             'br'        => 'off',                // Insert <br> tags between labels and inputs
             'suffix'    => null,                 // Add suffix character(s) to all labels
             'prefix'    => null,                 // Add suffix character(s) to all labels
-            'readonly'  => 'off',                // Set all form elements to disabled
-            'embedded'  => 'no',                 // By default, the form is not embedded
-            'multipage' => 'no'                  // By default, the form is not multipage
+            'readonly'  => 'off'                 // Set all form elements to disabled
         ), $atts) ;
 
         return wpGForm::ConstructGForm($params) ;
@@ -465,6 +532,8 @@ jQuery(document).ready(function($) {
     $("#ss-form").validate({
         errorClass: "gform-error"
     }) ;
+
+    //  Copy the Google form content to the DIV
 });
 </script>
 <?php
