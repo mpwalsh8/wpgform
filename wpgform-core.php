@@ -215,6 +215,12 @@ class wpGForm
         //  Breaks between labels and inputs?
         $br = $options['br'] === 'on' ;
 
+        //  Output the H1 title included in the Google Form?
+        $title = $options['title'] === 'on' ;
+
+        //  Map H1 tags to H2 tags?  Apparently helps SEO ...
+        $maph1h2 = $options['maph1h2'] === 'on' ;
+
         //  Google Legal Stuff?
         $legal = $options['legal'] !== 'off' ;
 
@@ -248,10 +254,15 @@ class wpGForm
 
             $params = array() ;
 
+            //  The name of the form fields are munged, they need
+            //  to be restored before the parameters can be posted
+
             foreach ($_POST as $key => $value)
             {
                 $params[str_replace('_', '.', $key)] = $value ;
             }
+
+            //  Remove the action from the form and POST it
 
             $form = str_replace($action, 'action=""', $form) ;
 
@@ -315,6 +326,8 @@ class wpGForm
            ,'td' => array('class' => array(), 'style' => array())
         ) ;
 
+        //  Process the HTML
+
         $html = wp_kses($html, $allowed_tags) ;
 
         //  Did we end up with anything prior to the first DIV?  If so, remove it as
@@ -338,6 +351,19 @@ class wpGForm
 
         $html = preg_replace('#<script[^>]*>.*?</script>#is',
             '<!-- Google Forms unnessary Javascript removed -->' . PHP_EOL, $html) ;
+
+        //  Allow H1 tags through if user wants them (which is the default)
+
+        if (!$title)
+            $html = preg_replace('#<h1[^>]*>.*?</h1>#is', '', $html) ;
+
+        //  Map H1 tags to H2 tags?
+
+        if ($maph1h2)
+        {
+            $html = preg_replace('/<h1/i', '<h2', $html) ;
+            $html = preg_replace('/h1>/i', 'h2>', $html) ;
+        }
 
         //  Augment class names with some sort of a prefix?
 
@@ -385,7 +411,6 @@ class wpGForm
             //print "<h1>A match was not found.</h1>"; 
         }
         
-
         //  By default Google will display it's own confirmation page which can't
         //  be styled and is not contained within the web site.  The plugin can
         //  optionally add some Javascript to redirect to a different URL upon
@@ -413,7 +438,7 @@ class wpGForm
             $xtra_html = '' ;
         }
          */
-            $xtra_html = '' ;
+        $xtra_html = '' ;
 
         //  Output custom CSS?
  
@@ -454,10 +479,7 @@ jQuery(document).ready(function($) {
 </script>
         ' ;
 
-        //$gformontent = '<iframe style="border: 2px solid yellow;" id="gform-content" width="500" height="200"></iframe>' ;
-        //$gformresponse = '<iframe style="border: 2px solid yellow;" id="gform-response" width="500" height="200"></iframe>' ;
-
-        return $js . $css . $xtra_html . $html /*. $gformresponse*/ ;
+        return $js . $css . $xtra_html . $html ;
     }
 
     /**
@@ -467,14 +489,16 @@ jQuery(document).ready(function($) {
      */
     function RenderGForm($atts) {
         $params = shortcode_atts(array(
-            'form'      => false,                // Google Form URL
-            'confirm'   => false,                // Optional URL to redirect to instead of Google confirmation
-            'class'     => 'gform',              // Container element's custom class value
-            'legal'     => 'on',                 // Display Google Legal Stuff
-            'br'        => 'off',                // Insert <br> tags between labels and inputs
-            'suffix'    => null,                 // Add suffix character(s) to all labels
-            'prefix'    => null,                 // Add suffix character(s) to all labels
-            'readonly'  => 'off'                 // Set all form elements to disabled
+            'form'      => false,        // Google Form URL
+            'confirm'   => false,        // Custom confirmation page URL to redirect to
+            'class'     => 'gform',      // Container element's custom class value
+            'legal'     => 'on',         // Display Google Legal Stuff
+            'br'        => 'off',        // Insert <br> tags between labels and inputs
+            'suffix'    => null,         // Add suffix character(s) to all labels
+            'prefix'    => null,         // Add suffix character(s) to all labels
+            'readonly'  => 'off',        // Set all form elements to disabled
+            'title'     => 'on',         // Remove the H1 element(s) from the Form
+            'maph1h2'   => 'off'         // Map H1 element(s) on the form to H2 element(s)
         ), $atts) ;
 
         return wpGForm::ConstructGForm($params) ;
@@ -532,8 +556,6 @@ jQuery(document).ready(function($) {
     $("#ss-form").validate({
         errorClass: "gform-error"
     }) ;
-
-    //  Copy the Google form content to the DIV
 });
 </script>
 <?php
