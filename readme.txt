@@ -40,8 +40,10 @@ The WordPress Google Form shortcode `gform` supports a number of attributes that
 * __br__:  For a <br> tag to be inserted between the form label and the input text box by setting the *br* attribute to *on*.  This will result in the form label and the input box being stacked on top of one another.
 * __prefix__:  Google Forms make use 20+ CSS classes.  If you use multiple forms and want to style them each differently, you can add a _prefix_ which will be added to beginning of each class name used in the Google Form.
 * __suffix__:  Append a character string to the end of each form label.  This can also be accomplished using CSS, refer to the CSS section.
+* __title__:  By default Google Forms have title wrapped in a <h1> tag.  If you do not want to include this form title as part of the form, add `title='off'` to your shortcode usage.  The <h1> content is removed from the form.
+* __maph1h2:  By default Google Forms have title wrapped in a <h1> tag.  If you want the form title but not as an <h1> element, add `maph1h2='on'` to your shortcode usage.  The <h1> elements will be mapped to <h2> elements.  The CSS class attributes remain unchanged.
 
-`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' class='mygform' legal='off' prefix='mygform-' br='on']`
+`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on']`
 
 == Frequently Asked Questions ==
 
@@ -134,7 +136,9 @@ hr.ss-email-break {}
 input.ss-q-short {
 	width: 300px;
 }
-label.ss-q-help {}
+label.ss-q-help {
+    display: block;
+}
 label.ss-q-radio {}
 label.ss-q-title {
     font-weight: bold;
@@ -174,6 +178,9 @@ No known upgrade issues.
 * Fixed bug which resulted in form being redisplayed when using default confirmation.
 * Deprecated use of jQuery Validaor plugin, it is no longer needed as Google is now doing required field checking and validation as part of the new architecture.
 * New CSS styles added to support new architecture and confirmation page rendering.
+* Default CSS style for div.ss-q-help changed to `display: block;`.
+* New attribute *title* added to allow supressing for form title.
+* New attribute *maph1h2* added to map H1 elements to H2 elements.
 
 = Version 0.10 =
 
