@@ -411,35 +411,6 @@ class wpGForm
             //print "<h1>A match was not found.</h1>"; 
         }
         
-        //  By default Google will display it's own confirmation page which can't
-        //  be styled and is not contained within the web site.  The plugin can
-        //  optionally add some Javascript to redirect to a different URL upon
-        //  submission of the form.
- 
-        //  Redirect to a custom confirmation page instead of the Google default?
-
-        /*
-        if (!is_null($confirm))
-        {
-            error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-            //  Need to modify the FORM tag and add some new attributes.
-            //$xtra_form_attrs = 'onsubmit="submitted=true;"' ;
-            //$xtra_form_attrs = 'target="gform_iframe" onsubmit="submitted=true;"' ;
-            //$html = preg_replace("/<form/i", "<form {$xtra_form_attrs}", $html) ;
-
-            //  Need some extra HTML which must be inserted before the extract FORM HTML.
-            //$xtra_html = '<script type="text/javascript">var submitted=false;</script>' ;
-            //$xtra_html .= '<iframe name="gform_iframe" id="gform_iframe" width="500" height="300" style="border: 2px solid yellow;display:block;" onload="if(submitted){window.location=\'' . $confirm . '\';}"></iframe>' ;
-            $xtra_html = '<script type="text/javascript">var submitted=false;</script>' ;
-        }
-        else
-        {
-            error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-            $xtra_html = '' ;
-        }
-         */
-        $xtra_html = '' ;
-
         //  Output custom CSS?
  
         $wpgform_options = wpgform_get_plugin_options() ;
@@ -479,7 +450,7 @@ jQuery(document).ready(function($) {
 </script>
         ' ;
 
-        return $js . $css . $xtra_html . $html ;
+        return $js . $css . $html ;
     }
 
     /**
