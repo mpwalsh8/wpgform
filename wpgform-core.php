@@ -259,6 +259,7 @@ class wpGForm
 
             foreach ($_POST as $key => $value)
             {
+                //printf('<h3>Fixing parameter "%s"</h3>', $key) ;
                 $params[str_replace('_', '.', $key)] = $value ;
             }
 
@@ -313,8 +314,8 @@ class wpGForm
            ,'h1' => array('class' => array())
            ,'i' => array()
            ,'label' => array('class' => array(), 'for' => array())
-           ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array())
-           ,'select' => array('name' => array(), 'for' => array())
+           ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'checked' => array())
+           ,'select' => array('name' => array(), 'for' => array(), 'checked' => array())
            ,'option' => array('value' => array(), 'checked' => array())
            ,'form' => array('id' => array(), 'class' => array(), 'action' => array(), 'method' => array(), 'target' => array(), 'onsubmit' => array())
            ,'script' => array('type' => array())
