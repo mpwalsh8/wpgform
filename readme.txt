@@ -173,6 +173,9 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.13
+* Fixed bug where values for check boxes and radio buttons was not retained when going back on multi-page Google Forms.
+
 = Version 0.12 =
 * Debug code removed and typos fixed.
 
