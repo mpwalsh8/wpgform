@@ -84,11 +84,11 @@ function wpgform_options_page()
 ?>
 <div class="wrap">
 <?php
-    if (function_exists(screen_icon)) screen_icon() ;
+    if (function_exists('screen_icon')) screen_icon() ;
 ?>
 <h2><?php _e('WordPress Google Form Plugin Settings') ; ?></h2>
 <?php
-    $wpgform_options = get_option('wpgform_options') ;
+    $wpgform_options = wpgform_get_plugin_options() ;
     if (!$wpgform_options['donation_message'])
     {
 ?>
@@ -262,7 +262,7 @@ function wpgform_options_page()
  */
 function wpgform_settings_input()
 {
-    $wpgform_options = get_option('wpgform_options') ; ?>
+    $wpgform_options = wpgform_get_plugin_options() ; ?>
     <table class="form-table">
         <tr valign="top">
             <th scope="row"><label><b><i>gform</i></b> Shortcode</label></th>
