@@ -37,8 +37,6 @@ function wpgform_init()
         add_filter('widget_text', 'do_shortcode') ;
 
     add_action('template_redirect', 'wpgform_head') ;
-
-    //add_action('wp_footer', 'wpgform_footer') ;
 }
 
 /**
@@ -262,11 +260,7 @@ class wpGForm
         if (!empty($_POST))
         {
             $posted = true ;
-            //echo '<h1>Posted!</h1>' ;
-            //var_dump($_POST) ;
-            //var_dump($form) ;
             $action = $_POST['gform-action'] ;
-            //var_dump($action) ;
             unset($_POST['gform-action']) ;
 
             $params = array() ;
@@ -282,22 +276,10 @@ class wpGForm
             $form = str_replace($action, 'action=""', $form) ;
 
             $response = wp_remote_post($action, array('sslverify' => false, 'body' => $params)) ;
-            //var_dump($response) ;
-
-            /*
-            if( is_wp_error( $response ) ) {
-                echo 'Something went wrong!';
-            } else {
-                echo 'Response:<pre>';
-                //print_r( $response );
-                echo '</pre>';
-            }
-             */
         }
         else
         {
             $posted = false ;
-            //echo '<h1>Not Posted!</h1>' ;
             $response = wp_remote_get($form, array('sslverify' => false)) ;
         }
 
@@ -415,7 +397,6 @@ class wpGForm
         { 
             for ($i=0; $i< count($matches[0]); $i++)
             {
-                //echo "<h1>matched $i: ".$matches[0][$i]."</h1>"; 
                 $action = $matches[0][$i] ;
             }
 
@@ -443,17 +424,7 @@ class wpGForm
         //  Output Javscript for form validation
         $js = '
 <script type="text/javascript">
-jQuery(document).ready(function($) {
-
-    /*
-    $("div > .ss-item-required input").addClass("gform-required");
-    $("div > .ss-item-required textarea").addClass("gform-required");
-    $.validator.addClassRules("gform-required", {
-        required: true
-    });
-    //$("#ss-form").validate({
-        //errorClass: "gform-error"
-    //}) ;*/' ;
+jQuery(document).ready(function($) {' ;
 
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= '
@@ -511,44 +482,5 @@ function wpgform_head()
         wp_enqueue_style('gform',
             plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
     }
-
-    //  Load the jQuery Validate from the Microsoft CDN, it isn't
-    //  available from the Google CDN or I'd load it from there!
-    wp_register_script('jquery-validate',
-        'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js',
-        array('jquery'), false, true) ;
-    wp_enqueue_script('jquery-validate') ;
-}
-
-/**
- * wpgform_footer()
- *
- * WordPress footer actions
- */
-function wpgform_footer()
-{
-    //
-    //  jQuery script to initialize the form validation
-    //  neccessary so bad or missing data is submitted.
-    //  When required fields are blank the normal Google
-    //  processing for form errors doesn't occur, this
-    //  jQuery script handles it gracefully.  The fields
-    //  have only rudimentary validation.
-    //
-?>
-
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    $("div > .ss-item-required input").addClass("gform-required");
-    $("div > .ss-item-required textarea").addClass("gform-required");
-    $.validator.addClassRules("gform-required", {
-        required: true
-    });
-    $("#ss-form").validate({
-        errorClass: "gform-error"
-    }) ;
-});
-</script>
-<?php
 }
 ?>
