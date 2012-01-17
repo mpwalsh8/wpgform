@@ -70,8 +70,25 @@ function wpgform_get_plugin_options()
     //  Get the default options in case anything new has been added
     $default_options = wpgform_get_default_plugin_options() ;
 
-    //  Merge the default with any options currently saves by WordPress
-    $plugin_options = wp_parse_args(get_option('wpgform_options', array()), $default_options) ;
+    //  If there is nothing persistent saved, return the default
+
+    if (get_option('wpgform_options') === false)
+        return $default_options ;
+
+    //  One of the issues with simply merging the defaults is that by
+    //  using checkboxes (which is the correct UI decision) WordPress does
+    //  not save anything for the fields which are unchecked which then
+    //  causes wp_parse_args() to incorrectly pick up the defaults.
+    //  Since the array keys are used to build the form, we need for them
+    //  to "exist" so if they don't, they are created and set to null.
+
+    $plugin_options = get_option('wpgform_options', $default_options) ;
+
+    foreach ($default_options as $key => $value)
+    {
+        if (!array_key_exists($key, $plugin_options))
+            $plugin_options[$key] = null ;
+    }
 
     return $plugin_options ;
 }
@@ -258,10 +275,7 @@ class wpGForm
             //  to be restored before the parameters can be posted
 
             foreach ($_POST as $key => $value)
-            {
-                //printf('<h3>Fixing parameter "%s"</h3>', $key) ;
                 $params[str_replace('_', '.', $key)] = $value ;
-            }
 
             //  Remove the action from the form and POST it
 
@@ -312,6 +326,11 @@ class wpGForm
            ,'br' => array()
            ,'div' => array('class' => array())
            ,'h1' => array('class' => array())
+           ,'h2' => array('class' => array())
+           ,'h3' => array('class' => array())
+           ,'h4' => array('class' => array())
+           ,'h5' => array('class' => array())
+           ,'h6' => array('class' => array())
            ,'i' => array()
            ,'label' => array('class' => array(), 'for' => array())
            ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'checked' => array())
@@ -339,7 +358,7 @@ class wpGForm
         //  If there are no DIVs, then we have garbage and should stop now!
 
         if ($first_div === false)
-            return '<div class="gform-error">Unable to retrieve Google Form.</div>' ;
+            return '<div class="gform-error">Unexpected content encountered, unable to retrieve Google Form.</div>' ;
 
         //  Strip off anything prior to the first  DIV, we don't want it.
 
