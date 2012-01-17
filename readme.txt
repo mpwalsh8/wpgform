@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.14
+Stable tag: 0.15
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -77,6 +77,9 @@ label.ss-q-title:after {
     content: ':';
 }
 `
+
+= No matter what I do, I always get the *Unable to retrieve Google Form.  Please try reloading this page.* error message.  Why is this?
+Validate that the WordPress HTTP API is working correctly.  If you are seeing HTTP API errors on the WordPress Dashboard or when you attempt to access the plugin repository through the Dashboard, the WordPress Google Form will likely fail too.  It requires the WordPress HTTP API to be working.  With some free hosting plans, ISPs disable the ability to access remote content.
 
 == CSS ==
 
@@ -172,6 +175,11 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.15
+* Fixed bug with default options which manifested itself always loading the default options for any setting which is on by default even when turned off by user.
+* Removed loading of jQuery-Validate as it is no longer used.
+* Removed debug and other deprecated code (e.g. wpgform_footer()).
 
 = Version 0.14
 * Fixed minor bug with default options which manifested itself as an array index warning on the Options page.
