@@ -263,18 +263,14 @@ class wpGForm
             $action = $_POST['gform-action'] ;
             unset($_POST['gform-action']) ;
 
-            print '<h2>$_POST</h2>' ;
-            print "<pre>" ;
-            print_r($_POST) ;
-            print "</pre>" ;
             $body = '' ;
-            $params = array() ;
-            $xtraparams = '' ;
 
             //  The name of the form fields are munged, they need
             //  to be restored before the parameters can be posted
 
-/*
+            $patterns = array('/^entry_([0-9])+_(single|group)_/', '/^entry_([0-9])+_/') ;
+            $replacements = array('entry.\1.\2.', 'entry.\1.') ;
+
             foreach ($_POST as $key => $value)
             {
                 //  Need to handle parameters passed as array
@@ -286,56 +282,19 @@ class wpGForm
                 {
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
-                        $xtraparams .= str_replace('_', '.', $key) . '=' . $pv . '&' ;
+                        $body .= preg_replace($patterns, $replacements, $key) . '=' . $pv . '&' ;
                 }
                 else
                 {
-                    $params[str_replace('_', '.', $key)] = $value ;
-                    printf("\"%s\"  =>  \"%s\" = \"%s\"<br/>", str_replace('_', '.', $key), $key, $value) ;
-                }
-            }
-            if ($xtraparams != '')
-                $params[] = $xtraparams ;
-
-*/
-
-            foreach ($_POST as $key => $value)
-            {
-                printf('<h1>%s = %s ?</h1>', $key,
-                    preg_replace('/^entry_([0-9])+_/', 'entry.\1.', $key)) ;
-
-                //  Need to handle parameters passed as array
-                //  values separately because of how Python (used
-                //  Google) handles array arguments differently than
-                //  PHP does.
-
-                printf("\"%s\"  =>  \"%s\" = \"%s\"<br/>", str_replace('_', '.', $key), $key, $value) ;
-                if (is_array($_POST[$key]))
-                {
-                    $pa = &$_POST[$key] ;
-                    foreach ($pa as $pv)
-                        $body .= preg_replace('/^entry_([0-9])+_/', 'entry.\1.', $key) . '=' . $pv . '&' ;
-                }
-                else
-                {
-                    $body .= preg_replace('/^entry_([0-9])+_/', 'entry.\1.', $key) . '=' . $value . '&' ;
+                    $body .= preg_replace($patterns, $replacements, $key) . '=' . $value . '&' ;
                 }
             }
             //  Remove the action from the form and POST it
 
             $form = str_replace($action, 'action=""', $form) ;
 
-            print "<pre>" ;
-            //print_r($params) ;
-            printf('%s::%s<br/>', basename(__FILE__), __LINE__) ;
-            var_dump($body) ;
-            print "</pre>" ;
-            //$response = wp_remote_post($action,
-            //    array('sslverify' => false, 'body' => $params)) ;
-            //$response = wp_remote_post('http://httpbin.org/post',
             $response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body)) ;
-                //array('sslverify' => false, 'body' => $params)) ;
         }
         else
         {
@@ -492,11 +451,12 @@ class wpGForm
         $js = '
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-$("form input:checkbox").wrap(\'<span></span>\').parent().css({background:"yellow", border:"3px red solid"});
-$("form input:checkbox").each(function(index) {
-    this.name = this.name + \'[]\';
-});
-
+//$("form input:checkbox").wrap(\'<span></span>\').parent().css({background:"yellow", border:"3px red solid"});
+    //  Need to fix the name arguments for checkboxes
+    //  so PHP will pass them as an array correctly.
+    $("div.ss-form-container input:checkbox").each(function(index) {
+        this.name = this.name + \'[]\';
+    });
 ' ;
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= '
