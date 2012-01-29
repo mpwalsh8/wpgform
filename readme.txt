@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.15
+Stable tag: 0.16
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -175,6 +175,11 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.16 =
+* Fixed bug with *select* input tags.  Selected value was not being retained on a multipage form.
+* Fixed bug with passing checkbox values.  Only one value, the last selected, was being passed for a multiple choice question.
+* Rearchitected process for passing parameters to the Google Form with wp_remote_post().
 
 = Version 0.15
 * Fixed bug with default options which manifested itself always loading the default options for any setting which is on by default even when turned off by user.
