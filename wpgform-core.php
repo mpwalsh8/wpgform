@@ -263,19 +263,79 @@ class wpGForm
             $action = $_POST['gform-action'] ;
             unset($_POST['gform-action']) ;
 
+            print '<h2>$_POST</h2>' ;
+            print "<pre>" ;
+            print_r($_POST) ;
+            print "</pre>" ;
+            $body = '' ;
             $params = array() ;
+            $xtraparams = '' ;
 
             //  The name of the form fields are munged, they need
             //  to be restored before the parameters can be posted
 
+/*
             foreach ($_POST as $key => $value)
-                $params[str_replace('_', '.', $key)] = $value ;
+            {
+                //  Need to handle parameters passed as array
+                //  values separately because of how Python (used
+                //  Google) handles array arguments differently than
+                //  PHP does.
 
+                if (is_array($_POST[$key]))
+                {
+                    $pa = &$_POST[$key] ;
+                    foreach ($pa as $pv)
+                        $xtraparams .= str_replace('_', '.', $key) . '=' . $pv . '&' ;
+                }
+                else
+                {
+                    $params[str_replace('_', '.', $key)] = $value ;
+                    printf("\"%s\"  =>  \"%s\" = \"%s\"<br/>", str_replace('_', '.', $key), $key, $value) ;
+                }
+            }
+            if ($xtraparams != '')
+                $params[] = $xtraparams ;
+
+*/
+
+            foreach ($_POST as $key => $value)
+            {
+                printf('<h1>%s = %s ?</h1>', $key,
+                    preg_replace('/^entry_([0-9])+_/', 'entry.\1.', $key)) ;
+
+                //  Need to handle parameters passed as array
+                //  values separately because of how Python (used
+                //  Google) handles array arguments differently than
+                //  PHP does.
+
+                printf("\"%s\"  =>  \"%s\" = \"%s\"<br/>", str_replace('_', '.', $key), $key, $value) ;
+                if (is_array($_POST[$key]))
+                {
+                    $pa = &$_POST[$key] ;
+                    foreach ($pa as $pv)
+                        $body .= preg_replace('/^entry_([0-9])+_/', 'entry.\1.', $key) . '=' . $pv . '&' ;
+                }
+                else
+                {
+                    $body .= preg_replace('/^entry_([0-9])+_/', 'entry.\1.', $key) . '=' . $value . '&' ;
+                }
+            }
             //  Remove the action from the form and POST it
 
             $form = str_replace($action, 'action=""', $form) ;
 
-            $response = wp_remote_post($action, array('sslverify' => false, 'body' => $params)) ;
+            print "<pre>" ;
+            //print_r($params) ;
+            printf('%s::%s<br/>', basename(__FILE__), __LINE__) ;
+            var_dump($body) ;
+            print "</pre>" ;
+            //$response = wp_remote_post($action,
+            //    array('sslverify' => false, 'body' => $params)) ;
+            //$response = wp_remote_post('http://httpbin.org/post',
+            $response = wp_remote_post($action,
+                array('sslverify' => false, 'body' => $body)) ;
+                //array('sslverify' => false, 'body' => $params)) ;
         }
         else
         {
@@ -317,7 +377,7 @@ class wpGForm
            ,'label' => array('class' => array(), 'for' => array())
            ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'checked' => array())
            ,'select' => array('name' => array(), 'for' => array(), 'checked' => array())
-           ,'option' => array('value' => array(), 'checked' => array())
+           ,'option' => array('value' => array(), 'selected' => array())
            ,'form' => array('id' => array(), 'class' => array(), 'action' => array(), 'method' => array(), 'target' => array(), 'onsubmit' => array())
            ,'script' => array('type' => array())
            ,'table' => array()
@@ -340,7 +400,10 @@ class wpGForm
         //  If there are no DIVs, then we have garbage and should stop now!
 
         if ($first_div === false)
+        {
+            print "<pre>$html</pre>" ;
             return '<div class="gform-error">Unexpected content encountered, unable to retrieve Google Form.</div>' ;
+        }
 
         //  Strip off anything prior to the first  DIV, we don't want it.
 
@@ -388,10 +451,15 @@ class wpGForm
             $html = preg_replace('/<div class="ss-legal"/i',
                 '<div class="ss-legal" style="display:none;"', $html) ;
 
-        //  Need to extract form action and rebuild form tag,
-        //  and add hidden field which contains the original
-        //  action.  This action is used to submit the form via
-        //  wp_remote_post().
+        //  Need to fix names for checkbox items to account for how PHP
+        //  handles arrays - each name needs to have the "[]" tacked on
+        //  the end of it.
+
+        //$html = preg_replace('/name="entry\.[0-9]+\.group/i', '\\1[]', $html) ;
+
+        //  Need to extract form action and rebuild form tag, and add hidden field
+        //  which contains the original action.  This action is used to submit the
+        //  form via wp_remote_post().
 
         if (preg_match_all('/(action(\\s*)=(\\s*)([\"\'])?(?(1)(.*?)\\2|([^\s\>]+)))/', $html, $matches)) 
         { 
@@ -409,7 +477,6 @@ class wpGForm
         else 
         {
             $action = null ;
-            //print "<h1>A match was not found.</h1>"; 
         }
         
         //  Output custom CSS?
@@ -424,8 +491,13 @@ class wpGForm
         //  Output Javscript for form validation
         $js = '
 <script type="text/javascript">
-jQuery(document).ready(function($) {' ;
+jQuery(document).ready(function($) {
+$("form input:checkbox").wrap(\'<span></span>\').parent().css({background:"yellow", border:"3px red solid"});
+$("form input:checkbox").each(function(index) {
+    this.name = this.name + \'[]\';
+});
 
+' ;
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= '
     $("div.ss-form-container :input").attr("disabled", true);
