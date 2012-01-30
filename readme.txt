@@ -176,6 +176,9 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.17 =
+* Fixed regular expression bug which prevented complex Google Forms from working correctly.  Any form which had more than 9 fields or had enough edits such that the form ids contained more than one digit which have been affected by this bug.
+
 = Version 0.16 =
 * Fixed bug with *select* input tags.  Selected value was not being retained on a multipage form.
 * Fixed bug with passing checkbox values.  Only one value, the last selected, was being passed for a multiple choice question.
