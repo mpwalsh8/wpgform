@@ -268,11 +268,13 @@ class wpGForm
             //  The name of the form fields are munged, they need
             //  to be restored before the parameters can be posted
 
-            $patterns = array('/^entry_([0-9])+_(single|group)_/', '/^entry_([0-9])+_/') ;
+            $patterns = array('/^entry_([0-9]+)_(single|group)_/', '/^entry_([0-9]+)_/') ;
             $replacements = array('entry.\1.\2.', 'entry.\1.') ;
 
             foreach ($_POST as $key => $value)
             {
+                //printf('Mapping "%s" -> "%s"</h1>', $key, preg_replace($patterns, $replacements, $key)) ;
+
                 //  Need to handle parameters passed as array
                 //  values separately because of how Python (used
                 //  Google) handles array arguments differently than
