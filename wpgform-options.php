@@ -27,7 +27,6 @@
  */
 function wpgform_options_admin_footer()
 {
-    //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 ?>
 <!-- Setup jQuery Tabs -->
 <script type="text/javascript">
@@ -36,7 +35,6 @@ function wpgform_options_admin_footer()
     }) ;
 </script>
 <?php
-    //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 } /* function wpgform_options_admin_footer() */
 
 /**
@@ -172,7 +170,6 @@ function wpgform_options_page()
 <div class="updated error">Unable to retrive FAQ content from WordPress plugin repository.</div>
 <?php
         }
-        //echo("\n</pre>");
     }
         
 ?>
@@ -237,7 +234,6 @@ function wpgform_options_page()
 <div class="updated error">Unable to retrive FAQ content from WordPress plugin repository.</div>
 <?php
         }
-        //echo("\n</pre>");
     }
         
 ?>
@@ -245,7 +241,7 @@ function wpgform_options_page()
         <div id="gform-tabs-4">
             <h4>About WordPress Google Form</h4>
 	    <p>An easy to implement integration of a Google Form with WordPress. This plugin allows you to leverage the power of Google Docs Spreadsheets and Forms to collect data while retaining the look and feel of your WordPress based web site.  The forms can optionally be styled to better integrate with your WordPress theme.</p>
-            <p>WordPress Google Form is based on the <a href="http://codex.wordpress.org/Function_API/wp_remote_get"><b>wp_remote_get()</b></a> function for retrieving the form and <a href="http://codex.wordpress.org/Function_Reference/wp_kses"><b>wp_kses()</b></a> function for processing HTML.  If you find this plugin useful and use it for commercial purposes, please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC" target="_blank">making small donations towards this plugin</a> to help keep it up to date.</p>
+            <p>WordPress Google Form is based on the <a href="http://codex.wordpress.org/HTTP_API"><b>WordPress HTTP API</b></a> and in particular, the <a href="http://codex.wordpress.org/Function_API/wp_remote_get"><b>wp_remote_get()</b></a> and <a href="http://codex.wordpress.org/Function_API/wp_remote_post"><b>wp_remote_post()</b></a> functions for retrieving and posting the form.  WordPress Google Form also makes use of the <a href="http://codex.wordpress.org/Function_Reference/wp_kses"><b>wp_kses()</b></a> function for processing the HTML retrieved from Google and extracting the relevant parts of the form.</p><p>If you find this plugin useful, please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC" target="_blank">making small donation towards this plugin</a> to help keep it up to date.</p>
         </div>
     </div>
 </div>
