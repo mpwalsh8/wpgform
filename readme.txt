@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.18
+Stable tag: 0.19
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -40,8 +40,8 @@ The WordPress Google Form shortcode `gform` supports a number of attributes that
 * __br__:  For a <br> tag to be inserted between the form label and the input text box by setting the *br* attribute to *on*.  This will result in the form label and the input box being stacked on top of one another.
 * __prefix__:  Google Forms make use 20+ CSS classes.  If you use multiple forms and want to style them each differently, you can add a _prefix_ which will be added to beginning of each class name used in the Google Form.
 * __suffix__:  Append a character string to the end of each form label.  This can also be accomplished using CSS, refer to the CSS section.
-* __title__:  By default Google Forms have title wrapped in a <h1> tag.  If you do not want to include this form title as part of the form, add `title='off'` to your shortcode usage.  The <h1> content is removed from the form.
-* __maph1h2:  By default Google Forms have title wrapped in a <h1> tag.  If you want the form title but not as an <h1> element, add `maph1h2='on'` to your shortcode usage.  The <h1> elements will be mapped to <h2> elements.  The CSS class attributes remain unchanged.
+* __title__:  By default Google Forms have title wrapped in a &lt;h1&gt; tag.  If you do not want to include this form title as part of the form, add `title='off'` to your shortcode usage.  The &lt;h1&gt; content is removed from the form.
+* __maph1h2:  By default Google Forms have title wrapped in a &lt;h1&gt; tag.  If you want the form title but not as an &lt;h1&gt; element, add `maph1h2='on'` to your shortcode usage.  The &lt;h1&gt; elements will be mapped to &lt;h2&gt; elements.  The CSS class attributes remain unchanged.
 
 `[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on']`
 
@@ -78,7 +78,7 @@ label.ss-q-title:after {
 }
 `
 
-= No matter what I do, I always get the *Unable to retrieve Google Form.  Please try reloading this page.* error message.  Why is this?
+= No matter what I do, I always get the *Unable to retrieve Google Form.  Please try reloading this page.* error message.  Why is this? =
 Validate that the WordPress HTTP API is working correctly.  If you are seeing HTTP API errors on the WordPress Dashboard or when you attempt to access the plugin repository through the Dashboard, the WordPress Google Form will likely fail too.  It requires the WordPress HTTP API to be working.  With some free hosting plans, ISPs disable the ability to access remote content.
 
 == CSS ==
@@ -176,7 +176,11 @@ No known upgrade issues.
 
 == Changelog ==
 
-= Version 0.18
+= Version 0.19 =
+* Documentation updates in the READMME.txt file.
+* Update information on About Tab to reflect new architecture.
+
+= Version 0.18 =
 * Fixed version numbering so the WordPress repository would work!
 
 = Version 0.17 =
