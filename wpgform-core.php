@@ -187,6 +187,16 @@ class wpGForm
             $form = $options['form'] ;
         }
 
+        //  Custom Alert Message?  Optional
+        if (!$options['alert'])
+        {
+            $alert = null ;
+        }
+        else
+        {
+            $alert = $options['alert'] ;
+        }
+
         //  Custom Confirmation URL?  Optional
         if (!$options['confirm'])
         {
@@ -466,7 +476,11 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Before closing the <script> tag, is this the confirmation
-        //  AND do we have a custom confiormation page?
+        //  AND do we have a custom confiormation page or alert message?
+
+        if ($posted && is_null($action) && !is_null($alert))
+            $js .= PHP_EOL . 'alert("' . $alert . '") ;' ;
+
         if ($posted && is_null($action) && !is_null($confirm))
             $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
 
@@ -487,6 +501,7 @@ jQuery(document).ready(function($) {
         $params = shortcode_atts(array(
             'form'      => false,        // Google Form URL
             'confirm'   => false,        // Custom confirmation page URL to redirect to
+            'alert'     => null,         // Optional Alert Message
             'class'     => 'gform',      // Container element's custom class value
             'legal'     => 'on',         // Display Google Legal Stuff
             'br'        => 'off',        // Insert <br> tags between labels and inputs
