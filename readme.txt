@@ -35,6 +35,7 @@ The WordPress Google Form shortcode `gform` supports a number of attributes that
 
 * __form__:  The full URL to the published Google Form.  You must be able to open this URL successfully from a browser for the __gform__ shortcode to work properly.
 * __confirm__:  A full URL to the confirmation (e.g. _Thanks for your submission!_) page.  Be default Google displays a very basic confirmation page which cannot be integrated easily with your WordPress site.  The _confirm_ attribute allows the form submission to land on a page of your choosing.  **It is strongly encouraged that you make use of a confirmation page.**  It will make the form submission process cleaner and clearer to the end user.
+* __alert__:  A message to display upon successful form submission in a Javascript Alert box (e.g. _Thanks for your submission!_).
 * __class__:  Google Forms are full of classes but the WordPress Google Form plugin does not bring their definitions into page when importing the form.  The _class_ attribute allows the addition of one or more CSS classes to the DIV which wraps the Google Form.  To add multiple classes, simply separate the class names with spaces.
 * __legal__:  By default Google Forms have a _Powered by Google Docs_ section at the bottom of the form which includes links to Google TOS and other Google information.  If you do not want to see this information as part of the form, add `legal='off'` to your shortcode usage.  The content remains in the form, it is simply hidden from the end user using CSS.
 * __br__:  For a <br> tag to be inserted between the form label and the input text box by setting the *br* attribute to *on*.  This will result in the form label and the input box being stacked on top of one another.
@@ -60,7 +61,7 @@ Yes, see a demo here:  [Demo of WordPress Google Form plugin](http://michaelwals
 
 Feel free to submit a response and then view other responses as well.
 
-= Content appears, but it's not my form and it looks odd! =
+= Content appears, but it's not my form and it looks odd! Why? =
 You should triple-check that you've published your Form. Google provides instructions for doing this. Be sure to follow steps 1 and 2 in [Google Spreadsheets Help: Publishing to the Web](http://docs.google.com/support/bin/answer.py?hl=en&answer=47134) as the same process applies to Forms and Spreadsheets.
 
 = Why doesn't my form look the same as it does when I use the stand alone URL? =
@@ -78,7 +79,7 @@ label.ss-q-title:after {
 }
 `
 
-= No matter what I do, I always get the *Unable to retrieve Google Form.  Please try reloading this page.* error message.  Why is this? =
+= No matter what I do, I always get the "Unable to retrieve Google Form.  Please try reloading this page." error message.  Why is this? =
 Validate that the WordPress HTTP API is working correctly.  If you are seeing HTTP API errors on the WordPress Dashboard or when you attempt to access the plugin repository through the Dashboard, the WordPress Google Form will likely fail too.  It requires the WordPress HTTP API to be working.  With some free hosting plans, ISPs disable the ability to access remote content.
 
 == CSS ==
@@ -176,6 +177,13 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.21 =
+* Added ability to display a Javascript alert box upon successful form submission.
+* Fixed more syntax errors in the ReadMe.txt markdown.
+
+= Version 0.20 =
+* More documentation cleanup.
+
 = Version 0.19 =
 * Documentation updates in the READMME.txt file.
 * Update information on About Tab to reflect new architecture.
@@ -191,15 +199,15 @@ No known upgrade issues.
 * Fixed bug with passing checkbox values.  Only one value, the last selected, was being passed for a multiple choice question.
 * Rearchitected process for passing parameters to the Google Form with wp_remote_post().
 
-= Version 0.15
+= Version 0.15 =
 * Fixed bug with default options which manifested itself always loading the default options for any setting which is on by default even when turned off by user.
 * Removed loading of jQuery-Validate as it is no longer used.
 * Removed debug and other deprecated code (e.g. wpgform_footer()).
 
-= Version 0.14
+= Version 0.14 =
 * Fixed minor bug with default options which manifested itself as an array index warning on the Options page.
 
-= Version 0.13
+= Version 0.13 =
 * Fixed bug where values for check boxes and radio buttons was not retained when going back on multi-page Google Forms.
 
 = Version 0.12 =
