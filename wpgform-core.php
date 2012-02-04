@@ -523,6 +523,9 @@ jQuery(document).ready(function($) {
  */
 function wpgform_head()
 {
+    //  wpGForm needs jQuery!
+    wp_enqueue_script('jquery') ;
+    
     $wpgform_options = wpgform_get_plugin_options() ;
 
     //  Load default gForm CSS?
