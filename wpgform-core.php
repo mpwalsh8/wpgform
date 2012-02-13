@@ -351,6 +351,7 @@ class wpGForm
            ,'option' => array('value' => array(), 'selected' => array())
            ,'form' => array('id' => array(), 'class' => array(), 'action' => array(), 'method' => array(), 'target' => array(), 'onsubmit' => array())
            ,'script' => array('type' => array())
+           ,'style' => array()
            ,'table' => array()
            ,'tbody' => array()
            ,'textarea' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'rows' => array(), 'cols' => array())
