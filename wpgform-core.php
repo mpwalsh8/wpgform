@@ -294,11 +294,11 @@ class wpGForm
                 {
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
-                        $body .= preg_replace($patterns, $replacements, $key) . '=' . $pv . '&' ;
+                        $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
                 }
                 else
                 {
-                    $body .= preg_replace($patterns, $replacements, $key) . '=' . $value . '&' ;
+                    $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                 }
             }
             //  Remove the action from the form and POST it
