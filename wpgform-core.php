@@ -419,9 +419,11 @@ class wpGForm
 
         //  Hide Google Legal Stuff?
 
-        if (!$legal)
-            $html = preg_replace('/<div class="ss-legal"/i',
-                '<div class="ss-legal" style="display:none;"', $html) ;
+        if (!(bool)$legal)
+        {
+            $html = preg_replace(sprintf('/<div class="%sss-legal"/i', $prefix),
+                sprintf('<div class="%sss-legal" style="display:none;"', $prefix), $html) ;
+        }
 
         //  Need to fix names for checkbox items to account for how PHP
         //  handles arrays - each name needs to have the "[]" tacked on
@@ -461,20 +463,20 @@ class wpGForm
             $css = '' ;
 
         //  Output Javscript for form validation
-        $js = '
+        $js = sprintf('
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 //$("form input:checkbox").wrap(\'<span></span>\').parent().css({background:"yellow", border:"3px red solid"});
     //  Need to fix the name arguments for checkboxes
     //  so PHP will pass them as an array correctly.
-    $("div.ss-form-container input:checkbox").each(function(index) {
+    $("div.%sss-form-container input:checkbox").each(function(index) {
         this.name = this.name + \'[]\';
     });
-' ;
+', $prefix) ;
         //  Before closing the <script> tag, is the form read only?
-        if ($readonly) $js .= '
-    $("div.ss-form-container :input").attr("disabled", true);
-        ' ;
+        if ($readonly) $js .= sprintf('
+    $("div.%sss-form-container :input").attr("disabled", true);
+        ', $prefix) ;
 
         //  Before closing the <script> tag, is this the confirmation
         //  AND do we have a custom confiormation page or alert message?
