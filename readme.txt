@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.25
+Stable tag: 0.26
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -176,6 +176,12 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.26 =
+* Added new shortcode attribute "email='on|off'", default is 'off'.
+* Changed confirmation page from a hard redirect to a Ajax load.
+* Added new email format choice on the Options page, default is HTML.
+* Cleaned up some dead code and comments.
 
 = Version 0.25 =
 * Fixed problem with checkbox processing when using the prefix attribute.
