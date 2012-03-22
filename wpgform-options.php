@@ -291,6 +291,17 @@ function wpgform_settings_input()
             </td>
         </tr>
         <tr valign="top">
+            <th scope="row"><label>Confirmation Email Format</label></th>
+            <td><fieldset>
+            <label for="gform_email_format">
+            <input name="wpgform_options[email_format]" type="radio" id="gform_email_format" value="<?php echo WPGFORM_EMAIL_FORMAT_HTML ;?>" <?php checked(WPGFORM_EMAIL_FORMAT_HTML, $wpgform_options['email_format']) ; ?> />
+            Send confirmation email (when used) in HTML format.</label>
+            <br/>
+            <input name="wpgform_options[email_format]" type="radio" id="gform_email_format" value="<?php echo WPGFORM_EMAIL_FORMAT_PLAIN ;?>" <?php checked(WPGFORM_EMAIL_FORMAT_PLAIN, $wpgform_options['email_format']) ; ?> />
+            Send confirmation email (when used) in Plain Text format.</label>
+            </fieldset></td>
+        </tr>
+        <tr valign="top">
             <th scope="row"><label>Donation Request</label></th>
             <td><fieldset>
             <label for="gform_donation_message">
