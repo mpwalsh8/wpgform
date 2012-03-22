@@ -18,6 +18,8 @@
 
 // Filesystem path to this plugin.
 define('WPGFORM_PATH', WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__))) ;
+define('WPGFORM_EMAIL_FORMAT_HTML', 'html') ;
+define('WPGFORM_EMAIL_FORMAT_PLAIN', 'plain') ;
 
 /**
  * wpgform_init()
@@ -53,6 +55,7 @@ function wpgform_get_default_plugin_options()
        ,'custom_css' => 0
        ,'custom_css_styles' => ''
        ,'donation_message' => 0
+       ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
 	) ;
 
 	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
@@ -138,6 +141,7 @@ function wpgform_register_activation_hook()
        ,'custom_css' => 0
        ,'custom_css_styles' => ''
        ,'donation_message' => 0
+       ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
     ) ;
 
     add_option('wpgform_options', $default_wpgform_options) ;
@@ -252,6 +256,9 @@ class wpGForm
         //  Should form be set to readonly?
         $readonly = $options['readonly'] === 'on' ;
 
+        //  Should email confirmation be sent?
+        $email = $options['email'] === 'on' ;
+
         //  WordPress converts all of the ampersand characters to their
         //  appropriate HTML entity or some variety of it.  Need to undo
         //  that so the URL can be actually be used.
@@ -283,12 +290,9 @@ class wpGForm
 
             foreach ($_POST as $key => $value)
             {
-                //printf('Mapping "%s" -> "%s"</h1>', $key, preg_replace($patterns, $replacements, $key)) ;
-
-                //  Need to handle parameters passed as array
-                //  values separately because of how Python (used
-                //  Google) handles array arguments differently than
-                //  PHP does.
+                //  Need to handle parameters passed as array values
+                //  separately because of how Python (used Google)
+                //  handles array arguments differently than PHP does.
 
                 if (is_array($_POST[$key]))
                 {
@@ -425,12 +429,6 @@ class wpGForm
                 sprintf('<div class="%sss-legal" style="display:none;"', $prefix), $html) ;
         }
 
-        //  Need to fix names for checkbox items to account for how PHP
-        //  handles arrays - each name needs to have the "[]" tacked on
-        //  the end of it.
-
-        //$html = preg_replace('/name="entry\.[0-9]+\.group/i', '\\1[]', $html) ;
-
         //  Need to extract form action and rebuild form tag, and add hidden field
         //  which contains the original action.  This action is used to submit the
         //  form via wp_remote_post().
@@ -462,11 +460,10 @@ class wpGForm
         else
             $css = '' ;
 
-        //  Output Javscript for form validation
+        //  Output Javscript for form validation, make sure any class prefix is included
         $js = sprintf('
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-//$("form input:checkbox").wrap(\'<span></span>\').parent().css({background:"yellow", border:"3px red solid"});
     //  Need to fix the name arguments for checkboxes
     //  so PHP will pass them as an array correctly.
     $("div.%sss-form-container input:checkbox").each(function(index) {
@@ -479,22 +476,57 @@ jQuery(document).ready(function($) {
         ', $prefix) ;
 
         //  Before closing the <script> tag, is this the confirmation
-        //  AND do we have a custom confiormation page or alert message?
+        //  AND do we have a custom confirmation page or alert message?
 
         if ($posted && is_null($action) && !is_null($alert))
             $js .= PHP_EOL . 'alert("' . $alert . '") ;' ;
 
+        //  Load the confirmation URL via Ajax?
         if ($posted && is_null($action) && !is_null($confirm))
-            $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
+            $js .= PHP_EOL . '$("body").load("' . $confirm . '") ;' ;
+
+        //if ($posted && is_null($action) && !is_null($confirm))
+            //$js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
 
         $js .= '
 });
 </script>
         ' ;
 
+        //printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
+        //  Send email?
+        if ($posted && is_null($action) && $email)
+        {
+            //printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
+            wpGForm::SendConfirmationEmail($wpgform_options['email_format']) ;
+        }
+        //printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
+
         return $js . $css . $html ;
     }
 
+    /**
+     * Get Page URL
+     *
+     * @return string
+     */
+    function GetPageURL()
+    {
+        $pageURL = 'http' ;
+
+        if ($_SERVER["HTTPS"] == "on") $pageURL .= 's' ;
+
+        $pageURL .= '://' ;
+
+        if ($_SERVER['SERVER_PORT'] != '80')
+            $pageURL .= $_SERVER['SERVER_NAME'] .
+                ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'] ;
+        else
+            $pageURL .= $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ;
+
+        return $pageURL ;
+    }
+            
     /**
      * WordPress Shortcode handler.
      *
@@ -512,10 +544,96 @@ jQuery(document).ready(function($) {
             'prefix'    => null,         // Add suffix character(s) to all labels
             'readonly'  => 'off',        // Set all form elements to disabled
             'title'     => 'on',         // Remove the H1 element(s) from the Form
-            'maph1h2'   => 'off'         // Map H1 element(s) on the form to H2 element(s)
+            'maph1h2'   => 'off',        // Map H1 element(s) on the form to H2 element(s)
+            'email'     => 'off'         // Send an email confirmation to blog admin on submission
         ), $atts) ;
 
         return wpGForm::ConstructGForm($params) ;
+    }
+
+    /**
+     * Send Confirmation E-mail
+     *
+     * Send an e-mail to the blog administrator informing
+     * them of a form submission.
+     * 
+     * @param string $action - action to take, register or unregister
+     */
+    function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_PLAIN)
+    {
+        if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
+        {
+            $headers  = 'MIME-Version: 1.0' . PHP_EOL ;
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . PHP_EOL ;
+        }
+        else
+        {
+            $headers = '' ;
+        }
+
+        $headers .= sprintf("From: %s <%s>",
+            get_bloginfo('name'), get_bloginfo('admin_email')) . PHP_EOL ;
+
+        $headers .= sprintf("Cc: %s", get_option('admin_email')) . PHP_EOL ;
+        $headers .= sprintf("Bcc: %s", get_bloginfo('admin_email')) . PHP_EOL ;
+        $headers .= sprintf("Reply-To: %s", get_bloginfo('admin_email')) . PHP_EOL ;
+        $headers .= sprintf("X-Mailer: PHP/%s", phpversion()) ;
+
+        if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
+        {
+            $html = '
+                <html>
+                <head>
+                <title>%s</title>
+                </head>
+                <body>
+                <p>
+                Admin -
+                </p>
+                <p>
+                A form was submitted on your web site.
+                <ul>
+                <li>URL:  %s</li>
+                <li>Date: %s</li>
+                <li>Time: %s</li>
+                </ul>
+                </p>
+                <p>
+                Thank you,<br/><br/>
+                %s
+                </p>
+                <p>
+                </p>
+                </body>
+                </html>
+                ' ;
+
+            $message = sprintf($html, get_bloginfo('name'),
+                wpGForm::GetPageUrl(), date('Y-m-d'), date('H:i'), get_bloginfo('name')) ;
+        }
+        else
+        {
+            $plain = 'Admin -' . PHP_EOL . PHP_EOL ;
+            $plain .= 'A form was submitted on your web site:' . PHP_EOL . PHP_EOL ;
+            $plain .= 'URL:  %s' . PHP_EOL . 'Date:  %s' . PHP_EOL . 'Time:  %s' . PHP_EOL . PHP_EOL ;
+            $plain .= 'Thank you,' . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
+
+            $message = sprintf($plain, wpGForm::GetPageUrl(),
+                date('Y-m-d'), date('H:i'), get_option('blogname')) ;
+        }
+
+        $to = sprintf('%s Admin <%s>, %s Admin<%s>',
+            get_option('blogname'), get_option('admin_email'),
+            get_option('blogname'), get_option('admin_email')) ;
+
+        $subject = sprintf('Form Submission from %s', get_option('blogname')) ;
+
+        //print '<pre>' ;
+        //var_dump($to, $subject, $message, $headers) ;
+        //print '</pre>' ;
+        $status = wp_mail($to, $subject, $message, $headers) ;
+
+        return $status ;
     }
 }
 
