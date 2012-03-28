@@ -13,6 +13,29 @@ label.gform-error {
     color: red;
     font-weight: bold;
 }
+
+div.gform-google-error,
+div.gform-browser-warning,
+div.gform-browser-error {
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 0 .6em;
+    margin: 5px 0 15px;
+}
+
+div.gform-browser-warning {
+    background-color: #ffffe0;
+    border-color: #e6db55;
+}
+
+div.gform-google-error,
+div.gform-browser-error {
+    background-color: #ffebe8;
+    border-color: #cc0000;
+}
+
 body.ss-base-body {}
 div.errorbox-good {}
 div.ss-attribution {}
