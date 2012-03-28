@@ -504,14 +504,11 @@ jQuery(document).ready(function($) {
 </script>
         ' ;
 
-        //printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
         //  Send email?
         if ($posted && is_null($action) && $email)
         {
-            //printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
             wpGForm::SendConfirmationEmail($wpgform_options['email_format']) ;
         }
-        //printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
 
         //  Check browser compatibility?  The jQuery used by this plugin may
         //  not work correctly on old browsers or IE running in compatibility mode.
@@ -524,42 +521,20 @@ jQuery(document).ready(function($) {
 
        	    $response = wp_check_browser_version();
 
-            if ($response && $response['upgrade'] || true)
+            if ($response && $response['upgrade'])
             {
 		        if ($response['insecure'])
-                    $css .= '<div class="gform-browser-error"><h3>' .
-                        __('Error:  You are using an insecure browser!') . '</h3></div>' ;
+                    $css .= '<div class="gform-browser-warning"><h4>' .
+                        __('Warning:  You are using an insecure browser!') . '</h4></div>' ;
 		        else
-                    $css .= '<div class="gform-browser-warning"><h3>' .
-                        __('Warning:  Your browser is out of date!  Please update now.') . '</h3></div>' ;
+                    $css .= '<div class="gform-browser-warning"><h4>' .
+                        __('Warning:  Your browser is out of date!  Please update now.') . '</h4></div>' ;
 	        }
         }
 
         return $js . $css . $html ;
     }
 
-    /**
-     * Get Page URL
-     *
-     * @return string
-     */
-    function GetPageURL()
-    {
-        $pageURL = 'http' ;
-
-        if ($_SERVER["HTTPS"] == "on") $pageURL .= 's' ;
-
-        $pageURL .= '://' ;
-
-        if ($_SERVER['SERVER_PORT'] != '80')
-            $pageURL .= $_SERVER['SERVER_NAME'] .
-                ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'] ;
-        else
-            $pageURL .= $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ;
-
-        return $pageURL ;
-    }
-            
     /**
      * WordPress Shortcode handler.
      *
