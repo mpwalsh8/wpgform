@@ -20,6 +20,9 @@
 define('WPGFORM_PATH', WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__))) ;
 define('WPGFORM_EMAIL_FORMAT_HTML', 'html') ;
 define('WPGFORM_EMAIL_FORMAT_PLAIN', 'plain') ;
+define('WPGFORM_CONFIRM_AJAX', 'ajax') ;
+define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
+define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
 
 /**
  * wpgform_init()
@@ -56,6 +59,7 @@ function wpgform_get_default_plugin_options()
        ,'custom_css_styles' => ''
        ,'donation_message' => 0
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
+       ,'browser_check' => 0
 	) ;
 
 	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
@@ -142,6 +146,7 @@ function wpgform_register_activation_hook()
        ,'custom_css_styles' => ''
        ,'donation_message' => 0
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
+       ,'browser_check' => 0
     ) ;
 
     add_option('wpgform_options', $default_wpgform_options) ;
@@ -259,6 +264,9 @@ class wpGForm
         //  Should email confirmation be sent?
         $email = $options['email'] === 'on' ;
 
+        //  Show the custom confirmation via AJAX instead of redirect?
+        $style = $options['style'] ;
+
         //  WordPress converts all of the ampersand characters to their
         //  appropriate HTML entity or some variety of it.  Need to undo
         //  that so the URL can be actually be used.
@@ -307,6 +315,7 @@ class wpGForm
             }
             //  Remove the action from the form and POST it
 
+            //$form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
             $form = str_replace($action, 'action=""', $form) ;
 
             $response = wp_remote_post($action,
@@ -321,7 +330,7 @@ class wpGForm
         //  Retrieve the HTML from the URL
 
         if (is_wp_error($response))
-            return '<div class="gform-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
+            return '<div class="gform-google-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
         else
             $html = $response['body'] ;
 
@@ -377,8 +386,7 @@ class wpGForm
 
         if ($first_div === false)
         {
-            print "<pre>$html</pre>" ;
-            return '<div class="gform-error">Unexpected content encountered, unable to retrieve Google Form.</div>' ;
+            return '<div class="gform-google-error">Unexpected content encountered, unable to retrieve Google Form.</div>' ;
         }
 
         //  Strip off anything prior to the first  DIV, we don't want it.
@@ -440,6 +448,7 @@ class wpGForm
                 $action = $matches[0][$i] ;
             }
 
+            //.$html = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $html) ;
             $html = str_replace($action, 'action=""', $html) ;
             $action = preg_replace('/^action/i', 'value', $action) ;
 
@@ -455,7 +464,7 @@ class wpGForm
  
         $wpgform_options = wpgform_get_plugin_options() ;
 
-        if ($wpgform_options['custom_css'] == 1)
+        if (($wpgform_options['custom_css'] == 1) && !empty($wpgform_options['custom_css_styles']))
             $css = '<style>' . $wpgform_options['custom_css_styles'] . '</style>' ;
         else
             $css = '' ;
@@ -481,12 +490,14 @@ jQuery(document).ready(function($) {
         if ($posted && is_null($action) && !is_null($alert))
             $js .= PHP_EOL . 'alert("' . $alert . '") ;' ;
 
-        //  Load the confirmation URL via Ajax?
-        if ($posted && is_null($action) && !is_null($confirm))
+        //  Load the confirmation URL via AJAX?
+        if ($posted && is_null($action) && !is_null($confirm) && $style === WPGFORM_CONFIRM_AJAX)
             $js .= PHP_EOL . '$("body").load("' . $confirm . '") ;' ;
 
-        //if ($posted && is_null($action) && !is_null($confirm))
-            //$js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
+        //  Load the confirmation URL via Redirect?
+        if ($posted && is_null($action) && !is_null($confirm) && $style === WPGFORM_CONFIRM_REDIRECT)
+            //printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
+            $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
 
         $js .= '
 });
@@ -501,6 +512,28 @@ jQuery(document).ready(function($) {
             wpGForm::SendConfirmationEmail($wpgform_options['email_format']) ;
         }
         //printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
+
+        //  Check browser compatibility?  The jQuery used by this plugin may
+        //  not work correctly on old browsers or IE running in compatibility mode.
+
+        if ($wpgform_options['browser_check'] == 1)
+        {
+            require_once(ABSPATH . '/wp-admin/includes/dashboard.php') ;
+ 
+            //  Let's check the browser version just in case ...
+
+       	    $response = wp_check_browser_version();
+
+            if ($response && $response['upgrade'] || true)
+            {
+		        if ($response['insecure'])
+                    $css .= '<div class="gform-browser-error"><h3>' .
+                        __('Error:  You are using an insecure browser!') . '</h3></div>' ;
+		        else
+                    $css .= '<div class="gform-browser-warning"><h3>' .
+                        __('Warning:  Your browser is out of date!  Please update now.') . '</h3></div>' ;
+	        }
+        }
 
         return $js . $css . $html ;
     }
@@ -534,18 +567,19 @@ jQuery(document).ready(function($) {
      */
     function RenderGForm($atts) {
         $params = shortcode_atts(array(
-            'form'      => false,        // Google Form URL
-            'confirm'   => false,        // Custom confirmation page URL to redirect to
-            'alert'     => null,         // Optional Alert Message
-            'class'     => 'gform',      // Container element's custom class value
-            'legal'     => 'on',         // Display Google Legal Stuff
-            'br'        => 'off',        // Insert <br> tags between labels and inputs
-            'suffix'    => null,         // Add suffix character(s) to all labels
-            'prefix'    => null,         // Add suffix character(s) to all labels
-            'readonly'  => 'off',        // Set all form elements to disabled
-            'title'     => 'on',         // Remove the H1 element(s) from the Form
-            'maph1h2'   => 'off',        // Map H1 element(s) on the form to H2 element(s)
-            'email'     => 'off'         // Send an email confirmation to blog admin on submission
+            'form'      => false,                   // Google Form URL
+            'confirm'   => false,                   // Custom confirmation page URL to redirect to
+            'alert'     => null,                    // Optional Alert Message
+            'class'     => 'gform',                 // Container element's custom class value
+            'legal'     => 'on',                    // Display Google Legal Stuff
+            'br'        => 'off',                   // Insert <br> tags between labels and inputs
+            'suffix'    => null,                    // Add suffix character(s) to all labels
+            'prefix'    => null,                    // Add suffix character(s) to all labels
+            'readonly'  => 'off',                   // Set all form elements to disabled
+            'title'     => 'on',                    // Remove the H1 element(s) from the Form
+            'maph1h2'   => 'off',                   // Map H1 element(s) on the form to H2 element(s)
+            'email'     => 'off',                   // Send an email confirmation to blog admin on submission
+            'style'     => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
         ), $atts) ;
 
         return wpGForm::ConstructGForm($params) ;
@@ -559,7 +593,7 @@ jQuery(document).ready(function($) {
      * 
      * @param string $action - action to take, register or unregister
      */
-    function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_PLAIN)
+    function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_HTML)
     {
         if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
         {
@@ -628,9 +662,6 @@ jQuery(document).ready(function($) {
 
         $subject = sprintf('Form Submission from %s', get_option('blogname')) ;
 
-        //print '<pre>' ;
-        //var_dump($to, $subject, $message, $headers) ;
-        //print '</pre>' ;
         $status = wp_mail($to, $subject, $message, $headers) ;
 
         return $status ;
