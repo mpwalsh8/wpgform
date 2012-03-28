@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.26
+Stable tag: 0.27
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -31,10 +31,11 @@ Currently, this plugin only supports Google Forms that are "Published as a web p
 
 The WordPress Google Form shortcode `gform` supports a number of attributes that allow further control and customization of the Google Form.
 
-`[gform form='<full_url_to_Google_Form>' confirm='<full_url_to_confirmation_page>' class='<value>' legal='on|off' br='on|off' prefix='<value>' suffix='<value>']`
+`[gform form='<full_url_to_Google_Form>' confirm='<full_url_to_confirmation_page>' class='<value>' legal='on|off' br='on|off' prefix='<value>' suffix='<value>' email='on|off' style='redirect|ajax']`
 
 * __form__:  The full URL to the published Google Form.  You must be able to open this URL successfully from a browser for the __gform__ shortcode to work properly.
-* __confirm__:  A full URL to the confirmation (e.g. _Thanks for your submission!_) page.  Be default Google displays a very basic confirmation page which cannot be integrated easily with your WordPress site.  The _confirm_ attribute allows the form submission to land on a page of your choosing.  **It is strongly encouraged that you make use of a confirmation page.**  It will make the form submission process cleaner and clearer to the end user.
+* __confirm__:  A full URL to the confirmation (e.g. _Thanks for your submission!_) page.  Be default Google displays a very basic confirmation page which cannot be integrated easily with your WordPress site.  The _confirm_ attribute allows the form submission to land on a page of your choosing.  **It is strongly encouraged that you make use of a confirmation page.**  It will make the form submission process cleaner and clearer to the end user.  The confirmation page will be displayed by a page redirect unless a different behavior is specified using the __style__ attribute.
+* __style__:  Specify how the custom confirmation page should be presented.  Legal values for the __style__ attribute are __redirect__ and __ajax__ (e.g. __style='redirect'__ or __style='ajax'__).
 * __alert__:  A message to display upon successful form submission in a Javascript Alert box (e.g. _Thanks for your submission!_).
 * __class__:  Google Forms are full of classes but the WordPress Google Form plugin does not bring their definitions into page when importing the form.  The _class_ attribute allows the addition of one or more CSS classes to the DIV which wraps the Google Form.  To add multiple classes, simply separate the class names with spaces.
 * __legal__:  By default Google Forms have a _Powered by Google Docs_ section at the bottom of the form which includes links to Google TOS and other Google information.  If you do not want to see this information as part of the form, add `legal='off'` to your shortcode usage.  The content remains in the form, it is simply hidden from the end user using CSS.
@@ -43,8 +44,9 @@ The WordPress Google Form shortcode `gform` supports a number of attributes that
 * __suffix__:  Append a character string to the end of each form label.  This can also be accomplished using CSS, refer to the CSS section.
 * __title__:  By default Google Forms have title wrapped in a &lt;h1&gt; tag.  If you do not want to include this form title as part of the form, add `title='off'` to your shortcode usage.  The &lt;h1&gt; content is removed from the form.
 * __maph1h2__:  By default Google Forms have title wrapped in a &lt;h1&gt; tag.  If you want the form title but not as an &lt;h1&gt; element, add `maph1h2='on'` to your shortcode usage.  The &lt;h1&gt; elements will be mapped to &lt;h2&gt; elements.  The CSS class attributes remain unchanged.
+* __email__:  Notify the site's WordPress administrator that a form has been submitted by setting the __email__ attribute to __on__.  This will result in an email being sent to the blog administrator letting them know a form was submitted with the URL of the form along with the date and time of submission.
 
-`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on']`
+`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' style='ajax' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on' email='on']`
 
 == Frequently Asked Questions ==
 
@@ -81,6 +83,9 @@ label.ss-q-title:after {
 
 = No matter what I do, I always get the "Unable to retrieve Google Form.  Please try reloading this page." error message.  Why is this? =
 Validate that the WordPress HTTP API is working correctly.  If you are seeing HTTP API errors on the WordPress Dashboard or when you attempt to access the plugin repository through the Dashboard, the WordPress Google Form will likely fail too.  It requires the WordPress HTTP API to be working.  With some free hosting plans, ISPs disable the ability to access remote content.
+
+= I don't like the redirection behavior of the custom confirmation, can you change it back to the way it worked in v0.10? =
+Unfortunately not.  I understand that the older behavior is preferable as it looks cleaner for the end user however there is no way to support multi-page Google Forms using the old model.  The requirement to support multi-page Google Forms is a higher priority than the older confirmation model based on the overwhelming feedback received to support multi-page forms.  In v0.26 a new confirmation behavior was introduced which uses AJAX to update the page with the content from the custom confirmation page.  In v0.27 the redirection mechanism has returned to be the default behavior but if the AJAX methodology is preferred, it is available by setting the `style='ajax'` attribute within the shortcode.
 
 == CSS ==
 
@@ -177,16 +182,23 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.27 =
+* Added ability to check and warn for old and/or unsupported browsers.  There is an option on the WordPress Google Form settings page to enable this check.  When an old or unsupported browser is detected, a message will be displayed on top of the form.  The browser check is based on the same functionality that WordPress uses on the Dashboard.
+* Changed default custom confirmation behaviour has reverted back to using a javascript redirect as it did from v0.11 through v0.25.
+* Added new shortcode attribute, __style__, to control how confirmation pages should be handled.  There are two options:  __style='redirect'__ which is the default and __style='ajax'__ which loads the page content via AJAX.
+* Added new CSS classes to support errors and warnings for the browser check and the inability to load Google Forms.
+* Cleaned up Options page GUI.
+
 = Version 0.26 =
-* Added new shortcode attribute "email='on|off'", default is 'off'.
-* Changed confirmation page from a hard redirect to a Ajax load.
+* Added new shortcode attribute __email='on|off'__, the default setting is 'off'.
+* Changed confirmation page from a hard redirect to an AJAX page load.
 * Added new email format choice on the Options page, default is HTML.
 * Cleaned up some dead code and comments.
 
 = Version 0.25 =
 * Fixed problem with checkbox processing when using the prefix attribute.
 * Fixed problem with hiding legal links when using the prefix attribute.
-* Fixed problem with legal='off' attribute not being processed correctly.
+* Fixed problem with __legal='off'__ attribute not being processed correctly.
 
 = Version 0.24 =
 * Fixed minor typos and other assorted nits.
