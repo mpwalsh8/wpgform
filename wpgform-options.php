@@ -302,11 +302,37 @@ function wpgform_settings_input()
             </fieldset></td>
         </tr>
         <tr valign="top">
+            <th scope="row"><label>Browser Check</label></th>
+            <td><fieldset>
+            <label for="gform_browser_check">
+            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+            <td style="padding: 0px;">
+            <input name="wpgform_options[browser_check]" type="checkbox" id="gform_browser_check" value="1" <?php checked('1', $wpgform_options['browser_check']) ; ?> />
+            </td>
+            <td style="padding: 5px;">
+            Check browser compatibility?  The WordPress Google Form plugin may not work as expected with older browser versions (e.g. IE6, IE7, etc.).
+            </td>
+            </tr>
+            </table>
+            </label>
+            </fieldset></td>
+        </tr>
+        <tr valign="top">
             <th scope="row"><label>Donation Request</label></th>
             <td><fieldset>
             <label for="gform_donation_message">
+            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+            <td style="padding: 0px;">
             <input name="wpgform_options[donation_message]" type="checkbox" id="gform_donation_message" value="1" <?php checked('1', $wpgform_options['donation_message']) ; ?> />
-            Hide the request for donation at the top of this page.  Donation request will remain on the <b>About</b> tab.</label>
+            </td>
+            <td style="padding: 5px;">
+            Hide the request for donation at the top of this page.<br/>The donation request will remain on the <b>About</b> tab.
+            </td>
+            </tr>
+            </table>
+            </label>
             </fieldset></td>
         </tr>
     </table>
