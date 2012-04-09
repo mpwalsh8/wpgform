@@ -640,7 +640,7 @@ jQuery(document).ready(function($) {
                 ' ;
 
             $message = sprintf($html, get_bloginfo('name'),
-                wpGForm::GetPageUrl(), date('Y-m-d'), date('H:i'), get_bloginfo('name')) ;
+                wpGForm::GetPageURL(), date('Y-m-d'), date('H:i'), get_bloginfo('name')) ;
         }
         else
         {
@@ -649,7 +649,7 @@ jQuery(document).ready(function($) {
             $plain .= 'URL:  %s' . PHP_EOL . 'Date:  %s' . PHP_EOL . 'Time:  %s' . PHP_EOL . PHP_EOL ;
             $plain .= 'Thank you,' . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
 
-            $message = sprintf($plain, wpGForm::GetPageUrl(),
+            $message = sprintf($plain, wpGForm::GetPageURL(),
                 date('Y-m-d'), date('H:i'), get_option('blogname')) ;
         }
 
