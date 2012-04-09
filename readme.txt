@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 0.27
+Stable tag: 0.28
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -181,6 +181,9 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.28 =
+* Fixed bug with missing GetPageURL method which appears when email confirmation is enabled (email='on').
 
 = Version 0.27 =
 * Added ability to check and warn for old and/or unsupported browsers.  There is an option on the WordPress Google Form settings page to enable this check.  When an old or unsupported browser is detected, a message will be displayed on top of the form.  The browser check is based on the same functionality that WordPress uses on the Dashboard.
