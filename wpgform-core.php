@@ -42,6 +42,7 @@ function wpgform_init()
         add_filter('widget_text', 'do_shortcode') ;
 
     add_action('template_redirect', 'wpgform_head') ;
+    add_filter('the_content', 'wpautop');
 }
 
 /**
@@ -264,6 +265,17 @@ class wpGForm
         //  Should email confirmation be sent?
         $email = $options['email'] === 'on' ;
 
+        //  Who should email confirmation be sent to?
+        if (!$options['sendto'])
+        {
+            $sendto = null ;
+        }
+        else
+        {
+            $sendto = is_email($options['sendto']) ;
+        }
+
+
         //  Show the custom confirmation via AJAX instead of redirect?
         $style = $options['style'] ;
 
@@ -448,8 +460,8 @@ class wpGForm
                 $action = $matches[0][$i] ;
             }
 
-            //.$html = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $html) ;
-            $html = str_replace($action, 'action=""', $html) ;
+            $html = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $html) ;
+            //$html = str_replace($action, 'action=""', $html) ;
             $action = preg_replace('/^action/i', 'value', $action) ;
 
             $html = preg_replace('/<\/form>/i',
@@ -471,10 +483,9 @@ class wpGForm
 
         //  Output Javscript for form validation, make sure any class prefix is included
         $js = sprintf('
+<!-- Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly. -->
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    //  Need to fix the name arguments for checkboxes
-    //  so PHP will pass them as an array correctly.
     $("div.%sss-form-container input:checkbox").each(function(index) {
         this.name = this.name + \'[]\';
     });
@@ -504,10 +515,13 @@ jQuery(document).ready(function($) {
 </script>
         ' ;
 
+        //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
+        $js = preg_replace('/[\r\n]+/', '', $js) . PHP_EOL ;
+
         //  Send email?
         if ($posted && is_null($action) && $email)
         {
-            wpGForm::SendConfirmationEmail($wpgform_options['email_format']) ;
+            wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto) ;
         }
 
         //  Check browser compatibility?  The jQuery used by this plugin may
@@ -542,6 +556,7 @@ jQuery(document).ready(function($) {
      */
     function GetPageURL()
     {
+        global $pagenow ;
         $pageURL = 'http' ;
 
         if ($_SERVER["HTTPS"] == "on") $pageURL .= 's' ;
@@ -576,6 +591,7 @@ jQuery(document).ready(function($) {
             'title'     => 'on',                    // Remove the H1 element(s) from the Form
             'maph1h2'   => 'off',                   // Map H1 element(s) on the form to H2 element(s)
             'email'     => 'off',                   // Send an email confirmation to blog admin on submission
+            'sendto'    => null,                    // Send an email confirmation to a specific address on submission
             'style'     => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
         ), $atts) ;
 
@@ -590,8 +606,10 @@ jQuery(document).ready(function($) {
      * 
      * @param string $action - action to take, register or unregister
      */
-    function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_HTML)
+    function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false)
     {
+        if ($sendto === false || $sendto === null) $sendto = get_bloginfo('admin_email') ;
+
         if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
         {
             $headers  = 'MIME-Version: 1.0' . PHP_EOL ;
@@ -603,11 +621,11 @@ jQuery(document).ready(function($) {
         }
 
         $headers .= sprintf("From: %s <%s>",
-            get_bloginfo('name'), get_bloginfo('admin_email')) . PHP_EOL ;
+            get_bloginfo('name'), $sendto) . PHP_EOL ;
 
-        $headers .= sprintf("Cc: %s", get_option('admin_email')) . PHP_EOL ;
+        $headers .= sprintf("Cc: %s", $sendto) . PHP_EOL ;
         $headers .= sprintf("Bcc: %s", get_bloginfo('admin_email')) . PHP_EOL ;
-        $headers .= sprintf("Reply-To: %s", get_bloginfo('admin_email')) . PHP_EOL ;
+        $headers .= sprintf("Reply-To: %s", $sendto) . PHP_EOL ;
         $headers .= sprintf("X-Mailer: PHP/%s", phpversion()) ;
 
         if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
@@ -619,7 +637,7 @@ jQuery(document).ready(function($) {
                 </head>
                 <body>
                 <p>
-                Admin -
+                FYI -
                 </p>
                 <p>
                 A form was submitted on your web site.
@@ -644,7 +662,7 @@ jQuery(document).ready(function($) {
         }
         else
         {
-            $plain = 'Admin -' . PHP_EOL . PHP_EOL ;
+            $plain = 'FYI -' . PHP_EOL . PHP_EOL ;
             $plain .= 'A form was submitted on your web site:' . PHP_EOL . PHP_EOL ;
             $plain .= 'URL:  %s' . PHP_EOL . 'Date:  %s' . PHP_EOL . 'Time:  %s' . PHP_EOL . PHP_EOL ;
             $plain .= 'Thank you,' . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
@@ -653,8 +671,8 @@ jQuery(document).ready(function($) {
                 date('Y-m-d'), date('H:i'), get_option('blogname')) ;
         }
 
-        $to = sprintf('%s Admin <%s>, %s Admin<%s>',
-            get_option('blogname'), get_option('admin_email'),
+        $to = sprintf('%s wpGForm Contact <%s>, %s Admin<%s>',
+            get_option('blogname'), $sendto,
             get_option('blogname'), get_option('admin_email')) ;
 
         $subject = sprintf('Form Submission from %s', get_option('blogname')) ;
