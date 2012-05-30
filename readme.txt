@@ -184,8 +184,8 @@ No known upgrade issues.
 == Changelog ==
 
 = Version 0.29 =
-= Added ability to specify email address when email='on' attribute is in use via new attribute 'sendto'.
-= Changed generated Javascript to limit the possibility that it is affected by 'the_content' or 'wpautop' filters resulting in Javascript errors.  This rare situation would prevent the page confirmation or redirection from loading correctly.
+* Added ability to specify email address when email='on' attribute is in use via new attribute 'sendto'.
+* Changed generated Javascript to limit the possibility that it is affected by 'the_content' or 'wpautop' filters resulting in Javascript errors.  This rare situation would prevent the page confirmation or redirection from loading correctly.
 
 = Version 0.28 =
 * Fixed bug with missing GetPageURL method which appears when email confirmation is enabled (email='on').
