@@ -481,9 +481,18 @@ class wpGForm
         else
             $css = '' ;
 
+        //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
+        $patterns = array('/[\r\n]+/', '/ +/') ;
+        $replacements = array('', ' ') ;
+        $css = preg_replace($patterns, $replacements, $css) . PHP_EOL ;
+        //$css = preg_replace('/[\r\n]+/', '', $css) . PHP_EOL ;
+
+
         //  Output Javscript for form validation, make sure any class prefix is included
+        //  Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly.
+        //  This jQuery script reformats the checkboxes so that Googles Python script will read them.
+
         $js = sprintf('
-<!-- Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly. -->
 <script type="text/javascript">
 jQuery(document).ready(function($) {
     $("div.%sss-form-container input:checkbox").each(function(index) {
@@ -516,7 +525,8 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        $js = preg_replace('/[\r\n]+/', '', $js) . PHP_EOL ;
+        //$js = preg_replace('/[\r\n]+/', '', $js) . PHP_EOL ;
+        $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
         if ($posted && is_null($action) && $email)
