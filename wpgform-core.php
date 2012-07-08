@@ -23,6 +23,51 @@ define('WPGFORM_EMAIL_FORMAT_PLAIN', 'plain') ;
 define('WPGFORM_CONFIRM_AJAX', 'ajax') ;
 define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
 define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
+define('WPGFORM_DEBUG', true) ;
+
+function wpgform_debug()
+{
+    global $wp_filter ;
+
+    if (!is_admin())
+    {
+        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+        wpgform_whereami(__FILE__, __LINE__) ;
+        wpgform_preprint_r($_SERVER) ;
+        wpgform_whereami(__FILE__, __LINE__) ;
+        wpgform_preprint_r($_ENV) ;
+        wpgform_whereami(__FILE__, __LINE__) ;
+        wpgform_preprint_r($_POST) ;
+        wpgform_whereami(__FILE__, __LINE__) ;
+        wpgform_preprint_r($_GET) ;
+        return;
+        if (array_key_exists('init', $wp_filter))
+        {
+            wpgform_whereami(__FILE__, __LINE__) ;
+            wpgform_preprint_r($wp_filter['init']) ;
+        }
+        if (array_key_exists('template_redirect', $wp_filter))
+        {
+            wpgform_whereami(__FILE__, __LINE__) ;
+            wpgform_preprint_r($wp_filter['template_redirect']) ;
+        }
+    }
+}
+if (WPGFORM_DEBUG)
+    add_action('init', 'wpgform_debug', 0) ;
+
+if (WPST_DEBUG) :
+/**
+ * wpgform_send_headers()
+ *
+ * @return null
+ */
+function wpgform_send_headers()
+{
+    header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
+    header('Expires: ' . date(DATE_RFC822, strtotime('yesterday'))); // Date in the past
+}
+endif ;
 
 /**
  * wpgform_init()
@@ -40,6 +85,9 @@ function wpgform_init()
 
     if ($wpgform_options['sc_widgets'] == 1)
         add_filter('widget_text', 'do_shortcode') ;
+
+    if (WPST_DEBUG)
+        add_action('send_headers', 'wpgform_send_headers') ;
 
     add_action('template_redirect', 'wpgform_head') ;
     add_filter('the_content', 'wpautop');
@@ -187,6 +235,8 @@ class wpGForm
      */
     function ConstructGForm($options)
     {
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__) ;
+        if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
         //  If no URL then return as nothing useful can be done.
         if (!$options['form'])
         {
@@ -294,9 +344,13 @@ class wpGForm
         //  submitted and now the plugin needs to "really" submit it to Google,
         //  get the response, and display it as part of the WordPress content.
 
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__) ;
+        if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
         if (!empty($_POST))
         {
             $posted = true ;
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__) ;
+            if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
             $action = $_POST['gform-action'] ;
             unset($_POST['gform-action']) ;
 
@@ -460,8 +514,8 @@ class wpGForm
                 $action = $matches[0][$i] ;
             }
 
-            $html = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $html) ;
-            //$html = str_replace($action, 'action=""', $html) ;
+            //$html = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $html) ;
+            $html = str_replace($action, 'action=""', $html) ;
             $action = preg_replace('/^action/i', 'value', $action) ;
 
             $html = preg_replace('/<\/form>/i',
@@ -712,4 +766,22 @@ function wpgform_head()
             plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
     }
 }
+
+function wpgform_whereami($f, $l)
+{
+    printf('<h2>%s::%s</h2>', basename($f), $l) ;
+}
+
+/**
+ * Debug functions
+ */
+function wpgform_preprint_r()
+{
+    $numargs = func_num_args() ;
+    $arg_list = func_get_args() ;
+    for ($i = 0; $i < $numargs; $i++) {
+	printf('<pre style="text-align:left;">%s</pre>', print_r($arg_list[$i], true)) ;
+    }
+}
+
 ?>
