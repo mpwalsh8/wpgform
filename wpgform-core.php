@@ -25,48 +25,8 @@ define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
 define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
 define('WPGFORM_DEBUG', true) ;
 
-function wpgform_debug()
-{
-    global $wp_filter ;
-
-    if (!is_admin())
-    {
-        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-        wpgform_whereami(__FILE__, __LINE__) ;
-        wpgform_preprint_r($_SERVER) ;
-        wpgform_whereami(__FILE__, __LINE__) ;
-        wpgform_preprint_r($_ENV) ;
-        wpgform_whereami(__FILE__, __LINE__) ;
-        wpgform_preprint_r($_POST) ;
-        wpgform_whereami(__FILE__, __LINE__) ;
-        wpgform_preprint_r($_GET) ;
-        return;
-        if (array_key_exists('init', $wp_filter))
-        {
-            wpgform_whereami(__FILE__, __LINE__) ;
-            wpgform_preprint_r($wp_filter['init']) ;
-        }
-        if (array_key_exists('template_redirect', $wp_filter))
-        {
-            wpgform_whereami(__FILE__, __LINE__) ;
-            wpgform_preprint_r($wp_filter['template_redirect']) ;
-        }
-    }
-}
-if (WPGFORM_DEBUG)
-    add_action('init', 'wpgform_debug', 0) ;
-
 if (WPST_DEBUG) :
-/**
- * wpgform_send_headers()
- *
- * @return null
- */
-function wpgform_send_headers()
-{
-    header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
-    header('Expires: ' . date(DATE_RFC822, strtotime('yesterday'))); // Date in the past
-}
+    require_once('wpgform-debug.php') ;
 endif ;
 
 /**
@@ -196,6 +156,7 @@ function wpgform_register_activation_hook()
        ,'donation_message' => 0
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
        ,'browser_check' => 0
+       ,'wpgform_debug' => 0
     ) ;
 
     add_option('wpgform_options', $default_wpgform_options) ;
@@ -610,7 +571,12 @@ jQuery(document).ready(function($) {
 	        }
         }
 
-        return $js . $css . $html ;
+        if (WPGFORM_DEBUG)
+            $debug = '<h2 class="gform-debug"><a href="#" class="gform-debug-wrapper">Show wpGForm Debug Content</a></h2>' ;
+        else
+            $debug = '' ;
+
+        return $debug . $js . $css . $html ;
     }
 
     /**
@@ -766,22 +732,4 @@ function wpgform_head()
             plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
     }
 }
-
-function wpgform_whereami($f, $l)
-{
-    printf('<h2>%s::%s</h2>', basename($f), $l) ;
-}
-
-/**
- * Debug functions
- */
-function wpgform_preprint_r()
-{
-    $numargs = func_num_args() ;
-    $arg_list = func_get_args() ;
-    for ($i = 0; $i < $numargs; $i++) {
-	printf('<pre style="text-align:left;">%s</pre>', print_r($arg_list[$i], true)) ;
-    }
-}
-
 ?>
