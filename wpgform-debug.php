@@ -19,7 +19,7 @@
 global $wpgform_debug_content ;
 
 $wpgform_debug_content = '' ;
-add_action('init', 'wpgform_debug', 0) ;
+add_action('init', 'wpgform_debug', 99) ;
 add_action('wp_footer', 'wpgform_show_debug_content') ;
 
 /**
@@ -32,24 +32,23 @@ function wpgform_debug()
 
     if (!is_admin())
     {
-        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-        wpgform_whereami(__FILE__, __LINE__) ;
+        wpgform_whereami(__FILE__, __LINE__, '$_SERVER') ;
         wpgform_preprint_r($_SERVER) ;
-        wpgform_whereami(__FILE__, __LINE__) ;
+        wpgform_whereami(__FILE__, __LINE__, '$_ENV') ;
         wpgform_preprint_r($_ENV) ;
-        wpgform_whereami(__FILE__, __LINE__) ;
+        wpgform_whereami(__FILE__, __LINE__, '$_POST') ;
         wpgform_preprint_r($_POST) ;
-        wpgform_whereami(__FILE__, __LINE__) ;
+        wpgform_whereami(__FILE__, __LINE__, '$_GET') ;
         wpgform_preprint_r($_GET) ;
-        return;
+
         if (array_key_exists('init', $wp_filter))
         {
-            wpgform_whereami(__FILE__, __LINE__) ;
+            wpgform_whereami(__FILE__, __LINE__, '$wp_filter[\'init\']') ;
             wpgform_preprint_r($wp_filter['init']) ;
         }
         if (array_key_exists('template_redirect', $wp_filter))
         {
-            wpgform_whereami(__FILE__, __LINE__) ;
+            wpgform_whereami(__FILE__, __LINE__, '$wp_filter[\'template_redirect\']') ;
             wpgform_preprint_r($wp_filter['template_redirect']) ;
         }
     }
@@ -128,11 +127,20 @@ function wpgform_send_headers()
 /**
  * Debug "where am i" function
  */
-function wpgform_whereami($f, $l)
+function wpgform_whereami($f, $l, $s = null)
 {
     global $wpgform_debug_content ;
 
-    $wpgform_debug_content .= sprintf('<h3>%s::%s</h3>', basename($f), $l) ;
+    if (is_null($s))
+    {
+        $wpgform_debug_content .= sprintf('<h3>%s::%s</h3>', basename($f), $l) ;
+        //error_log(sprintf('%s::%s', basename($f), $l)) ;
+    }
+    else
+    {
+        $wpgform_debug_content .= sprintf('<h3>%s::%s::%s</h3>', basename($f), $l, $s) ;
+        //error_log(sprintf('%s::%s::%s', basename($f), $l, $s)) ;
+    }
 }
 
 /**
