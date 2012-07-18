@@ -23,9 +23,9 @@ define('WPGFORM_EMAIL_FORMAT_PLAIN', 'plain') ;
 define('WPGFORM_CONFIRM_AJAX', 'ajax') ;
 define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
 define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
-define('WPGFORM_DEBUG', true) ;
+define('WPGFORM_DEBUG', false) ;
 
-if (WPST_DEBUG) :
+if (WPGFORM_DEBUG) :
     require_once('wpgform-debug.php') ;
 endif ;
 
@@ -38,6 +38,9 @@ endif ;
  */
 function wpgform_init()
 {
+    if (WPGFORM_DEBUG)
+        error_reporting(E_ALL) ;
+
     $wpgform_options = wpgform_get_plugin_options() ;
 
     if ($wpgform_options['sc_posts'] == 1)
@@ -46,7 +49,7 @@ function wpgform_init()
     if ($wpgform_options['sc_widgets'] == 1)
         add_filter('widget_text', 'do_shortcode') ;
 
-    if (WPST_DEBUG)
+    if (WPGFORM_DEBUG)
         add_action('send_headers', 'wpgform_send_headers') ;
 
     add_filter('the_content', 'wpautop');
@@ -441,10 +444,11 @@ class wpGForm
 
             //$html = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $html) ;
             $html = str_replace($action, 'action=""', $html) ;
-            $action = preg_replace('/^action/i', 'value', $action) ;
+            $action = preg_replace(array('/^action=/i', '/"/'), array('', ''), $action) ;
+            $action = base64_encode(serialize($action)) ;
 
             $html = preg_replace('/<\/form>/i',
-                "<input type=\"hidden\" {$action} name=\"gform-action\"></form>", $html) ;
+                "<input type=\"hidden\" value=\"{$action}\" name=\"gform-action\"></form>", $html) ;
         } 
         else 
         {
@@ -562,17 +566,17 @@ jQuery(document).ready(function($) {
     {
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
-        if (!empty($_POST))
+        if (!empty($_POST) && array_key_exists('gform-action', $_POST))
         {
             self::$posted = true ;
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__) ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
-            $action = $_POST['gform-action'] ;
+            $action = unserialize(base64_decode($_POST['gform-action'])) ;
             unset($_POST['gform-action']) ;
             $options = $_POST['gform-options'] ;
             unset($_POST['gform-options']) ;
             $options = unserialize(base64_decode($options)) ;
-            wpgform_preprint_r($options) ;
+            if (WPGFORM_DEBUG) wpgform_preprint_r($options) ;
             $form = $options['form'] ;
 
             $body = '' ;
@@ -602,11 +606,15 @@ jQuery(document).ready(function($) {
             }
             //  Remove the action from the form and POST it
 
-            //$form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
-            $form = str_replace($action, 'action=""', $form) ;
+            $form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
+            //$form = str_replace($action, 'action=""', $form) ;
 
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body)) ;
+        }
+        else
+        {
+            sprintf('%s::%s', basename(__FILE__), __LINE__) ;
         }
     }
 
