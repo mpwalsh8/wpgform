@@ -18,8 +18,9 @@
 
 global $wpgform_debug_content ;
 
+//printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
 $wpgform_debug_content = '' ;
-add_action('init', 'wpgform_debug', 99) ;
+add_action('init', 'wpgform_debug', 0) ;
 add_action('wp_footer', 'wpgform_show_debug_content') ;
 
 /**
@@ -29,6 +30,8 @@ add_action('wp_footer', 'wpgform_show_debug_content') ;
 function wpgform_debug()
 {
     global $wp_filter ;
+
+    wpgform_error_log($_POST) ;
 
     if (!is_admin())
     {
@@ -79,13 +82,14 @@ div.gform-debug h2 {
 
 div.gform-debug h3 {
     padding: 10px;
-    color: #ffffff;
+    color: #fff;
     font-weight: bold;
     border: 1px solid #000000;
     background-color: #024593;
 }
 
 div.gform-debug pre {
+    color: #000;
     text-align: left;
     border: 1px solid #000000;
     background-color: #c6dffd;
@@ -154,6 +158,18 @@ function wpgform_preprint_r()
     $arg_list = func_get_args() ;
     for ($i = 0; $i < $numargs; $i++) {
 	    $wpgform_debug_content .= sprintf('<pre style="text-align:left;">%s</pre>', print_r($arg_list[$i], true)) ;
+    }
+    wpgform_error_log(func_get_args()) ;
+}
+/**
+ * Debug functions
+ */
+function wpgform_error_log()
+{
+    $numargs = func_num_args() ;
+    $arg_list = func_get_args() ;
+    for ($i = 0; $i < $numargs; $i++) {
+	    error_log(print_r($arg_list[$i], true)) ;
     }
 }
 ?>
