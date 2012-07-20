@@ -307,7 +307,7 @@ function wpgform_settings_input()
             <label for="gform_browser_check">
             <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
             <tr>
-            <td style="padding: 0px;">
+            <td style="padding: 5px 0px; vertical-align: top;">
             <input name="wpgform_options[browser_check]" type="checkbox" id="gform_browser_check" value="1" <?php checked('1', $wpgform_options['browser_check']) ; ?> />
             </td>
             <td style="padding: 5px;">
@@ -324,11 +324,47 @@ function wpgform_settings_input()
             <label for="gform_donation_message">
             <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
             <tr>
-            <td style="padding: 0px;">
+            <td style="padding: 5px 0px; vertical-align: top;">
             <input name="wpgform_options[donation_message]" type="checkbox" id="gform_donation_message" value="1" <?php checked('1', $wpgform_options['donation_message']) ; ?> />
             </td>
             <td style="padding: 5px;">
             Hide the request for donation at the top of this page.<br/>The donation request will remain on the <b>About</b> tab.
+            </td>
+            </tr>
+            </table>
+            </label>
+            </fieldset></td>
+        </tr>
+<!--
+        <tr valign="top">
+            <th scope="row"><label>Serialize Post Variables</label></th>
+            <td><fieldset>
+            <label for="gform_serialize_post_vars">
+            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+            <td style="padding: 5px 0px; vertical-align: top;">
+            <input name="wpgform_options[serialize_post_vars]" type="checkbox" id="gform_serialize_post_vars" value="1" <?php //checked('1', $wpgform_options['serialize_post_vars']) ; ?> />
+            </td>
+            <td style="padding: 5px;">
+            Serialize POST data prior to form submission?  Enabling this <i><b>may</b></i> help with servers where <a href="http://www.modsecurity.org/">Apache's ModSecurity</a> module is installed.  If you're experiencing 403 errors after submitting a form, this may alleviate the problem.
+            </td>
+            </tr>
+            </table>
+            </label>
+            </fieldset></td>
+        </tr>
+-->
+        <tr valign="top">
+            <th scope="row"><label>Enable Debug</label></th>
+            <td><fieldset>
+            <label for="gform_enable_debug">
+            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+            <td style="padding: 5px 0px; vertical-align: top;">
+            <input name="wpgform_options[enable_debug]" type="checkbox" id="gform_enable_debug" value="1" <?php checked('1', $wpgform_options['enable_debug']) ; ?> />
+            </td>
+            <td style="padding: 5px;">
+            Enabling debug will collect data during the form rendering and processing process.  The data is added to the page footer but hidden with a link appearing above the form which can toggle the display of the debug data.  This data is useful when trying to understand why the plugin isn't operating as expected.
             </td>
             </tr>
             </table>
