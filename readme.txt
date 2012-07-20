@@ -183,6 +183,11 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.31 =
+* Separation of rendering and processing of the Google Form to better work with sites that make multiple calls to `do_shortcode()`.
+* Added a new option to enable "debug".  Enabling debug will add some hidden information to the page.  The visibility of this hidden information can be toggled on an off using a link which is inserted into the page above form.  This debug information is useful for chasing down odd behavior, in particular 403 errors which tend not to be real obvious.
+* Significant change to better support servers which have Apache ModSecurity enabled.  Sites which employ ModSecurity may result in 403 errors which are hard to determine because in most cases, the page with the form on it will simply be displayed again.  The plugin now tries to detect 403 errors and when found, will issue a message as part of the form rendering.
+
 = Version 0.30 =
 * Changed generated CSS to limit the possibility that it is affected by 'the_content' or 'wpautop' filters resulting in CSS errors.  This rare situation would prevent the custom CSS from being applied correctly.
  
