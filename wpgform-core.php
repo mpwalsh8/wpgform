@@ -23,11 +23,19 @@ define('WPGFORM_EMAIL_FORMAT_PLAIN', 'plain') ;
 define('WPGFORM_CONFIRM_AJAX', 'ajax') ;
 define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
 define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
-define('WPGFORM_DEBUG', false) ;
 
-if (WPGFORM_DEBUG) :
+//  Need the plugin options to initialize debug
+$wpgform_options = wpgform_get_plugin_options() ;
+
+//  Enable debug content?
+define('WPGFORM_DEBUG', $wpgform_options['enable_debug'] == 1) ;
+
+if (WPGFORM_DEBUG)
+{
+    error_reporting(E_ALL) ;
     require_once('wpgform-debug.php') ;
-endif ;
+    add_action('send_headers', 'wpgform_send_headers') ;
+}
 
 /**
  * wpgform_init()
@@ -38,9 +46,6 @@ endif ;
  */
 function wpgform_init()
 {
-    if (WPGFORM_DEBUG)
-        error_reporting(E_ALL) ;
-
     $wpgform_options = wpgform_get_plugin_options() ;
 
     if ($wpgform_options['sc_posts'] == 1)
@@ -48,9 +53,6 @@ function wpgform_init()
 
     if ($wpgform_options['sc_widgets'] == 1)
         add_filter('widget_text', 'do_shortcode') ;
-
-    if (WPGFORM_DEBUG)
-        add_action('send_headers', 'wpgform_send_headers') ;
 
     add_filter('the_content', 'wpautop');
     add_action('template_redirect', 'wpgform_head') ;
@@ -74,6 +76,8 @@ function wpgform_get_default_plugin_options()
        ,'donation_message' => 0
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
        ,'browser_check' => 0
+       ,'enable_debug' => 0
+       ,'serialize_post_vars' => 0
 	) ;
 
 	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
@@ -211,6 +215,13 @@ class wpGForm
     {
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
+
+        //  Some servers running ModSecurity issue 403 errors because something
+        //  in the form's POST parameters has triggered a positive match on a rule.
+
+        if (!empty($_SERVER) && array_key_exists('REDIRECT_STATUS', $_SERVER) && ($_SERVER['REDIRECT_STATUS'] == '403'))
+            return '<div class="gform-google-error">Unable to process Google Form.  Server is responding with <span class="gform-google-error">403 Permission Denied</span> error.</div>' ;
+
         //  If no URL then return as nothing useful can be done.
         if (!$options['form'])
         {
@@ -493,6 +504,24 @@ jQuery(document).ready(function($) {
     $("div.%sss-form-container :input").attr("disabled", true);
         ', $prefix) ;
 
+        /*
+        //  Serialize the POST variables?
+        if ($wpgform_options['serialize_post_vars'] == 1)
+        {
+            $js .= sprintf('
+    $("#%sss-form").submit(function(event) {
+        $("div.%sss-form-container input").each(function(index) {
+        this.val(encodeURI(this.val()));
+    });
+        alert("fixing things ... ") ;
+                    //event.preventDefault();
+                    //alert($("#%sss-form").serialize()) ;
+                    //$.post("%s", $("#%sss-form").serialize(), function(data){ alert(data) });
+                    //alert("testing...");
+    });', $prefix, $prefix, $prefix, get_permalink(get_the_ID()), $prefix) ;
+        }
+        */
+
         //  Before closing the <script> tag, is this the confirmation
         //  AND do we have a custom confirmation page or alert message?
 
@@ -514,7 +543,6 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        //$js = preg_replace('/[\r\n]+/', '', $js) . PHP_EOL ;
         $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
@@ -606,8 +634,8 @@ jQuery(document).ready(function($) {
             }
             //  Remove the action from the form and POST it
 
-            $form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
-            //$form = str_replace($action, 'action=""', $form) ;
+            //$form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
+            $form = str_replace($action, 'action=""', $form) ;
 
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body)) ;
