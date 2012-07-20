@@ -18,7 +18,6 @@
 
 global $wpgform_debug_content ;
 
-//printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
 $wpgform_debug_content = '' ;
 add_action('init', 'wpgform_debug', 0) ;
 add_action('wp_footer', 'wpgform_show_debug_content') ;
@@ -126,6 +125,7 @@ function wpgform_send_headers()
 {
     header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
     header('Expires: ' . date(DATE_RFC822, strtotime('yesterday'))); // Date in the past
+    header('X-Frame-Options: SAMEORIGIN'); 
 }
 
 /**
