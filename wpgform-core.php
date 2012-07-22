@@ -841,12 +841,14 @@ function wpgform_head()
     
     $wpgform_options = wpgform_get_plugin_options() ;
 
+/*
     //  Load Base64 Encode/Decode jQuery plugin?
     if ($wpgform_options['serialize_post_vars'] == 1)
     {
 	    wp_enqueue_script('gform-jquery-base64',
             plugins_url(plugin_basename(dirname(__FILE__) . '/js/jquery.base64.js')), array('jquery'));
     }
+*/
 
     //  Load default gForm CSS?
     if ($wpgform_options['default_css'] == 1)
