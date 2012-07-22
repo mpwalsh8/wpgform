@@ -466,11 +466,12 @@ class wpGForm
             $action = null ;
         }
         
-        //  Enclode all of the short code options so they can
+        //  Encode all of the short code options so they can
         //  be referenced if/when needed during form processing.
 
         $html = preg_replace('/<\/form>/i', "<input type=\"hidden\" value=\"" .
             base64_encode(serialize($options)) . "\" name=\"gform-options\"></form>", $html) ;
+            //base64_encode($options) . "\" name=\"gform-options\"></form>", $html) ;
 
         //  Output custom CSS?
  
@@ -504,23 +505,36 @@ jQuery(document).ready(function($) {
     $("div.%sss-form-container :input").attr("disabled", true);
         ', $prefix) ;
 
-        /*
+/*
         //  Serialize the POST variables?
         if ($wpgform_options['serialize_post_vars'] == 1)
         {
             $js .= sprintf('
     $("#%sss-form").submit(function(event) {
-        $("div.%sss-form-container input").each(function(index) {
-        this.val(encodeURI(this.val()));
+        //$("#%sss-form").children().each(function(){
+        $.each($("#%sss-form input, #%sss-form textarea"), function() {
+        //access to form element via $(this)
+            $(this).val($.base64Encode($(this).val()));
+            alert($(this).val());
+        });
     });
-        alert("fixing things ... ") ;
-                    //event.preventDefault();
-                    //alert($("#%sss-form").serialize()) ;
-                    //$.post("%s", $("#%sss-form").serialize(), function(data){ alert(data) });
-                    //alert("testing...");
-    });', $prefix, $prefix, $prefix, get_permalink(get_the_ID()), $prefix) ;
+        //var i = 0;
+//$.each($("#%sss-form input:text, #%sss-form input:hidden #%sss-form textarea"), function(i,v) {
+//$.each($("#%sss-form input, #%sss-form textarea"), function(i,v) {
+    //var theTag = v.tagName;
+    //var theElement = $(v);
+    //var theValue = theElement.val();
+    //alert(i + ":  " + theValue) ;
+    //$(v).val($.base64Encode($(v).val()));
+    //alert($.base64Encode(theValue)) ;
+    //i++;
+//});
+        
+        
+//alert("waiting ...");
+    //});', $prefix, $prefix, $prefix, $prefix, $prefix, $prefix, $prefix, $prefix, $prefix) ;
         }
-        */
+*/
 
         //  Before closing the <script> tag, is this the confirmation
         //  AND do we have a custom confirmation page or alert message?
@@ -543,7 +557,7 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
+        //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
         if (self::$posted && is_null($action) && $email)
@@ -597,13 +611,43 @@ jQuery(document).ready(function($) {
         if (!empty($_POST) && array_key_exists('gform-action', $_POST))
         {
             self::$posted = true ;
+
+            $wpgform_options = wpgform_get_plugin_options() ;
+
+            //print_r($_POST) ;
+            //  Are POST variables base64 encoded?
+/*
+            if ($wpgform_options['serialize_post_vars'] == 1)
+            {
+                foreach ($_POST as $key => $value)
+                {
+                    //  Need to handle parameters passed as array values
+                    //  separately because of how Python (used Google)
+                    //  handles array arguments differently than PHP does.
+
+                    //if (is_array($_POST[$key]))
+                    //{
+                        //$pa = &$_POST[$key] ;
+                        //foreach ($pa as $pv)
+                            //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
+                    //}
+                    //else
+                    //{
+                        $_POST[$key] = base64_decode($value) ;
+                    //}
+                }
+            }
+            //print_r($_POST) ;
+*/
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__) ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
+            
             $action = unserialize(base64_decode($_POST['gform-action'])) ;
             unset($_POST['gform-action']) ;
             $options = $_POST['gform-options'] ;
             unset($_POST['gform-options']) ;
             $options = unserialize(base64_decode($options)) ;
+
             if (WPGFORM_DEBUG) wpgform_preprint_r($options) ;
             $form = $options['form'] ;
 
@@ -632,11 +676,16 @@ jQuery(document).ready(function($) {
                     $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                 }
             }
-            //  Remove the action from the form and POST it
 
             //$form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
             $form = str_replace($action, 'action=""', $form) ;
 
+            //  WordPress converts all of the ampersand characters to their
+            //  appropriate HTML entity or some variety of it.  Need to undo
+            //  that so the URL can be actually be used.
+    
+            $action = str_replace(array('&#038;','&#38;','&amp;'), '&', $action) ;
+        
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body)) ;
         }
@@ -791,6 +840,13 @@ function wpgform_head()
     wp_enqueue_script('jquery') ;
     
     $wpgform_options = wpgform_get_plugin_options() ;
+
+    //  Load Base64 Encode/Decode jQuery plugin?
+    if ($wpgform_options['serialize_post_vars'] == 1)
+    {
+	    wp_enqueue_script('gform-jquery-base64',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/js/jquery.base64.js')), array('jquery'));
+    }
 
     //  Load default gForm CSS?
     if ($wpgform_options['default_css'] == 1)
