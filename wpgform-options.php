@@ -7,7 +7,7 @@
  *
  * (c) 2011 by Mike Walsh
  *
- * @author Mike Walsh <mike@walshcrew.com>
+ * @author Mike Walsh <mpwalsh8@gmail.com>
  * @package wpGForm
  * @subpackage options
  * @version $Revision$
@@ -258,7 +258,7 @@ function wpgform_options_page()
  */
 function wpgform_settings_input()
 {
-    $wpgform_options = wpgform_get_plugin_options() ; ?>
+    $wpgform_options = wpgform_get_plugin_options() ;
     <table class="form-table">
         <tr valign="top">
             <th scope="row"><label><b><i>gform</i></b> Shortcode</label></th>
@@ -299,6 +299,10 @@ function wpgform_settings_input()
             <br/>
             <input name="wpgform_options[email_format]" type="radio" id="gform_email_format" value="<?php echo WPGFORM_EMAIL_FORMAT_PLAIN ;?>" <?php checked(WPGFORM_EMAIL_FORMAT_PLAIN, $wpgform_options['email_format']) ; ?> />
             Send confirmation email (when used) in Plain Text format.</label>
+            <br />
+            <label for="bcc_blog_admin">
+            <input name="wpgform_options[bcc_blog_admin]" type="checkbox" id="gform_bcc_blog_admin" value="1" <?php checked('1', $wpgform_options['bcc_blog_admin']) ; ?> />
+            Bcc Blog Admin on Confirmation Email (when used)</label>
             </fieldset></td>
         </tr>
         <tr valign="top">
