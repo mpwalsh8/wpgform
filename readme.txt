@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 0.31
+Stable tag: 0.32
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -191,6 +191,11 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.32 =
+* New option to control Bcc to blog admin when using email notification.  By default this option is enabled to allow plugin to behave as it has in prior versions.
+* Fixed bug in processing default plugin settings which are on by default.  New options which are on by default were not recognized.
+* Fixed activation bug which didn't set all of the default settings correctly.
 
 = Version 0.31 =
 * Separation of rendering and processing of the Google Form to better work with sites that make multiple calls to `do_shortcode()`.
