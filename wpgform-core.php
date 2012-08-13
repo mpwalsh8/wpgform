@@ -78,6 +78,7 @@ function wpgform_get_default_plugin_options()
        ,'browser_check' => 0
        ,'enable_debug' => 0
        ,'serialize_post_vars' => 0
+       ,'bcc_blog_admin' => 1
 	) ;
 
 	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
@@ -156,19 +157,7 @@ function wpgform_admin_init()
  */
 function wpgform_register_activation_hook()
 {
-    $default_wpgform_options = array(
-        'sc_posts' => 1
-       ,'sc_widgets' => 1
-       ,'default_css' => 1
-       ,'custom_css' => 0
-       ,'custom_css_styles' => ''
-       ,'donation_message' => 0
-       ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
-       ,'browser_check' => 0
-       ,'wpgform_debug' => 0
-    ) ;
-
-    add_option('wpgform_options', $default_wpgform_options) ;
+    add_option('wpgform_options', wpgform_get_default_plugin_options()) ;
     add_filter('widget_text', 'do_shortcode') ;
 }
 
@@ -754,6 +743,8 @@ jQuery(document).ready(function($) {
      */
     function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false)
     {
+        $wpgform_options = wpgform_get_plugin_options() ;
+
         if ($sendto === false || $sendto === null) $sendto = get_bloginfo('admin_email') ;
 
         if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
@@ -770,7 +761,11 @@ jQuery(document).ready(function($) {
             get_bloginfo('name'), $sendto) . PHP_EOL ;
 
         $headers .= sprintf("Cc: %s", $sendto) . PHP_EOL ;
-        $headers .= sprintf("Bcc: %s", get_bloginfo('admin_email')) . PHP_EOL ;
+
+        //  Bcc Blog Admin?
+        if ($wpgform_options['bcc_blog_admin'])
+            $headers .= sprintf("Bcc: %s", get_bloginfo('admin_email')) . PHP_EOL ;
+
         $headers .= sprintf("Reply-To: %s", $sendto) . PHP_EOL ;
         $headers .= sprintf("X-Mailer: PHP/%s", phpversion()) ;
 
@@ -817,9 +812,11 @@ jQuery(document).ready(function($) {
                 date('Y-m-d'), date('H:i'), get_option('blogname')) ;
         }
 
-        $to = sprintf('%s wpGForm Contact <%s>, %s Admin<%s>',
-            get_option('blogname'), $sendto,
-            get_option('blogname'), get_option('admin_email')) ;
+        $to = sprintf('%s wpGForm Contact <%s>', get_option('blogname'), $sendto) ;
+
+        //$to = sprintf('%s wpGForm Contact <%s>, %s Admin<%s>',
+        //    get_option('blogname'), $sendto,
+        //    get_option('blogname'), get_option('admin_email')) ;
 
         $subject = sprintf('Form Submission from %s', get_option('blogname')) ;
 
