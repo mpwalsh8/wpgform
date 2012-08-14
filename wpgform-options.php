@@ -259,6 +259,7 @@ function wpgform_options_page()
 function wpgform_settings_input()
 {
     $wpgform_options = wpgform_get_plugin_options() ;
+?>
     <table class="form-table">
         <tr valign="top">
             <th scope="row"><label><b><i>gform</i></b> Shortcode</label></th>
