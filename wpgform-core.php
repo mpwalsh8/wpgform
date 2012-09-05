@@ -271,6 +271,16 @@ class wpGForm
             $suffix = $options['suffix'] ;
         }
 
+        //  Spreadsheet URL?  Optional
+        if (!$options['spreadsheet'])
+        {
+            $spreadsheet = null ;
+        }
+        else
+        {
+            $spreadsheet = $options['spreadsheet'] ;
+        }
+
         //  Breaks between labels and inputs?
         $br = $options['br'] === 'on' ;
 
@@ -551,7 +561,7 @@ jQuery(document).ready(function($) {
         //  Send email?
         if (self::$posted && is_null($action) && $email)
         {
-            wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto) ;
+            wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto, $spreadsheet) ;
         }
 
         //  Check browser compatibility?  The jQuery used by this plugin may
@@ -694,7 +704,7 @@ jQuery(document).ready(function($) {
         global $pagenow ;
         $pageURL = 'http' ;
 
-        if ($_SERVER["HTTPS"] == "on") $pageURL .= 's' ;
+        if (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on') $pageURL .= 's' ;
 
         $pageURL .= '://' ;
 
@@ -714,20 +724,21 @@ jQuery(document).ready(function($) {
      */
     function RenderGForm($atts) {
         $params = shortcode_atts(array(
-            'form'      => false,                   // Google Form URL
-            'confirm'   => false,                   // Custom confirmation page URL to redirect to
-            'alert'     => null,                    // Optional Alert Message
-            'class'     => 'gform',                 // Container element's custom class value
-            'legal'     => 'on',                    // Display Google Legal Stuff
-            'br'        => 'off',                   // Insert <br> tags between labels and inputs
-            'suffix'    => null,                    // Add suffix character(s) to all labels
-            'prefix'    => null,                    // Add suffix character(s) to all labels
-            'readonly'  => 'off',                   // Set all form elements to disabled
-            'title'     => 'on',                    // Remove the H1 element(s) from the Form
-            'maph1h2'   => 'off',                   // Map H1 element(s) on the form to H2 element(s)
-            'email'     => 'off',                   // Send an email confirmation to blog admin on submission
-            'sendto'    => null,                    // Send an email confirmation to a specific address on submission
-            'style'     => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
+            'form'        => false,                   // Google Form URL
+            'confirm'     => false,                   // Custom confirmation page URL to redirect to
+            'alert'       => null,                    // Optional Alert Message
+            'class'       => 'gform',                 // Container element's custom class value
+            'legal'       => 'on',                    // Display Google Legal Stuff
+            'br'          => 'off',                   // Insert <br> tags between labels and inputs
+            'suffix'      => null,                    // Add suffix character(s) to all labels
+            'prefix'      => null,                    // Add suffix character(s) to all labels
+            'readonly'    => 'off',                   // Set all form elements to disabled
+            'title'       => 'on',                    // Remove the H1 element(s) from the Form
+            'maph1h2'     => 'off',                   // Map H1 element(s) on the form to H2 element(s)
+            'email'       => 'off',                   // Send an email confirmation to blog admin on submission
+            'sendto'      => null,                    // Send an email confirmation to a specific address on submission
+            'spreadsheet' => false,                   // Google Spreadsheet URL
+            'style'       => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
         ), $atts) ;
 
         return wpGForm::ConstructGForm($params) ;
@@ -741,11 +752,16 @@ jQuery(document).ready(function($) {
      * 
      * @param string $action - action to take, register or unregister
      */
-    function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false)
+    function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false, $spreadsheet = null)
     {
         $wpgform_options = wpgform_get_plugin_options() ;
 
         if ($sendto === false || $sendto === null) $sendto = get_bloginfo('admin_email') ;
+
+        if ($spreadsheet === false || $spreadsheet === null)
+            $spreadsheet = 'N/A' ;
+        else
+            $spreadsheet = sprintf('<a href="%s">View Form Submissions</a>', $spreadsheet) ;
 
         if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
         {
@@ -773,6 +789,7 @@ jQuery(document).ready(function($) {
         {
             $html = '
                 <html>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <head>
                 <title>%s</title>
                 </head>
@@ -783,7 +800,8 @@ jQuery(document).ready(function($) {
                 <p>
                 A form was submitted on your web site.
                 <ul>
-                <li>URL:  %s</li>
+                <li>Form:  %s</li>
+                <li>Responses:  %s</li>
                 <li>Date: %s</li>
                 <li>Time: %s</li>
                 </ul>
@@ -792,24 +810,21 @@ jQuery(document).ready(function($) {
                 Thank you,<br/><br/>
                 %s
                 </p>
-                <p>
-                </p>
                 </body>
-                </html>
-                ' ;
+                </html>' ;
 
-            $message = sprintf($html, get_bloginfo('name'),
-                wpGForm::GetPageURL(), date('Y-m-d'), date('H:i'), get_bloginfo('name')) ;
+            $message = sprintf($html, get_bloginfo('name'), get_the_title(),
+                $spreadsheet, date('Y-m-d'), date('H:i'), get_bloginfo('name')) ;
         }
         else
         {
             $plain = 'FYI -' . PHP_EOL . PHP_EOL ;
             $plain .= 'A form was submitted on your web site:' . PHP_EOL . PHP_EOL ;
-            $plain .= 'URL:  %s' . PHP_EOL . 'Date:  %s' . PHP_EOL . 'Time:  %s' . PHP_EOL . PHP_EOL ;
-            $plain .= 'Thank you,' . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
+            $plain .= 'Form:  %s' . PHP_EOL . 'Responses:  %s' . PHP_EOL . 'Date:  %s' . PHP_EOL ;
+            $plain .= 'Time:  %s' . PHP_EOL . PHP_EOL . 'Thank you,' . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
 
-            $message = sprintf($plain, wpGForm::GetPageURL(),
-                date('Y-m-d'), date('H:i'), get_option('blogname')) ;
+            $message = sprintf($plain, get_the_title(),
+                date('Y-m-d'), date('H:i'), $spreadsheet, get_option('blogname')) ;
         }
 
         $to = sprintf('%s wpGForm Contact <%s>', get_option('blogname'), $sendto) ;
@@ -819,6 +834,9 @@ jQuery(document).ready(function($) {
         //    get_option('blogname'), get_option('admin_email')) ;
 
         $subject = sprintf('Form Submission from %s', get_option('blogname')) ;
+
+        if (WPGFORM_DEBUG) 
+            wpgform_preprint_r($headers, htmlentities($message)) ;
 
         $status = wp_mail($to, $subject, $message, $headers) ;
 
