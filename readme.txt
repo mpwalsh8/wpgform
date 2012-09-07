@@ -192,6 +192,10 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+ 
+= Version 0.36 =
+* Fixed a bug which appears when the Browser Check option is enabled.  There was a conflict in the server response from Google and the server response from WordPress due to overwriting a variable.
+* Fixed format of plain text email response when email is enabled for form submission.  The information in the email was being inserted into the template incorrectly.
 
 = Version 0.35 =
 * Changed format of email to use the title of the page/post instead of the permalink to the form.
