@@ -340,12 +340,7 @@ class wpGForm
         if (is_wp_error(self::$response))
             return '<div class="gform-google-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
         else
-        {
-            print '<pre>' ;
-            print_r(self::$response) ;
-            print '</pre>' ;
             $html = self::$response['body'] ;
-        }
 
         //  Need to filter the HTML retrieved from the form and strip off the stuff
         //  we don't want.  This gets rid of the HTML wrapper from the Google page.
