@@ -174,6 +174,11 @@ function wpgform_register_activation_hook()
 class wpGForm
 {
     /**
+     * Property to hold Browser Check response
+     */
+    static $browser_check ;
+
+    /**
      * Property to hold Google Form Response
      */
     static $response ;
@@ -335,7 +340,12 @@ class wpGForm
         if (is_wp_error(self::$response))
             return '<div class="gform-google-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
         else
+        {
+            print '<pre>' ;
+            print_r(self::$response) ;
+            print '</pre>' ;
             $html = self::$response['body'] ;
+        }
 
         //  Need to filter the HTML retrieved from the form and strip off the stuff
         //  we don't want.  This gets rid of the HTML wrapper from the Google page.
@@ -573,11 +583,11 @@ jQuery(document).ready(function($) {
  
             //  Let's check the browser version just in case ...
 
-            self::$response = wp_check_browser_version();
+            self::$browser_check = wp_check_browser_version();
 
-            if (self::$response && self::$response['upgrade'])
+            if (self::$browser_check && self::$browser_check['upgrade'])
             {
-		        if (self::$response['insecure'])
+		        if (self::$browser_check['insecure'])
                     $css .= '<div class="gform-browser-warning"><h4>' .
                         __('Warning:  You are using an insecure browser!') . '</h4></div>' ;
 		        else
@@ -824,7 +834,7 @@ jQuery(document).ready(function($) {
             $plain .= 'Time:  %s' . PHP_EOL . PHP_EOL . 'Thank you,' . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
 
             $message = sprintf($plain, get_the_title(),
-                date('Y-m-d'), date('H:i'), $spreadsheet, get_option('blogname')) ;
+                $spreadsheet, date('Y-m-d'), date('H:i'), get_option('blogname')) ;
         }
 
         $to = sprintf('%s wpGForm Contact <%s>', get_option('blogname'), $sendto) ;
