@@ -226,6 +226,8 @@ class wpGForm
             $form = $options['form'] ;
         }
 
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+
         //  Custom Alert Message?  Optional
         if (!$options['alert'])
         {
@@ -314,6 +316,13 @@ class wpGForm
             $sendto = is_email($options['sendto']) ;
         }
 
+        //  The Unite theme from Paralleus mucks with the submit buttons
+        //  which breaks the ability to submit the form to Google correctly.
+        //  This hack will "unbreak" the submit buttons.
+
+        $unitethemehack = $options['unitethemehack'] === 'on' ;
+
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
 
         //  Show the custom confirmation via AJAX instead of redirect?
         $style = $options['style'] ;
@@ -341,6 +350,8 @@ class wpGForm
             return '<div class="gform-google-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
         else
             $html = self::$response['body'] ;
+
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
 
         //  Need to filter the HTML retrieved from the form and strip off the stuff
         //  we don't want.  This gets rid of the HTML wrapper from the Google page.
@@ -397,6 +408,8 @@ class wpGForm
         {
             return '<div class="gform-google-error">Unexpected content encountered, unable to retrieve Google Form.</div>' ;
         }
+
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
 
         //  Strip off anything prior to the first  DIV, we don't want it.
 
@@ -470,6 +483,15 @@ class wpGForm
             $action = null ;
         }
         
+        //  The Unite theme from Paralleus mucks with the submit buttons
+        //  which breaks the ability to submit the form to Google correctly.
+        //  This hack will "unbreak" the submit buttons.
+
+        if ($unitethemehack)
+            $html = preg_replace('/<input type="submit"/i', '<input class="noStyle" type="submit"', $html) ;
+
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+
         //  Encode all of the short code options so they can
         //  be referenced if/when needed during form processing.
 
@@ -561,7 +583,7 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
+        $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
         if (self::$posted && is_null($action) && $email)
@@ -614,6 +636,8 @@ jQuery(document).ready(function($) {
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
         if (!empty($_POST) && array_key_exists('gform-action', $_POST))
         {
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+
             self::$posted = true ;
 
             $wpgform_options = wpgform_get_plugin_options() ;
@@ -643,7 +667,7 @@ jQuery(document).ready(function($) {
             }
             //print_r($_POST) ;
 */
-            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__) ;
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
             
             $action = unserialize(base64_decode($_POST['gform-action'])) ;
@@ -663,35 +687,53 @@ jQuery(document).ready(function($) {
             $patterns = array('/^entry_([0-9]+)_(single|group)_/', '/^entry_([0-9]+)_/') ;
             $replacements = array('entry.\1.\2.', 'entry.\1.') ;
 
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+            if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
+
             foreach ($_POST as $key => $value)
             {
+                if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+                if (WPGFORM_DEBUG) wpgform_preprint_r($key, $value) ;
+
                 //  Need to handle parameters passed as array values
                 //  separately because of how Python (used Google)
                 //  handles array arguments differently than PHP does.
 
                 if (is_array($_POST[$key]))
                 {
+                    if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
                         $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
                 }
                 else
                 {
+                    if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
                     $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                 }
             }
 
             //$form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
             $form = str_replace($action, 'action=""', $form) ;
+            var_dump($form) ;
+
 
             //  WordPress converts all of the ampersand characters to their
             //  appropriate HTML entity or some variety of it.  Need to undo
             //  that so the URL can be actually be used.
     
             $action = str_replace(array('&#038;','&#38;','&amp;'), '&', $action) ;
+            if (WPGFORM_DEBUG)
+            {
+                wpgform_preprint_r($action) ;
+                wpgform_preprint_r($body) ;
+            }
         
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body)) ;
+
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+            if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
         }
         else
         {
@@ -729,21 +771,22 @@ jQuery(document).ready(function($) {
      */
     function RenderGForm($atts) {
         $params = shortcode_atts(array(
-            'form'        => false,                   // Google Form URL
-            'confirm'     => false,                   // Custom confirmation page URL to redirect to
-            'alert'       => null,                    // Optional Alert Message
-            'class'       => 'gform',                 // Container element's custom class value
-            'legal'       => 'on',                    // Display Google Legal Stuff
-            'br'          => 'off',                   // Insert <br> tags between labels and inputs
-            'suffix'      => null,                    // Add suffix character(s) to all labels
-            'prefix'      => null,                    // Add suffix character(s) to all labels
-            'readonly'    => 'off',                   // Set all form elements to disabled
-            'title'       => 'on',                    // Remove the H1 element(s) from the Form
-            'maph1h2'     => 'off',                   // Map H1 element(s) on the form to H2 element(s)
-            'email'       => 'off',                   // Send an email confirmation to blog admin on submission
-            'sendto'      => null,                    // Send an email confirmation to a specific address on submission
-            'spreadsheet' => false,                   // Google Spreadsheet URL
-            'style'       => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
+            'form'           => false,                   // Google Form URL
+            'confirm'        => false,                   // Custom confirmation page URL to redirect to
+            'alert'          => null,                    // Optional Alert Message
+            'class'          => 'gform',                 // Container element's custom class value
+            'legal'          => 'on',                    // Display Google Legal Stuff
+            'br'             => 'off',                   // Insert <br> tags between labels and inputs
+            'suffix'         => null,                    // Add suffix character(s) to all labels
+            'prefix'         => null,                    // Add suffix character(s) to all labels
+            'readonly'       => 'off',                   // Set all form elements to disabled
+            'title'          => 'on',                    // Remove the H1 element(s) from the Form
+            'maph1h2'        => 'off',                   // Map H1 element(s) on the form to H2 element(s)
+            'email'          => 'off',                   // Send an email confirmation to blog admin on submission
+            'sendto'         => null,                    // Send an email confirmation to a specific address on submission
+            'spreadsheet'    => false,                   // Google Spreadsheet URL
+            'unitethemehack' => 'off',                   // Send an email confirmation to blog admin on submission
+            'style'          => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
         ), $atts) ;
 
         return wpGForm::ConstructGForm($params) ;
