@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 0.39
+Stable tag: 0.40
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -196,6 +196,9 @@ No known upgrade issues.
 
 == Changelog ==
  
+= Version 0.40 =
+* Removed leftover debug code.  Again.  :-(
+
 = Version 0.39 =
 * Added new attribute *unitedthemehack='on|off', which defaults to 'off'.  This attribute allows WordPress Google Form to work correctly with Paralleus' Unite theme (which mucks with the submit button(s) on the Google Form preventing the form from being submitted).
  
