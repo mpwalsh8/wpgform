@@ -715,7 +715,6 @@ jQuery(document).ready(function($) {
 
             //$form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
             $form = str_replace($action, 'action=""', $form) ;
-            var_dump($form) ;
 
 
             //  WordPress converts all of the ampersand characters to their
