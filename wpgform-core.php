@@ -79,6 +79,13 @@ function wpgform_get_default_plugin_options()
        ,'enable_debug' => 0
        ,'serialize_post_vars' => 0
        ,'bcc_blog_admin' => 1
+       ,'fsockopen_transport' => 0
+       ,'streams_transport' => 0
+       ,'curl_transport' => 0
+       ,'local_ssl_verify' => 0
+       ,'ssl_verify' => 0
+       ,'http_request_timeout' => 0
+       ,'http_request_timeout_value' => 30
 	) ;
 
 	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
@@ -111,7 +118,7 @@ function wpgform_get_plugin_options()
     foreach ($default_options as $key => $value)
     {
         if (!array_key_exists($key, $plugin_options))
-            $plugin_options[$key] = null ;
+            $plugin_options[$key] = $default_options[$key] ;
     }
 
     return $plugin_options ;
@@ -187,6 +194,31 @@ class wpGForm
      * Property to hold Google Form Post Status
      */
     static $posted = false ;
+
+    /**
+     * Property to indicate Javascript output state
+     */
+    static $wpgform_js = false ;
+
+    /**
+     * Property to indicate CSS output state
+     */
+    static $wpgform_css = false ;
+
+    /**
+     * Property to indicate Debug output state
+     */
+    static $wpgform_debug = false ;
+
+    /**
+     * Property to store unique form id
+     */
+    static $wpgform_form_id = 1 ;
+
+    /**
+     * Property to store unique form id
+     */
+    static $wpgform_submitted_form_id = null ;
 
     /**
      * Constructor
@@ -291,6 +323,9 @@ class wpGForm
         //  Breaks between labels and inputs?
         $br = $options['br'] === 'on' ;
 
+        //  Display CAPTCHA?
+        $captcha = $options['captcha'] === 'on' ;
+
         //  Output the H1 title included in the Google Form?
         $title = $options['title'] === 'on' ;
 
@@ -347,7 +382,22 @@ class wpGForm
         //  Retrieve the HTML from the URL
 
         if (is_wp_error(self::$response))
+        {
+            printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
+            print '<pre>' ;
+            print_r(self::$response) ;
+            print '</pre>' ;
+            $error_string = self::$response->get_error_message();
+            echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+            if (WPGFORM_DEBUG)
+            {
+                //wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+                //wpgform_preprint_r(self::$respone) ;
+                
+            }
+
             return '<div class="gform-google-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
+        }
         else
             $html = self::$response['body'] ;
 
@@ -474,13 +524,16 @@ class wpGForm
             $html = str_replace($action, 'action=""', $html) ;
             $action = preg_replace(array('/^action=/i', '/"/'), array('', ''), $action) ;
             $action = base64_encode(serialize($action)) ;
+            $wgformid = self::$wpgform_form_id++ ;
 
+            //  Add some hidden input fields to faciliate control of subsquent actions
             $html = preg_replace('/<\/form>/i',
-                "<input type=\"hidden\" value=\"{$action}\" name=\"gform-action\"></form>", $html) ;
+                "<input type=\"hidden\" value=\"{$action}\" name=\"gform-action\"><input type=\"hidden\" value=\"{$wgformid}\" name=\"gform-form-id\"></form>", $html) ;
         } 
         else 
         {
             $action = null ;
+            $wgformid = self::$wpgform_form_id++ ;
         }
         
         //  The Unite theme from Paralleus mucks with the submit buttons
@@ -565,17 +618,28 @@ jQuery(document).ready(function($) {
         //  Before closing the <script> tag, is this the confirmation
         //  AND do we have a custom confirmation page or alert message?
 
-        if (self::$posted && is_null($action) && !is_null($alert))
+        if (self::$posted && is_null($action) && !is_null($alert) &&
+            (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1))
+        {
             $js .= PHP_EOL . 'alert("' . $alert . '") ;' ;
+        }
 
         //  Load the confirmation URL via AJAX?
-        if (self::$posted && is_null($action) && !is_null($confirm) && $style === WPGFORM_CONFIRM_AJAX)
+        if (self::$posted && is_null($action) && !is_null($confirm) &&
+            (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
+            $style === WPGFORM_CONFIRM_AJAX)
+        {
             $js .= PHP_EOL . '$("body").load("' . $confirm . '") ;' ;
+        }
 
         //  Load the confirmation URL via Redirect?
-        if (self::$posted && is_null($action) && !is_null($confirm) && $style === WPGFORM_CONFIRM_REDIRECT)
+        if (self::$posted && is_null($action) && !is_null($confirm) &&
+            (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
+            $style === WPGFORM_CONFIRM_REDIRECT)
+        {
             //printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
             $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
+        }
 
         $js .= '
 });
@@ -618,7 +682,43 @@ jQuery(document).ready(function($) {
         else
             $debug = '' ;
 
-        return $debug . $js . $css . $html ;
+        //  Assemble final HTML to return.  To handle pages with more than one
+        //  form, Javascript, CSS, and debug control should only be rendered once!
+ 
+        $onetime_html = '' ;
+
+        if (WPGFORM_DEBUG)
+        {
+            printf('<h2>Form Id:  %s</h2>', self::$wpgform_form_id - 1) ;
+            if (!is_null(self::$wpgform_submitted_form_id))
+                printf('<h2>Submitted Form Id:  %s</h2>', self::$wpgform_submitted_form_id) ;
+            else
+                printf('<h2>No Submitted Form Id:</h2>') ;
+        }
+
+        if (!self::$wpgform_js)
+        {
+            if (is_null(self::$wpgform_submitted_form_id) ||
+                self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1)
+            {
+                $onetime_html .= $js ;
+                self::$wpgform_js = true ;
+            }
+        }
+
+        if (!self::$wpgform_css)
+        {
+            $onetime_html .= $css ;
+            self::$wpgform_css = true ;
+        }
+
+        if (!self::$wpgform_debug)
+        {
+            $onetime_html .= $debug ;
+            self::$wpgform_debug = true ;
+        }
+
+        return $onetime_html . $html ;
     }
 
     /**
@@ -670,6 +770,11 @@ jQuery(document).ready(function($) {
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
             
+            //  Need the form ID to handle multiple forms per page
+            self::$wpgform_submitted_form_id = $_POST['gform-form-id'] ;
+            unset($_POST['gform-form-id']) ;
+
+            //  Need the action which was saved during form construction
             $action = unserialize(base64_decode($_POST['gform-action'])) ;
             unset($_POST['gform-action']) ;
             $options = $_POST['gform-options'] ;
@@ -784,6 +889,7 @@ jQuery(document).ready(function($) {
             'email'          => 'off',                   // Send an email confirmation to blog admin on submission
             'sendto'         => null,                    // Send an email confirmation to a specific address on submission
             'spreadsheet'    => false,                   // Google Spreadsheet URL
+            'captcha'        => 'off',                   // Display a CAPTCHA when enabled
             'unitethemehack' => 'off',                   // Send an email confirmation to blog admin on submission
             'style'          => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
         ), $atts) ;
