@@ -209,6 +209,8 @@ No known upgrade issues.
 * Reintroduced jQuery Validation for checking required fields.
 * Improved support for multiple forms on one page.
 * Fixed several bugs where CSS prefix, when used, was not output in some places.
+* Moved Debug control to their own tab on the settings page.
+* Added new Debug options to facilicate chasing down HTTP API issues.
  
 = Version 0.40 =
 * Removed leftover debug code.  Again.  :-(
