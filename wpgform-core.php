@@ -56,6 +56,7 @@ function wpgform_init()
 
     add_filter('the_content', 'wpautop');
     add_action('template_redirect', 'wpgform_head') ;
+    //add_action('wp_footer', 'wpgform_footer') ;
 }
 
 add_action('init', array('wpGForm', 'ProcessGForm')) ;
@@ -221,6 +222,11 @@ class wpGForm
     static $wpgform_submitted_form_id = null ;
 
     /**
+     * Property to store captcha values
+     */
+    static $wpgform_captcha = null ;
+
+    /**
      * Constructor
      */
     function wpGForm()
@@ -325,6 +331,25 @@ class wpGForm
 
         //  Display CAPTCHA?
         $captcha = $options['captcha'] === 'on' ;
+        $captcha_html = '' ;
+
+        if ($captcha)
+        {
+            $a = rand(0, 19) ;
+            $b = rand(0, 19) ;
+            $c = $a + $b ;
+
+            self::$wpgform_captcha = array('a' => $a, 'b' => $b, 'c' => $c) ;
+
+            $captcha_html .= '<div style="margin-top: 5px; display: none;" class="gform-captcha">' ;
+            $captcha_html .= sprintf('<div class="%sss-item %sss-item-required %sss-text">', $prefix, $prefix, $prefix) ;
+            $captcha_html .= sprintf('<div class="%sss-form-entry">', $prefix) ;
+            $captcha_html .= sprintf('<label for="gform-captcha" class="%sss-q-title">What is %s + %s ?', $prefix, $a, $b) ;
+            $captcha_html .= sprintf('<span class="%sss-required-asterisk">*</span></label>', $prefix) ;
+            $captcha_html .= sprintf('<label for="gform-captcha" class="%sss-q-help"></label>', $prefix) ;
+            $captcha_html .= sprintf('<input style="width: 100px;" type="text" id="gform-captcha" class="%sss-q-short" value="" name="gform-captcha">', $prefix) ;
+            $captcha_html .= '</div></div></div>' ;
+        }
 
         //  Output the H1 title included in the Google Form?
         $title = $options['title'] === 'on' ;
@@ -575,10 +600,43 @@ class wpGForm
         $js = sprintf('
 <script type="text/javascript">
 jQuery(document).ready(function($) {
+    $("div > .ss-item-required input:not(.%sss-q-other").addClass("gform-required");
+    $("div > .ss-item-required textarea").addClass("gform-required");
+
+    $.validator.methods.equal = function(value, element, param) {
+		return value == param;
+	};
+    $("#ss-form").append(\'%s\');
+    if ($("#ss-form input[type=submit][name=submit]").length) {
+        $("div.gform-captcha").show();
+        $.validator.addClassRules("gform-captcha", {
+            required: true
+        });
+        $("#ss-form").validate({
+            errorClass: "gform-error",
+			rules: {
+				"gform-captcha": {
+					equal: %s
+				}
+			},
+			messages: {
+				"gform-captcha": "Incorrect answer."
+			}
+		});
+    }
+
+    $.validator.addClassRules("gform-required", {
+        required: true
+    });
+
+    $("#ss-form").validate({
+        errorClass: "gform-error"
+    }) ;
+
     $("div.%sss-form-container input:checkbox").each(function(index) {
         this.name = this.name + \'[]\';
     });
-', $prefix) ;
+', $prefix, $captcha_html, self::$wpgform_captcha['c'], $prefix) ;
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= sprintf('
     $("div.%sss-form-container :input").attr("disabled", true);
@@ -647,7 +705,7 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
+        //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
         if (self::$posted && is_null($action) && $email)
@@ -1024,5 +1082,43 @@ function wpgform_head()
         wp_enqueue_style('gform',
             plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
     }
+
+    //  Load the jQuery Validate from the Microsoft CDN, it isn't
+    //  available from the Google CDN or I'd load it from there!
+    wp_register_script('jquery-validate',
+        'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.js',
+        array('jquery'), false, true) ;
+    wp_enqueue_script('jquery-validate') ;
+}
+/**
+ * wpgform_footer()
+ *
+ * WordPress footer actions
+ */
+function wpgform_footer()
+{
+    //
+    //  jQuery script to initialize the form validation
+    //  neccessary so bad or missing data is submitted.
+    //  When required fields are blank the normal Google
+    //  processing for form errors doesn't occur, this
+    //  jQuery script handles it gracefully.  The fields
+    //  have only rudimentary validation.
+    //
+?>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    //$("div > .ss-item-required input").addClass("gform-required");
+    //$("div > .ss-item-required textarea").addClass("gform-required");
+    $.validator.addClassRules("gform-required", {
+        required: true
+    });
+    $("#ss-form").validate({
+        errorClass: "gform-error"
+    }) ;
+});
+</script>
+<?php
 }
 ?>
