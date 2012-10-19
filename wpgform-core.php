@@ -513,11 +513,6 @@ class wpGForm
             $html = preg_replace('/h1>/i', 'h2>', $html) ;
         }
 
-        //  Augment class names with some sort of a prefix?
-
-        if (!is_null($prefix))
-            $html = preg_replace('/ class="/i', " class=\"{$prefix}", $html) ;
-
         //  Augment labels with some sort of a suffix?
 
         if (!is_null($suffix))
@@ -604,6 +599,16 @@ class wpGForm
 jQuery(document).ready(function($) {
 ' ;
 
+        //  Did short code specify a CSS prefix?
+        if (!is_null($prefix)) $js .= sprintf('
+    $("#ss-form [class]").each(function(i, el) {
+        var c = $(this).attr("class").split(" ");
+        for (var i = 0; i < c.length; ++i) {
+            $(this).removeClass(c[i]).addClass("%s" + c[i]);
+        }
+    });
+', $prefix) ;
+
         //  Is CAPTCHA enabled?
         if ($captcha) $js .= sprintf('
     $.validator.methods.equal = function(value, element, param) {
@@ -631,7 +636,9 @@ jQuery(document).ready(function($) {
 
         //  Include jQuery validation?
         if ($validation) $js .= sprintf('
-    $("div > .s%ss-item-required textarea").addClass("gform-required");
+    $("div > .ss-item-required textarea").addClass("gform-required");
+    $("div > .ss-item-required input:not(.ss-q-other").addClass("gform-required");
+    $("div > .%sss-item-required textarea").addClass("gform-required");
     $("div > .%sss-item-required input:not(.%sss-q-other").addClass("gform-required");
 
     $.validator.addClassRules("gform-required", {
@@ -686,7 +693,7 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
+        //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
         if (self::$posted && is_null($action) && $email)
