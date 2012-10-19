@@ -50,8 +50,10 @@ The WordPress Google Form shortcode `gform` supports a number of attributes that
 * __sendto__:  Notify the "sendto" email address that a form has been submitted by setting the __email__ attribute to __on__.  This will result in an email being sent to the "sendto" letting them know a form was submitted with the URL of the form along with the date and time of submission.  The email message will always be sent to the blog administrator via Bcc.
 * __spreadsheet__:  The full URL to the "Shared" Google Docs Spreadsheet which stores the form responses.  You must be able to open this URL successfully from a browser for the link in the email to work properly.  This attribute is used in conjunction with the __email__ attribute, it has no effect when the __email__ attribute is not turned __on__.
 * __unitethemehack__:  Off by default, this attribute should be enabled, `unitethemehack='on'`, when using the [Unite theme from Paralleus](http://themeforest.net/item/unite-wordpress-business-magazine-theme/90959).  The Unite theme manipulates the submit button(s) on a page, the result of which is a button that prevents the Google form from being submitted.  Turning this attribute on enables a hack which inserts *class="noStyle"* to all submit buttons, preventing Unite from mucking with them.
+* __validation__:  Off by default, this attribute can be enabled, `validation='on'`, to add jQuery based form validation support using the [jQuery Validate Plugin](http://bassistance.de/jquery-plugins/jquery-plugin-validation/).  Enabling this optional attribute will allow inline checking without form submission to Google (which also does checking for required fields).  Error messages can be styled using the *gform-error* CSS class.
+* __captcha__:  Off by default, this attribute can be enabled, `captcha='on'`, to add a simple math based [CAPTCHA](http://en.wikipedia.org/wiki/CAPTCHA) to the Google Form.  The CAPTCHA only appears for the final submit on multi-page forms. The CAPTCHA error message can be styled using the *gform-error* CSS class.
 
-`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' style='ajax' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on' email='on' spreadsheet='https://docs.google.com/spreadsheet/ccc?key=0AgBHWDGsX0PUdE56R1ZldXo4a0N3VTNMNEpSemdGV3c' unitethemehack='off']`
+`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' style='ajax' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on' email='on' spreadsheet='https://docs.google.com/spreadsheet/ccc?key=0AgBHWDGsX0PUdE56R1ZldXo4a0N3VTNMNEpSemdGV3c' unitethemehack='off' validation='on' captcha='on']`
 
 == Frequently Asked Questions ==
 
@@ -100,6 +102,12 @@ label.ss-q-title:after {
 
 = I don't like the redirection behavior of the custom confirmation, can you change it back to the way it worked in v0.10? =
 Unfortunately not.  I understand that the older behavior is preferable as it looks cleaner for the end user however there is no way to support multi-page Google Forms using the old model.  The requirement to support multi-page Google Forms is a higher priority than the older confirmation model based on the overwhelming feedback received to support multi-page forms.  In v0.26 a new confirmation behavior was introduced which uses AJAX to update the page with the content from the custom confirmation page.  In v0.27 the redirection mechanism has returned to be the default behavior but if the AJAX methodology is preferred, it is available by setting the `style='ajax'` attribute within the shortcode.
+
+= Can I change the range of values the CAPCTHA is based on?
+Not at this time.
+
+= Can I changer the math operator the CAPTCHA is based on?
+Not at this time.
 
 == CSS ==
 
@@ -195,6 +203,12 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.41 =
+* Added simple math based CAPTCHA support.
+* Reintroduced jQuery Validation for checking required fields.
+* Improved support for multiple forms on one page.
+* Fixed several bugs where CSS prefix, when used, was not output in some places.
  
 = Version 0.40 =
 * Removed leftover debug code.  Again.  :-(
