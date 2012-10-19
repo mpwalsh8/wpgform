@@ -211,6 +211,7 @@ No known upgrade issues.
 * Fixed several bugs where CSS prefix, when used, was not output in some places.
 * Moved Debug control to their own tab on the settings page.
 * Added new Debug options to facilicate chasing down HTTP API issues.
+* Fixed bug where the CSS prefix, when used, was not being applied properly to elements which had more than one class.  Only the first class was properly prefixed.
  
 = Version 0.40 =
 * Removed leftover debug code.  Again.  :-(
