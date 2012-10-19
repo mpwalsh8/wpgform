@@ -56,7 +56,6 @@ function wpgform_init()
 
     add_filter('the_content', 'wpautop');
     add_action('template_redirect', 'wpgform_head') ;
-    //add_action('wp_footer', 'wpgform_footer') ;
 }
 
 add_action('init', array('wpGForm', 'ProcessGForm')) ;
@@ -329,6 +328,9 @@ class wpGForm
         //  Breaks between labels and inputs?
         $br = $options['br'] === 'on' ;
 
+        //  Use jQuery validation?
+        $validation = $options['validation'] === 'on' ;
+
         //  Display CAPTCHA?
         $captcha = $options['captcha'] === 'on' ;
         $captcha_html = '' ;
@@ -336,7 +338,7 @@ class wpGForm
         if ($captcha)
         {
             $a = rand(0, 19) ;
-            $b = rand(0, 19) ;
+            $b = rand(5, 24) ;
             $c = $a + $b ;
 
             self::$wpgform_captcha = array('a' => $a, 'b' => $b, 'c' => $c) ;
@@ -597,12 +599,13 @@ class wpGForm
         //  Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly.
         //  This jQuery script reformats the checkboxes so that Googles Python script will read them.
 
-        $js = sprintf('
+        $js = '
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    $("div > .ss-item-required input:not(.%sss-q-other").addClass("gform-required");
-    $("div > .ss-item-required textarea").addClass("gform-required");
+' ;
 
+        //  Is CAPTCHA enabled?
+        if ($captcha) $js .= sprintf('
     $.validator.methods.equal = function(value, element, param) {
 		return value == param;
 	};
@@ -624,6 +627,12 @@ jQuery(document).ready(function($) {
 			}
 		});
     }
+', $captcha_html, self::$wpgform_captcha['c']) ;
+
+        //  Include jQuery validation?
+        if ($validation) $js .= sprintf('
+    $("div > .s%ss-item-required textarea").addClass("gform-required");
+    $("div > .%sss-item-required input:not(.%sss-q-other").addClass("gform-required");
 
     $.validator.addClassRules("gform-required", {
         required: true
@@ -632,11 +641,14 @@ jQuery(document).ready(function($) {
     $("#ss-form").validate({
         errorClass: "gform-error"
     }) ;
+', $prefix, $prefix, $prefix) ;
 
+        //  Always include the jQuery to clean up the checkboxes
+        $js .= sprintf('
     $("div.%sss-form-container input:checkbox").each(function(index) {
         this.name = this.name + \'[]\';
     });
-', $prefix, $captcha_html, self::$wpgform_captcha['c'], $prefix) ;
+', $prefix) ;
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= sprintf('
     $("div.%sss-form-container :input").attr("disabled", true);
@@ -705,7 +717,7 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
+        $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
         if (self::$posted && is_null($action) && $email)
@@ -948,6 +960,7 @@ jQuery(document).ready(function($) {
             'sendto'         => null,                    // Send an email confirmation to a specific address on submission
             'spreadsheet'    => false,                   // Google Spreadsheet URL
             'captcha'        => 'off',                   // Display a CAPTCHA when enabled
+            'validation'     => 'off',                   // Use jQuery validation for required fields
             'unitethemehack' => 'off',                   // Send an email confirmation to blog admin on submission
             'style'          => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
         ), $atts) ;
@@ -1089,36 +1102,5 @@ function wpgform_head()
         'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.js',
         array('jquery'), false, true) ;
     wp_enqueue_script('jquery-validate') ;
-}
-/**
- * wpgform_footer()
- *
- * WordPress footer actions
- */
-function wpgform_footer()
-{
-    //
-    //  jQuery script to initialize the form validation
-    //  neccessary so bad or missing data is submitted.
-    //  When required fields are blank the normal Google
-    //  processing for form errors doesn't occur, this
-    //  jQuery script handles it gracefully.  The fields
-    //  have only rudimentary validation.
-    //
-?>
-
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    //$("div > .ss-item-required input").addClass("gform-required");
-    //$("div > .ss-item-required textarea").addClass("gform-required");
-    $.validator.addClassRules("gform-required", {
-        required: true
-    });
-    $("#ss-form").validate({
-        errorClass: "gform-error"
-    }) ;
-});
-</script>
-<?php
 }
 ?>
