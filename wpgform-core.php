@@ -654,37 +654,6 @@ jQuery(document).ready(function($) {
     $("div.%sss-form-container :input").attr("disabled", true);
         ', $prefix) ;
 
-/*
-        //  Serialize the POST variables?
-        if ($wpgform_options['serialize_post_vars'] == 1)
-        {
-            $js .= sprintf('
-    $("#%sss-form").submit(function(event) {
-        //$("#%sss-form").children().each(function(){
-        $.each($("#%sss-form input, #%sss-form textarea"), function() {
-        //access to form element via $(this)
-            $(this).val($.base64Encode($(this).val()));
-            alert($(this).val());
-        });
-    });
-        //var i = 0;
-//$.each($("#%sss-form input:text, #%sss-form input:hidden #%sss-form textarea"), function(i,v) {
-//$.each($("#%sss-form input, #%sss-form textarea"), function(i,v) {
-    //var theTag = v.tagName;
-    //var theElement = $(v);
-    //var theValue = theElement.val();
-    //alert(i + ":  " + theValue) ;
-    //$(v).val($.base64Encode($(v).val()));
-    //alert($.base64Encode(theValue)) ;
-    //i++;
-//});
-        
-        
-//alert("waiting ...");
-    //});', $prefix, $prefix, $prefix, $prefix, $prefix, $prefix, $prefix, $prefix, $prefix) ;
-        }
-*/
-
         //  Before closing the <script> tag, is this the confirmation
         //  AND do we have a custom confirmation page or alert message?
 
@@ -812,31 +781,6 @@ jQuery(document).ready(function($) {
 
             $wpgform_options = wpgform_get_plugin_options() ;
 
-            //print_r($_POST) ;
-            //  Are POST variables base64 encoded?
-/*
-            if ($wpgform_options['serialize_post_vars'] == 1)
-            {
-                foreach ($_POST as $key => $value)
-                {
-                    //  Need to handle parameters passed as array values
-                    //  separately because of how Python (used Google)
-                    //  handles array arguments differently than PHP does.
-
-                    //if (is_array($_POST[$key]))
-                    //{
-                        //$pa = &$_POST[$key] ;
-                        //foreach ($pa as $pv)
-                            //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
-                    //}
-                    //else
-                    //{
-                        $_POST[$key] = base64_decode($value) ;
-                    //}
-                }
-            }
-            //print_r($_POST) ;
-*/
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
             
@@ -1079,15 +1023,6 @@ function wpgform_head()
     wp_enqueue_script('jquery') ;
     
     $wpgform_options = wpgform_get_plugin_options() ;
-
-/*
-    //  Load Base64 Encode/Decode jQuery plugin?
-    if ($wpgform_options['serialize_post_vars'] == 1)
-    {
-	    wp_enqueue_script('gform-jquery-base64',
-            plugins_url(plugin_basename(dirname(__FILE__) . '/js/jquery.base64.js')), array('jquery'));
-    }
-*/
 
     //  Load default gForm CSS?
     if ($wpgform_options['default_css'] == 1)
