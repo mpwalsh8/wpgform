@@ -103,10 +103,10 @@ label.ss-q-title:after {
 = I don't like the redirection behavior of the custom confirmation, can you change it back to the way it worked in v0.10? =
 Unfortunately not.  I understand that the older behavior is preferable as it looks cleaner for the end user however there is no way to support multi-page Google Forms using the old model.  The requirement to support multi-page Google Forms is a higher priority than the older confirmation model based on the overwhelming feedback received to support multi-page forms.  In v0.26 a new confirmation behavior was introduced which uses AJAX to update the page with the content from the custom confirmation page.  In v0.27 the redirection mechanism has returned to be the default behavior but if the AJAX methodology is preferred, it is available by setting the `style='ajax'` attribute within the shortcode.
 
-= Can I change the range of values the CAPCTHA is based on?
+= Can I change the range of values the CAPCTHA is based on? =
 Not at this time.
 
-= Can I changer the math operator the CAPTCHA is based on?
+= Can I change the math operator the CAPTCHA is based on? =
 Not at this time.
 
 == CSS ==
