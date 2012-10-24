@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 0.40
+Stable tag: 0.41
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
