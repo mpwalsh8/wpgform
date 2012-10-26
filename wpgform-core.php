@@ -115,11 +115,11 @@ function wpgform_get_plugin_options()
 
     $plugin_options = get_option('wpgform_options', $default_options) ;
 
+    //  If the array key doesn't exist, it means it is a check box option
+    //  that is not enabled so the array element(s) needs to be set to zero.
+
     foreach ($default_options as $key => $value)
-    {
-        if (!array_key_exists($key, $plugin_options))
-            $plugin_options[$key] = $default_options[$key] ;
-    }
+        if (!array_key_exists($key, $plugin_options)) $plugin_options[$key] = 0 ;
 
     return $plugin_options ;
 }
