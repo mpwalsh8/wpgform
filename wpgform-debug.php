@@ -31,13 +31,7 @@ if ($wpgform_options['http_request_timeout'] == 1)
 {
     if (is_int($wpgform_options['http_request_timeout_value'])
         || ctype_digit($wpgform_options['http_request_timeout_value']))
-    {
-        add_filter('http_request_timeout',
-            function($timeout) {
-                $wpgform_options = wpgform_get_plugin_options() ;
-                return $wpgform_options['http_request_timeout'] ;
-            }) ;
-    }
+        add_filter('http_request_timeout', 'wpgform_http_request_timeout') ;
 }
 
 //  Disable fsockopen transport?
@@ -59,6 +53,15 @@ if ($wpgform_options['local_ssl_verify'] == 1)
 //  Disable ssl verify?
 if ($wpgform_options['ssl_verify'] == 1)
     add_filter('https_ssl_verify', '__return_false') ;
+
+/**
+ * Optional filter to change HTTP Request Timeout
+ *
+ */
+function wpgform_http_request_timeout($timeout) {
+    $wpgform_options = wpgform_get_plugin_options() ;
+    return $wpgform_options['http_request_timeout'] ;
+}
 
 /**
  * Debug action to examine server variables
