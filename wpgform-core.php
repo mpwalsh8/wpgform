@@ -520,16 +520,8 @@ class wpGForm
 
         //  Insert breaks between labels and input fields?
 
-        if ($br)
-            $html = preg_replace('/<\/label>[\w\n]*<input/i', '</label><br/><input', $html) ;
-
-        //  Hide Google Legal Stuff?
-
-        if (!(bool)$legal)
-        {
-            $html = preg_replace(sprintf('/<div class="%sss-legal"/i', $prefix),
-                sprintf('<div class="%sss-legal" style="display:none;"', $prefix), $html) ;
-        }
+        //if ($br)
+            //$html = preg_replace('/<\/label>[\w\n]*<input/i', '</label><br/><input', $html) ;
 
         //  Need to extract form action and rebuild form tag, and add hidden field
         //  which contains the original action.  This action is used to submit the
@@ -599,14 +591,26 @@ class wpGForm
 jQuery(document).ready(function($) {
 ' ;
 
+        //  Insert breaks between labels and input fields?
+        if ($br) $js .= '
+            $("#ss-form textarea").before("<br/>");
+            $("#ss-form input[type=text]").before("<br/>");
+' ;
+
         //  Did short code specify a CSS prefix?
         if (!is_null($prefix)) $js .= sprintf('
-    $("#ss-form [class]").each(function(i, el) {
+    $("div.ss-form-container [class]").each(function(i, el) {
         var c = $(this).attr("class").split(" ");
         for (var i = 0; i < c.length; ++i) {
             $(this).removeClass(c[i]).addClass("%s" + c[i]);
         }
     });
+    $("div.ss-form-container").removeClass("ss-form-container").addClass("%s" + "ss-form-container");
+', $prefix, $prefix) ;
+
+        //  Hide Google Legal Stuff?
+        if (!(bool)$legal) $js .= sprintf('
+    $("div.%sss-legal").hide();
 ', $prefix) ;
 
         //  Is CAPTCHA enabled?
@@ -693,7 +697,7 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
+        //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
         if (self::$posted && is_null($action) && $email)
