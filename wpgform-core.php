@@ -56,6 +56,7 @@ function wpgform_init()
 
     add_filter('the_content', 'wpautop');
     add_action('template_redirect', 'wpgform_head') ;
+    add_action('wp_footer', 'wpgform_footer') ;
 }
 
 add_action('init', array('wpGForm', 'ProcessGForm')) ;
@@ -199,6 +200,11 @@ class wpGForm
      * Property to indicate Javascript output state
      */
     static $wpgform_js = false ;
+
+    /**
+     * Property to store Javascript output in footer
+     */
+    static $wpgform_footer_js = '' ;
 
     /**
      * Property to indicate CSS output state
@@ -593,12 +599,14 @@ jQuery(document).ready(function($) {
 
         //  Insert breaks between labels and input fields?
         if ($br) $js .= '
-            $("#ss-form textarea").before("<br/>");
-            $("#ss-form input[type=text]").before("<br/>");
+    //  Insert br elements before input and textarea boxes
+    $("#ss-form textarea").before("<br/>");
+    $("#ss-form input[type=text]").before("<br/>");
 ' ;
 
         //  Did short code specify a CSS prefix?
         if (!is_null($prefix)) $js .= sprintf('
+    //  Manipulate CSS classes to account for CSS prefix
     $("div.ss-form-container [class]").each(function(i, el) {
         var c = $(this).attr("class").split(" ");
         for (var i = 0; i < c.length; ++i) {
@@ -610,14 +618,14 @@ jQuery(document).ready(function($) {
 
         //  Hide Google Legal Stuff?
         if (!(bool)$legal) $js .= sprintf('
+    //  Hide Google Legal content
     $("div.%sss-legal").hide();
 ', $prefix) ;
 
         //  Is CAPTCHA enabled?
         if ($captcha) $js .= sprintf('
-    $.validator.methods.equal = function(value, element, param) {
-		return value == param;
-	};
+    //  Construct CAPTCHA
+    $.validator.methods.equal = function(value, element, param) { return value == param; };
     $("#ss-form").append(\'%s\');
     if ($("#ss-form input[type=submit][name=submit]").length) {
         $("div.gform-captcha").show();
@@ -640,28 +648,25 @@ jQuery(document).ready(function($) {
 
         //  Include jQuery validation?
         if ($validation) $js .= sprintf('
+    //  jQuery inline validation
     $("div > .ss-item-required textarea").addClass("gform-required");
     $("div > .ss-item-required input:not(.ss-q-other").addClass("gform-required");
     $("div > .%sss-item-required textarea").addClass("gform-required");
     $("div > .%sss-item-required input:not(.%sss-q-other").addClass("gform-required");
-
-    $.validator.addClassRules("gform-required", {
-        required: true
-    });
-
-    $("#ss-form").validate({
-        errorClass: "gform-error"
-    }) ;
+    $.validator.addClassRules("gform-required", { required: true });
+    $("#ss-form").validate({ errorClass: "gform-error" }) ;
 ', $prefix, $prefix, $prefix) ;
 
         //  Always include the jQuery to clean up the checkboxes
         $js .= sprintf('
+    //  Fix checkboxes to work with Google Python
     $("div.%sss-form-container input:checkbox").each(function(index) {
         this.name = this.name + \'[]\';
     });
 ', $prefix) ;
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= sprintf('
+    //  Put form in read-only mode
     $("div.%sss-form-container :input").attr("disabled", true);
         ', $prefix) ;
 
@@ -697,7 +702,7 @@ jQuery(document).ready(function($) {
         ' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
-        $js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
+        //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
         //  Send email?
         if (self::$posted && is_null($action) && $email)
@@ -751,8 +756,9 @@ jQuery(document).ready(function($) {
             if (is_null(self::$wpgform_submitted_form_id) ||
                 self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1)
             {
-                $onetime_html .= $js ;
+                //$onetime_html .= $js ;
                 self::$wpgform_js = true ;
+                self::$wpgform_footer_js = $js ;
             }
         }
 
@@ -1048,5 +1054,18 @@ function wpgform_head()
         'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.js',
         array('jquery'), false, true) ;
     wp_enqueue_script('jquery-validate') ;
+}
+
+/**
+ * wpgform_head()
+ *
+ * WordPress footer actions
+ *
+ */
+function wpgform_footer()
+{
+    //  Output the generated jQuery script as part of the footer
+
+    print wpGForm::$wpgform_footer_js ;
 }
 ?>
