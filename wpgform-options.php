@@ -67,7 +67,7 @@ function wpgform_options_print_styles()
     //  Load them from Google - should not be an issue since
     //  this plugin is all about consuming Google content!
 
-    wp_enqueue_style('xtra-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css') ;
+    wp_enqueue_style('xtra-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/themes/base/jquery-ui.css') ;
 }
 
 /**
