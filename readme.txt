@@ -204,6 +204,10 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.45 =
+* Updated load of jQuery Tabs CSS to latest version.
+* Moved generated jQuery script from part of the form to the WordPress wp_footer action.
+
 = Version 0.44 =
 * Fixed bug preventing options which are enabled by default from being turned off.
 
