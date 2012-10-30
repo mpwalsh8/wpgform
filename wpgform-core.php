@@ -592,10 +592,11 @@ class wpGForm
         //  Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly.
         //  This jQuery script reformats the checkboxes so that Googles Python script will read them.
 
-        $js = '
+        $js = sprintf('
 <script type="text/javascript">
+//  WordPress Google Form v%s jQuery script
 jQuery(document).ready(function($) {
-' ;
+', WPGFORM_VERSION) ;
 
         //  Insert breaks between labels and input fields?
         if ($br) $js .= '
@@ -1013,11 +1014,6 @@ jQuery(document).ready(function($) {
         }
 
         $to = sprintf('%s wpGForm Contact <%s>', get_option('blogname'), $sendto) ;
-
-        //$to = sprintf('%s wpGForm Contact <%s>, %s Admin<%s>',
-        //    get_option('blogname'), $sendto,
-        //    get_option('blogname'), get_option('admin_email')) ;
-
         $subject = sprintf('Form Submission from %s', get_option('blogname')) ;
 
         if (WPGFORM_DEBUG) 
@@ -1027,6 +1023,7 @@ jQuery(document).ready(function($) {
 
         return $status ;
     }
+
 }
 
 /**
