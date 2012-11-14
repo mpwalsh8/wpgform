@@ -126,14 +126,48 @@ There are two ways to customize the Google Form CSS.
 
 = Default Google Form CSS =
 
-As of 2012-01-07, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
+As of 2012-14-15, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
 
 `
-label.gform-error {
+label.gform-error,
+label.wpgform-error {
     float: right;
     color: red;
     font-weight: bold;
 }
+
+div.gform-captcha,
+div.wpgform-captcha {
+    margin: 5px 0px 10px;
+    display: none;
+}
+
+div.gform-browser-warning,
+div.gform-browser-error,
+div.wpgform-browser-warning,
+div.wpgform-browser-error {
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 0 .6em;
+    margin: 5px 0 15px;
+}
+
+div.gform-browser-warning,
+div.wpgform-browser-warning {
+    background-color: #ffffe0;
+    border-color: #e6db55;
+}
+
+div.gform-google-error,
+div.gform-browser-error,
+div.wpgform-google-error,
+div.wpgform-browser-error {
+    background-color: #ffebe8;
+    border-color: #cc0000;
+}
+
 body.ss-base-body {}
 div.errorbox-good {}
 div.ss-attribution {}
@@ -168,8 +202,8 @@ div.ss-text {}
 form#ss-form {}
 h1.ss-form-title {}
 hr.ss-email-break {}
-input.ss-q-short {
-	width: 250px;
+input.ss-q-short:text {
+	width: 300px;
 }
 label.ss-q-help {
     display: block;
@@ -210,7 +244,9 @@ No known upgrade issues.
 
 = Version 0.46 =
 * Added support for columns!  New *columns='N'* short code attribute will split the form into columns.
-* Changed default width of *ss-q-short* input fields from 300px to 250px.
+* Fixed CSS for input fields so buttons are not 300px wide by default.
+* Began process of deprecating "gform" prefix which will be replaced with "wpgform" prefix for CSS classes.
+* Moved CAPTCHA (when in use) from below the submit button to above the submit button.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
