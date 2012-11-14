@@ -8,15 +8,23 @@
  * default font.
  */
 
-label.gform-error {
+label.gform-error,
+label.wpgform-error {
     float: right;
     color: red;
     font-weight: bold;
 }
 
-div.gform-google-error,
+div.gform-captcha,
+div.wpgform-captcha {
+    margin: 5px 0px 10px;
+    display: none;
+}
+
 div.gform-browser-warning,
-div.gform-browser-error {
+div.gform-browser-error,
+div.wpgform-browser-warning,
+div.wpgform-browser-error {
     -webkit-border-radius: 3px;
     border-radius: 3px;
     border-width: 1px;
@@ -25,13 +33,16 @@ div.gform-browser-error {
     margin: 5px 0 15px;
 }
 
-div.gform-browser-warning {
+div.gform-browser-warning,
+div.wpgform-browser-warning {
     background-color: #ffffe0;
     border-color: #e6db55;
 }
 
 div.gform-google-error,
-div.gform-browser-error {
+div.gform-browser-error,
+div.wpgform-google-error,
+div.wpgform-browser-error {
     background-color: #ffebe8;
     border-color: #cc0000;
 }
@@ -70,7 +81,7 @@ div.ss-text {}
 form#ss-form {}
 h1.ss-form-title {}
 hr.ss-email-break {}
-input.ss-q-short {
+input.ss-q-short:text {
 	width: 300px;
 }
 label.ss-q-help {
