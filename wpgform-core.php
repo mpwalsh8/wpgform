@@ -257,7 +257,7 @@ class wpGForm
         //  in the form's POST parameters has triggered a positive match on a rule.
 
         if (!empty($_SERVER) && array_key_exists('REDIRECT_STATUS', $_SERVER) && ($_SERVER['REDIRECT_STATUS'] == '403'))
-            return '<div class="gform-google-error">Unable to process Google Form.  Server is responding with <span class="gform-google-error">403 Permission Denied</span> error.</div>' ;
+            return '<div class="wpgform-google-error gform-google-error">Unable to process Google Form.  Server is responding with <span class="wpgform-google-error gform-google-error">403 Permission Denied</span> error.</div>' ;
 
         //  If no URL then return as nothing useful can be done.
         if (!$options['form'])
@@ -384,6 +384,21 @@ class wpGForm
             $sendto = is_email($options['sendto']) ;
         }
 
+        //  Columns?  Optional - if supplied make sure it is reasonable.
+        if (!$options['columns'])
+        {
+            $columns = 1 ;
+        }
+        else
+        {
+            $columns = $options['columns'] ;
+
+            if (is_numeric($columns) && ($columns > 1) && ($columns == round($columns)))
+                $columns = (int)$columns ;
+            else
+                $columns = 1 ;
+        }
+
         //  The Unite theme from Paralleus mucks with the submit buttons
         //  which breaks the ability to submit the form to Google correctly.
         //  This hack will "unbreak" the submit buttons.
@@ -429,7 +444,7 @@ class wpGForm
                 
             }
 
-            return '<div class="gform-google-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
+            return '<div class="wpgform-google-error gform-google-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
         }
         else
             $html = self::$response['body'] ;
@@ -489,7 +504,7 @@ class wpGForm
 
         if ($first_div === false)
         {
-            return '<div class="gform-google-error">Unexpected content encountered, unable to retrieve Google Form.</div>' ;
+            return '<div class="wpgform-google-error gform-google-error">Unexpected content encountered, unable to retrieve Google Form.</div>' ;
         }
 
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
@@ -570,7 +585,6 @@ class wpGForm
 
         $html = preg_replace('/<\/form>/i', "<input type=\"hidden\" value=\"" .
             base64_encode(serialize($options)) . "\" name=\"gform-options\"></form>", $html) ;
-            //base64_encode($options) . "\" name=\"gform-options\"></form>", $html) ;
 
         //  Output custom CSS?
  
@@ -585,7 +599,6 @@ class wpGForm
         $patterns = array('/[\r\n]+/', '/ +/') ;
         $replacements = array('', ' ') ;
         $css = preg_replace($patterns, $replacements, $css) . PHP_EOL ;
-        //$css = preg_replace('/[\r\n]+/', '', $css) . PHP_EOL ;
 
 
         //  Output Javscript for form validation, make sure any class prefix is included
@@ -697,10 +710,25 @@ jQuery(document).ready(function($) {
             $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
         }
 
-        $js .= '
+        //  Add jQuery to support multiple columns
+        $js .= sprintf('
+    //  Columnize the form
+    //  Make sure we don\'t split labels and input fields
+    $("div.%sss-item").addClass("wpgform-dontsplit");
+    //  Wrap all of the form content in a DIV so it can be split
+    $("#ss-form").wrapInner("<div class=\"wpgform-wrapper\"></div>");
+    //  Columnize the form content.
+    $(function(){
+        $(".wpgform-wrapper").columnize({
+            columns : %s,
+            cssClassPrefix : "wpgform"
+        });
+        //  Wrap each column so it can styled easier
+        $(".wpgform-column").wrapInner("<div class=\"wpgform-column-wrapper\"></div>");
+    });
 });
 </script>
-        ' ;
+        ', $prefix, $columns) ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
         //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
@@ -725,16 +753,16 @@ jQuery(document).ready(function($) {
             if (self::$browser_check && self::$browser_check['upgrade'])
             {
 		        if (self::$browser_check['insecure'])
-                    $css .= '<div class="gform-browser-warning"><h4>' .
+                    $css .= '<div class="wpgform-browser-warning gform-browser-warning"><h4>' .
                         __('Warning:  You are using an insecure browser!') . '</h4></div>' ;
 		        else
-                    $css .= '<div class="gform-browser-warning"><h4>' .
+                    $css .= '<div class="wpgform-browser-warning gform-browser-warning"><h4>' .
                         __('Warning:  Your browser is out of date!  Please update now.') . '</h4></div>' ;
 	        }
         }
 
         if (WPGFORM_DEBUG)
-            $debug = '<h2 class="gform-debug"><a href="#" class="gform-debug-wrapper">Show wpGForm Debug Content</a></h2>' ;
+            $debug = '<h2 class="wpgform-debug gform-debug"><a href="#" class="wpgform-debug-wrapper gform-debug-wrapper">Show wpGForm Debug Content</a></h2>' ;
         else
             $debug = '' ;
 
@@ -757,7 +785,6 @@ jQuery(document).ready(function($) {
             if (is_null(self::$wpgform_submitted_form_id) ||
                 self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1)
             {
-                //$onetime_html .= $js ;
                 self::$wpgform_js = true ;
                 self::$wpgform_footer_js = $js ;
             }
@@ -765,7 +792,7 @@ jQuery(document).ready(function($) {
 
         if (!self::$wpgform_css)
         {
-            $onetime_html .= $css ;
+            $onetime_html .= PHP_EOL . $css ;
             self::$wpgform_css = true ;
         }
 
@@ -775,7 +802,9 @@ jQuery(document).ready(function($) {
             self::$wpgform_debug = true ;
         }
 
-        return $onetime_html . $html ;
+        $html = $onetime_html . $html ;
+
+        return $html ;
     }
 
     /**
@@ -913,6 +942,7 @@ jQuery(document).ready(function($) {
             'class'          => 'gform',                 // Container element's custom class value
             'legal'          => 'on',                    // Display Google Legal Stuff
             'br'             => 'off',                   // Insert <br> tags between labels and inputs
+            'columns'        => '1',                     // Number of columns to render the form in
             'suffix'         => null,                    // Add suffix character(s) to all labels
             'prefix'         => null,                    // Add suffix character(s) to all labels
             'readonly'       => 'off',                   // Set all form elements to disabled
@@ -1051,6 +1081,12 @@ function wpgform_head()
         'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.js',
         array('jquery'), false, true) ;
     wp_enqueue_script('jquery-validate') ;
+
+    //  Load the jQuery Columnizer script from the plugin
+    wp_register_script('jquery-columnizer',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/js/jquery.columnizer.js')),
+        array('jquery'), false, true) ;
+    wp_enqueue_script('jquery-columnizer') ;
 }
 
 /**
