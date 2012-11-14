@@ -2,7 +2,7 @@
 Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
-Requires at least: 3.0
+Requires at least: 3.3
 Tested up to: 3.4.2
 Stable tag: 0.45
 
@@ -52,8 +52,9 @@ The WordPress Google Form shortcode `gform` supports a number of attributes that
 * __unitethemehack__:  Off by default, this attribute should be enabled, `unitethemehack='on'`, when using the [Unite theme from Paralleus](http://themeforest.net/item/unite-wordpress-business-magazine-theme/90959).  The Unite theme manipulates the submit button(s) on a page, the result of which is a button that prevents the Google form from being submitted.  Turning this attribute on enables a hack which inserts *class="noStyle"* to all submit buttons, preventing Unite from mucking with them.
 * __validation__:  Off by default, this attribute can be enabled, `validation='on'`, to add jQuery based form validation support using the [jQuery Validate Plugin](http://bassistance.de/jquery-plugins/jquery-plugin-validation/).  Enabling this optional attribute will allow inline checking without form submission to Google (which also does checking for required fields).  Error messages can be styled using the *gform-error* CSS class.
 * __captcha__:  Off by default, this attribute can be enabled, `captcha='on'`, to add a simple math based [CAPTCHA](http://en.wikipedia.org/wiki/CAPTCHA) to the Google Form.  The CAPTCHA only appears for the final submit on multi-page forms. The CAPTCHA error message can be styled using the *gform-error* CSS class.
+* __columns__:  The number of columns the form should be split into.  By default the form appears in a single column the same way it is designed in Google Docs.
 
-`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' style='ajax' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on' email='on' spreadsheet='https://docs.google.com/spreadsheet/ccc?key=0AgBHWDGsX0PUdE56R1ZldXo4a0N3VTNMNEpSemdGV3c' unitethemehack='off' validation='on' captcha='on']`
+`[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' style='ajax' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on' email='on' spreadsheet='https://docs.google.com/spreadsheet/ccc?key=0AgBHWDGsX0PUdE56R1ZldXo4a0N3VTNMNEpSemdGV3c' unitethemehack='off' validation='on' captcha='on' columns='1']`
 
 == Frequently Asked Questions ==
 
@@ -108,6 +109,9 @@ Not at this time.
 
 = Can I change the math operator the CAPTCHA is based on? =
 Not at this time.
+
+= How do specify which fields go in which columns when splitting a form across multiple columns? =
+This isn't possible.  The process of splitting the form into columns is automatic and will try to balance the colummn content.  You can rearrange the fields on the Google side to have some affect on their placement but there isn't any control over the exact column layout or where splits are inserted.
 
 == CSS ==
 
@@ -165,7 +169,7 @@ form#ss-form {}
 h1.ss-form-title {}
 hr.ss-email-break {}
 input.ss-q-short {
-	width: 300px;
+	width: 250px;
 }
 label.ss-q-help {
     display: block;
@@ -203,6 +207,10 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.46 =
+* Added support for columns!  New *columns='N'* short code attribute will split the form into columns.
+* Changed default width of *ss-q-short* input fields from 300px to 250px.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
