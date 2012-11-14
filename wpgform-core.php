@@ -349,7 +349,7 @@ class wpGForm
 
             self::$wpgform_captcha = array('a' => $a, 'b' => $b, 'c' => $c) ;
 
-            $captcha_html .= '<div style="margin-top: 5px; display: none;" class="gform-captcha">' ;
+            $captcha_html .= '<div class="gform-captcha">' ;
             $captcha_html .= sprintf('<div class="%sss-item %sss-item-required %sss-text">', $prefix, $prefix, $prefix) ;
             $captcha_html .= sprintf('<div class="%sss-form-entry">', $prefix) ;
             $captcha_html .= sprintf('<label for="gform-captcha" class="%sss-q-title">What is %s + %s ?', $prefix, $a, $b) ;
@@ -640,8 +640,8 @@ jQuery(document).ready(function($) {
         if ($captcha) $js .= sprintf('
     //  Construct CAPTCHA
     $.validator.methods.equal = function(value, element, param) { return value == param; };
-    $("#ss-form").append(\'%s\');
     if ($("#ss-form input[type=submit][name=submit]").length) {
+        $("#ss-form input[type=submit][name=submit]").before(\'%s\');
         $("div.gform-captcha").show();
         $.validator.addClassRules("gform-captcha", {
             required: true
