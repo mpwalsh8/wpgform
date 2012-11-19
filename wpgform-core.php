@@ -24,6 +24,25 @@ define('WPGFORM_CONFIRM_AJAX', 'ajax') ;
 define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
 define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
 
+// i18n plugin domain
+define( 'WPGFORM_I18N_DOMAIN', 'wpgform' );
+
+/**
+ * Initialise the internationalisation domain
+ */
+$is_wpgform_i18n_setup = false ;
+function wpgform_init_i18n()
+{
+	global $is_wpgform_i18n_setup;
+
+	if ($is_wpgform_i18n_setup == false) {
+		load_plugin_textdomain(WPGFORM_I18N_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages/') ;
+		$is_wpgform_i18n_setup = true;
+	}
+}
+
+
+
 //  Need the plugin options to initialize debug
 $wpgform_options = wpgform_get_plugin_options() ;
 
@@ -134,9 +153,12 @@ function wpgform_get_plugin_options()
  */
 function wpgform_admin_menu()
 {
+    wpgform_init_i18n() ;
     require_once(WPGFORM_PATH . '/wpgform-options.php') ;
 
-    $wpgform_options_page = add_options_page('WP Google Form', 'WP Google Form ',
+    $wpgform_options_page = add_options_page(
+        __('WP Google Form', WPGFORM_I18N_DOMAIN),
+        __('WP Google Form ', WPGFORM_I18N_DOMAIN),
         'manage_options', 'wpgform-options.php', 'wpgform_options_page') ;
     add_action('admin_footer-'.$wpgform_options_page, 'wpgform_options_admin_footer') ;
     add_action('admin_print_scripts-'.$wpgform_options_page, 'wpgform_options_print_scripts') ;
@@ -165,6 +187,7 @@ function wpgform_admin_init()
  */
 function wpgform_register_activation_hook()
 {
+    wpgform_init_18n() ;
     add_option('wpgform_options', wpgform_get_default_plugin_options()) ;
     add_filter('widget_text', 'do_shortcode') ;
 }
@@ -706,7 +729,6 @@ jQuery(document).ready(function($) {
             (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
             $style === WPGFORM_CONFIRM_REDIRECT)
         {
-            //printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
             $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
         }
 
@@ -773,11 +795,12 @@ jQuery(document).ready(function($) {
 
         if (WPGFORM_DEBUG)
         {
-            printf('<h2>Form Id:  %s</h2>', self::$wpgform_form_id - 1) ;
+            printf('<h2>%s:  %s</h2>', __('Form Id:', WPGFORM_I18N_DOMAIN), self::$wpgform_form_id - 1) ;
             if (!is_null(self::$wpgform_submitted_form_id))
-                printf('<h2>Submitted Form Id:  %s</h2>', self::$wpgform_submitted_form_id) ;
+                printf('<h2>%s:  %s</h2>', __('Submitted Form Id',
+                    WPGFORM_I18N_DOMAIN), self::$wpgform_submitted_form_id) ;
             else
-                printf('<h2>No Submitted Form Id:</h2>') ;
+                printf('<h2>%s:</h2>', __('No Submitted Form Id', WPGFORM_I18N_DOMAIN)) ;
         }
 
         if (!self::$wpgform_js)
@@ -900,10 +923,6 @@ jQuery(document).ready(function($) {
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
         }
-        else
-        {
-            sprintf('%s::%s', basename(__FILE__), __LINE__) ;
-        }
     }
 
     /**
@@ -977,7 +996,8 @@ jQuery(document).ready(function($) {
         if ($spreadsheet === false || $spreadsheet === null)
             $spreadsheet = 'N/A' ;
         else
-            $spreadsheet = sprintf('<a href="%s">View Form Submissions</a>', $spreadsheet) ;
+            $spreadsheet = sprintf('<a href="%s">%s</a>',
+                $spreadsheet, __('View Form Submissions', WPGFORM_I18N_DOMAIN)) ;
 
         if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
         {
@@ -1014,30 +1034,40 @@ jQuery(document).ready(function($) {
                 FYI -
                 </p>
                 <p>
-                A form was submitted on your web site.
+                %s
                 <ul>
-                <li>Form:  %s</li>
-                <li>Responses:  %s</li>
-                <li>Date: %s</li>
-                <li>Time: %s</li>
+                <li>%s:  %s</li>
+                <li>%s:  %s</li>
+                <li>%s: %s</li>
+                <li>%s: %s</li>
                 </ul>
                 </p>
                 <p>
-                Thank you,<br/><br/>
+                %s,<br/><br/>
                 %s
                 </p>
                 </body>
                 </html>' ;
 
-            $message = sprintf($html, get_bloginfo('name'), get_the_title(),
-                $spreadsheet, date('Y-m-d'), date('H:i'), get_bloginfo('name')) ;
+            $message = sprintf($html, get_bloginfo('name'),
+                __('A form was submitted on your web site.', WPGFORM_I18N_DOMAIN),
+                __('Form', WPGFORM_I18N_DOMAIN), get_the_title(),
+                __('Responses', WPGFORM_I18N_DOMAIN), $spreadsheet,
+                __('Date', WPGFORM_I18N_DOMAIN), date('Y-m-d'),
+                __('Time', WPGFORM_I18N_DOMAIN), date('H:i'),
+                __('Thank you', WPGFORM_I18N_DOMAIN), get_bloginfo('name')) ;
         }
         else
         {
             $plain = 'FYI -' . PHP_EOL . PHP_EOL ;
-            $plain .= 'A form was submitted on your web site:' . PHP_EOL . PHP_EOL ;
-            $plain .= 'Form:  %s' . PHP_EOL . 'Responses:  %s' . PHP_EOL . 'Date:  %s' . PHP_EOL ;
-            $plain .= 'Time:  %s' . PHP_EOL . PHP_EOL . 'Thank you,' . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
+            $plain .= sprintf('%s:',
+                __('A form was submitted on your web site', WPGFORM_I18N_DOMAIN)) . PHP_EOL . PHP_EOL ;
+            $plain .= sprintf('%s:', __('Form', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL ;
+            $plain .= sprintf('%s:', __('Responses', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL ;
+            $plain .= sprintf('%s:', __('Date', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL ;
+            $plain .= sprintf('%s:', __('Time', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL . PHP_EOL ;
+            
+            $plain .= sprintf('%s,', __('Thank you', WPGFORM_I18N_DOMAIN)) . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
 
             $message = sprintf($plain, get_the_title(),
                 $spreadsheet, date('Y-m-d'), date('H:i'), get_option('blogname')) ;
