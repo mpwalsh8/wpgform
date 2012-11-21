@@ -17,6 +17,7 @@
  */
 
 // Filesystem path to this plugin.
+define('WPGFORM_PREFIX', 'wpgform_') ;
 define('WPGFORM_PATH', WP_PLUGIN_DIR.'/'.dirname(plugin_basename(__FILE__))) ;
 define('WPGFORM_EMAIL_FORMAT_HTML', 'html') ;
 define('WPGFORM_EMAIL_FORMAT_PLAIN', 'plain') ;
@@ -48,6 +49,7 @@ $wpgform_options = wpgform_get_plugin_options() ;
 
 //  Enable debug content?
 define('WPGFORM_DEBUG', $wpgform_options['enable_debug'] == 1) ;
+//define('WPGFORM_DEBUG', true) ;
 
 if (WPGFORM_DEBUG)
 {
@@ -68,7 +70,10 @@ function wpgform_init()
     $wpgform_options = wpgform_get_plugin_options() ;
 
     if ($wpgform_options['sc_posts'] == 1)
-        add_shortcode('gform', array('wpGForm', 'RenderGForm')) ;
+    {
+        add_shortcode('gform', array('wpGForm', 'gform_sc')) ;
+        add_shortcode('wpgform', array('wpGForm', 'wpgform_sc')) ;
+    }
 
     if ($wpgform_options['sc_widgets'] == 1)
         add_filter('widget_text', 'do_shortcode') ;
@@ -78,7 +83,7 @@ function wpgform_init()
     add_action('wp_footer', 'wpgform_footer') ;
 }
 
-add_action('init', array('wpGForm', 'ProcessGForm')) ;
+add_action('init', array('wpGForm', 'ProcessGoogleForm')) ;
 
 /**
  * Returns the default options for wpGForm.
@@ -157,8 +162,8 @@ function wpgform_admin_menu()
     require_once(WPGFORM_PATH . '/wpgform-options.php') ;
 
     $wpgform_options_page = add_options_page(
-        __('WP Google Form', WPGFORM_I18N_DOMAIN),
-        __('WP Google Form ', WPGFORM_I18N_DOMAIN),
+        __('Google Forms', WPGFORM_I18N_DOMAIN),
+        __('Google Forms', WPGFORM_I18N_DOMAIN),
         'manage_options', 'wpgform-options.php', 'wpgform_options_page') ;
     add_action('admin_footer-'.$wpgform_options_page, 'wpgform_options_admin_footer') ;
     add_action('admin_print_scripts-'.$wpgform_options_page, 'wpgform_options_print_scripts') ;
@@ -199,8 +204,8 @@ function wpgform_register_activation_hook()
  * @access public
  * @see wp_remote_get()
  * @see wp_remote_post()
- * @see RenderGForm()
- * @see ConstructGForm()
+ * @see RenderGoogleForm()
+ * @see ConstructGoogleForm()
  */
 class wpGForm
 {
@@ -255,6 +260,38 @@ class wpGForm
     static $wpgform_captcha = null ;
 
     /**
+     * Property to store the various options which control the
+     * HTML manipulation and generation.  These array keys map
+     * to the meta data stored with the wpGForm Custom Post Type.
+     *
+     * The Unite theme from Paralleus mucks with the submit buttons
+     * which breaks the ability to submit the form to Google correctly.
+     * This "special" hack will "unbreak" the submit buttons.
+     *
+     */
+    protected static $options = array(
+        'form'           => false,          // Google Form URL
+        'confirm'        => false,          // Custom confirmation page URL to redirect to
+        'alert'          => null,           // Optional Alert Message
+        'class'          => 'gform',        // Container element's custom class value
+        'legal'          => 'on',           // Display Google Legal Stuff
+        'br'             => 'off',          // Insert <br> tags between labels and inputs
+        'columns'        => '1',            // Number of columns to render the form in
+        'suffix'         => null,           // Add suffix character(s) to all labels
+        'prefix'         => null,           // Add suffix character(s) to all labels
+        'readonly'       => 'off',          // Set all form elements to disabled
+        'title'          => 'on',           // Remove the H1 element(s) from the Form
+        'maph1h2'        => 'off',          // Map H1 element(s) on the form to H2 element(s)
+        'email'          => 'off',          // Send an email confirmation to blog admin on submission
+        'sendto'         => null,           // Send an email confirmation to a specific address on submission
+        'spreadsheet'    => false,          // Google Spreadsheet URL
+        'captcha'        => 'off',          // Display a CAPTCHA when enabled
+        'validation'     => 'off',          // Use jQuery validation for required fields
+        'unitethemehack' => 'off',          // Send an email confirmation to blog admin on submission
+        'style'          => null,           // How to present the custom confirmation after submit
+    ) ;
+
+    /**
      * Constructor
      */
     function wpGForm()
@@ -263,106 +300,191 @@ class wpGForm
     }
 
     /**
-     * Function ConstructGForm loads HTML from a Google Form URL,
+     * 'gform' short code handler
+     *
+     * @since 0.1
+     * @deprecated
+     */
+    function gform_sc($options)
+    {
+        if (self::ProcessShortCodeOptions($options))
+        {
+            return self::ConstructGoogleForm() ;
+        }
+        else
+        {
+            return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
+               __('Unable to process Google Form short code.', WPGFORM_I18N_DOMAIN)) ;
+        }
+    }
+
+    /**
+     * 'wpgform' short code handler
+     *
+     * @since 1.0
+     */
+    function wpgform_sc($options)
+    {
+        if (self::ProcessWpGFormCPT($options))
+            return self::ConstructGoogleForm() ;
+        else
+            return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
+               __('Unable to process Google Form short code.', WPGFORM_I18N_DOMAIN)) ;
+    }
+
+    /**
+     * Function ProcessShortcode loads HTML from a Google Form URL,
      * processes it, and inserts it into a WordPress filter to output
      * as part of a post, page, or widget.
      *
      * @param $options array Values passed from the shortcode.
-     * @return An HTML string if successful, false otherwise.
-     * @see RenderGForm
+     * @see gform_sc
+     * @return boolean - abort processing when false
      */
-    function ConstructGForm($options)
+    function ProcessShortcodeOptions($options)
     {
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+        //  Property short cut
+        $o = &self::$options ;
+
+        //  Override default options based on the short code attributes
+
+        foreach ($o as $key => $value)
+        {
+            if (array_key_exists($key, $options))
+                $o[$key] = $options[$key] ;
+        }
+
+        //  Validate columns - make sure it is a reasonable number
+ 
+        if (is_numeric($o['columns']) && ($o['columns'] > 1) && ($o['columns'] == round($o['columns'])))
+            $o['columns'] = (int)$o['columns'] ;
+        else
+            $o['columns'] = 1 ;
+
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessShortcodeOptions') ;
+        if (WPGFORM_DEBUG) wpgform_preprint_r($o) ;
+
+        //  Have to have a form URL otherwise the short code is meaningless!
+
+        return (!empty($o['form'])) ;
+    }
+
+    /**
+     * Function ProcessShortcode loads HTML from a Google Form URL,
+     * processes it, and inserts it into a WordPress filter to output
+     * as part of a post, page, or widget.
+     *
+     * @param $options array Values passed from the shortcode.
+     * @see RenderGoogleForm
+     * @return boolean - abort processing when false
+     */
+    function ProcessWpGFormCPT($options)
+    {
+        //  Property short cut
+        $o = &self::$options ;
+
+        //  Id?  Required - make sure it is reasonable.
+
+        if ($options['id'])
+        {
+            $o['id'] = $options['id'] ;
+
+            //  Make sure we didn't get something nonsensical
+            if (is_numeric($o['id']) && ($o['id'] > 0) && ($o['id'] == round($o['id'])))
+                $o['id'] = (int)$o['id'] ;
+            else
+                return false ;
+        }
+        else
+        {
+            return false ;
+        }
+
+        // get current form meta data
+
+        $mb = wpgform_form_meta_box_content() ;
+
+        foreach ($mb['fields'] as $field)
+        {
+            //  Only show the fields which are not hidden
+            if ($field['type'] !== 'hidden')
+            {
+                // get current post meta data
+                $meta = get_post_meta($o['id'], $field['id'], true);
+
+                //  If a meta value is found, strip off the prefix
+                //  from the meta key so the id matches the options
+                //  used by the form rendering method.
+
+                if ($meta)
+                    $o[substr($field['id'], strlen(WPGFORM_PREFIX))] = $meta ;
+            }
+        }
+
+        //  Validate columns - make sure it is a reasonable number
+ 
+        if (is_numeric($o['columns']) && ($o['columns'] > 1) && ($o['columns'] == round($o['columns'])))
+            $o['columns'] = (int)$o['columns'] ;
+        else
+            $o['columns'] = 1 ;
+
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessWpGFormCPT') ;
+        if (WPGFORM_DEBUG) wpgform_preprint_r($o) ;
+
+        //  Have to have a form URL otherwise the short code is meaningless!
+
+        return (!empty($o['form'])) ;
+    }
+
+    /**
+     * Function ConstructGoogleForm loads HTML from a Google Form URL,
+     * processes it, and inserts it into a WordPress filter to output
+     * as part of a post, page, or widget.
+     *
+     * @return An HTML string if successful, false otherwise.
+     * @see RenderGoogleForm
+     */
+    function ConstructGoogleForm()
+    {
+        //  Property short cut
+        $o = &self::$options ;
+
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
 
         //  Some servers running ModSecurity issue 403 errors because something
         //  in the form's POST parameters has triggered a positive match on a rule.
 
         if (!empty($_SERVER) && array_key_exists('REDIRECT_STATUS', $_SERVER) && ($_SERVER['REDIRECT_STATUS'] == '403'))
-            return '<div class="wpgform-google-error gform-google-error">Unable to process Google Form.  Server is responding with <span class="wpgform-google-error gform-google-error">403 Permission Denied</span> error.</div>' ;
+            return sprintf('<div class="wpgform-google-error gform-google-error">%s %s<span class="wpgform-google-error gform-google-error">%s</span> %s.</div>',
+                __('Unable to process Google Form.', WPGFORM_I18N_DOMAIN),
+                __('Server is responding with', WPGFORM_I18N_DOMAIN),
+                __('403 Permission Denied', WPGFORM_I18N_DOMAIN), __('error', WPGFORM_I18N_DOMAIN)) ;
 
         //  If no URL then return as nothing useful can be done.
-        if (!$options['form'])
+        if (!$o['form'])
         {
             return false; 
         }
         else
         {
-            $form = $options['form'] ;
+            $form = $o['form'] ;
+            $prefix = $o['prefix'] ;
+            $suffix = $o['suffix'] ;
+            $confirm = $o['confirm'] ;
+            $alert = $o['alert'] ;
+            $spreadsheet = $o['spreadsheet'] ;
+            $sendto = $o['sendto'] ;
         }
 
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
-
-        //  Custom Alert Message?  Optional
-        if (!$options['alert'])
-        {
-            $alert = null ;
-        }
-        else
-        {
-            $alert = $options['alert'] ;
-        }
-
-        //  Custom Confirmation URL?  Optional
-        if (!$options['confirm'])
-        {
-            $confirm = null ;
-        }
-        else
-        {
-            $confirm = $options['confirm'] ;
-        }
-
-        //  Custom Class?  Optional
-        if (!$options['class'])
-        {
-            $class = null ;
-        }
-        else
-        {
-            $class = $options['class'] ;
-        }
-
-        //  Class Prefix?  Optional
-        if (!$options['prefix'])
-        {
-            $prefix = null ;
-        }
-        else
-        {
-            $prefix = $options['prefix'] ;
-        }
-
-        //  Label Suffix?  Optional
-        if (!$options['suffix'])
-        {
-            $suffix = null ;
-        }
-        else
-        {
-            $suffix = $options['suffix'] ;
-        }
-
-        //  Spreadsheet URL?  Optional
-        if (!$options['spreadsheet'])
-        {
-            $spreadsheet = null ;
-        }
-        else
-        {
-            $spreadsheet = $options['spreadsheet'] ;
-        }
-
-        //  Breaks between labels and inputs?
-        $br = $options['br'] === 'on' ;
-
-        //  Use jQuery validation?
-        $validation = $options['validation'] === 'on' ;
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
 
         //  Display CAPTCHA?
-        $captcha = $options['captcha'] === 'on' ;
         $captcha_html = '' ;
+
+        $captcha = $o['captcha'] === 'on' ;
+
+        //  Generate the CAPTCHA HTML if requested
 
         if ($captcha)
         {
@@ -383,55 +505,43 @@ class wpGForm
         }
 
         //  Output the H1 title included in the Google Form?
-        $title = $options['title'] === 'on' ;
+        $title = $o['title'] === 'on' ;
 
         //  Map H1 tags to H2 tags?  Apparently helps SEO ...
-        $maph1h2 = $options['maph1h2'] === 'on' ;
+        $maph1h2 = $o['maph1h2'] === 'on' ;
+
+        //  Insert <br> elements between labels and input boxes?
+        $br = $o['br'] === 'on' ;
+
+        //  Use jQuery validation?
+        $validation = $o['validation'] === 'on' ;
 
         //  Google Legal Stuff?
-        $legal = $options['legal'] !== 'off' ;
+        $legal = $o['legal'] !== 'off' ;
 
         //  Should form be set to readonly?
-        $readonly = $options['readonly'] === 'on' ;
+        $readonly = $o['readonly'] === 'on' ;
 
         //  Should email confirmation be sent?
-        $email = $options['email'] === 'on' ;
+        $email = $o['email'] === 'on' ;
 
         //  Who should email confirmation be sent to?
-        if (!$options['sendto'])
-        {
-            $sendto = null ;
-        }
-        else
-        {
-            $sendto = is_email($options['sendto']) ;
-        }
+        if (is_email($o['sendto']))
+            $sendto = $options['sendto'] ;
 
-        //  Columns?  Optional - if supplied make sure it is reasonable.
-        if (!$options['columns'])
-        {
-            $columns = 1 ;
-        }
-        else
-        {
-            $columns = $options['columns'] ;
-
-            if (is_numeric($columns) && ($columns > 1) && ($columns == round($columns)))
-                $columns = (int)$columns ;
-            else
-                $columns = 1 ;
-        }
+        //  How many columns?
+        $columns = $o['columns'] ;
 
         //  The Unite theme from Paralleus mucks with the submit buttons
         //  which breaks the ability to submit the form to Google correctly.
         //  This hack will "unbreak" the submit buttons.
 
-        $unitethemehack = $options['unitethemehack'] === 'on' ;
+        $unitethemehack = $o['unitethemehack'] === 'on' ;
 
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
 
         //  Show the custom confirmation via AJAX instead of redirect?
-        $style = $options['style'] ;
+        $style = $o['style'] === 'none' ? null : $o['style'] ;
 
         //  WordPress converts all of the ampersand characters to their
         //  appropriate HTML entity or some variety of it.  Need to undo
@@ -462,7 +572,7 @@ class wpGForm
             echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
             if (WPGFORM_DEBUG)
             {
-                //wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+                //wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
                 //wpgform_preprint_r(self::$respone) ;
                 
             }
@@ -472,7 +582,7 @@ class wpGForm
         else
             $html = self::$response['body'] ;
 
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
 
         //  Need to filter the HTML retrieved from the form and strip off the stuff
         //  we don't want.  This gets rid of the HTML wrapper from the Google page.
@@ -527,10 +637,11 @@ class wpGForm
 
         if ($first_div === false)
         {
-            return '<div class="wpgform-google-error gform-google-error">Unexpected content encountered, unable to retrieve Google Form.</div>' ;
+            return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
+               __('Unexpected content encountered, unable to retrieve Google Form.', WPGFORM_I18N_DOMAIN)) ;
         }
 
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
 
         //  Strip off anything prior to the first  DIV, we don't want it.
 
@@ -601,13 +712,13 @@ class wpGForm
         if ($unitethemehack)
             $html = preg_replace('/<input type="submit"/i', '<input class="noStyle" type="submit"', $html) ;
 
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGForm') ;
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
 
         //  Encode all of the short code options so they can
         //  be referenced if/when needed during form processing.
 
         $html = preg_replace('/<\/form>/i', "<input type=\"hidden\" value=\"" .
-            base64_encode(serialize($options)) . "\" name=\"gform-options\"></form>", $html) ;
+            base64_encode(serialize($o)) . "\" name=\"gform-options\"></form>", $html) ;
 
         //  Output custom CSS?
  
@@ -831,27 +942,27 @@ jQuery(document).ready(function($) {
     }
 
     /**
-     * Function ConstructGForm loads HTML from a Google Form URL,
+     * Function ConstructGoogleForm loads HTML from a Google Form URL,
      * processes it, and inserts it into a WordPress filter to output
      * as part of a post, page, or widget.
      *
      * @param $options array Values passed from the shortcode.
      * @return An HTML string if successful, false otherwise.
-     * @see RenderGForm
+     * @see RenderGoogleForm
      */
-    function ProcessGForm()
+    function ProcessGoogleForm()
     {
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
         if (!empty($_POST) && array_key_exists('gform-action', $_POST))
         {
-            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
 
             self::$posted = true ;
 
             $wpgform_options = wpgform_get_plugin_options() ;
 
-            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
             
             //  Need the form ID to handle multiple forms per page
@@ -876,12 +987,12 @@ jQuery(document).ready(function($) {
             $patterns = array('/^entry_([0-9]+)_(single|group)_/', '/^entry_([0-9]+)_/') ;
             $replacements = array('entry.\1.\2.', 'entry.\1.') ;
 
-            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
 
             foreach ($_POST as $key => $value)
             {
-                if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+                if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                 if (WPGFORM_DEBUG) wpgform_preprint_r($key, $value) ;
 
                 //  Need to handle parameters passed as array values
@@ -890,14 +1001,14 @@ jQuery(document).ready(function($) {
 
                 if (is_array($_POST[$key]))
                 {
-                    if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+                    if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
                         $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
                 }
                 else
                 {
-                    if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+                    if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                 }
             }
@@ -920,7 +1031,7 @@ jQuery(document).ready(function($) {
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body)) ;
 
-            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGForm') ;
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
         }
     }
@@ -953,7 +1064,7 @@ jQuery(document).ready(function($) {
      *
      * @return HTML
      */
-    function RenderGForm($atts) {
+    function RenderGoogleForm($atts) {
         $params = shortcode_atts(array(
             'form'           => false,                   // Google Form URL
             'confirm'        => false,                   // Custom confirmation page URL to redirect to
@@ -976,7 +1087,7 @@ jQuery(document).ready(function($) {
             'style'          => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
         ), $atts) ;
 
-        return wpGForm::ConstructGForm($params) ;
+        return wpGForm::ConstructGoogleForm($params) ;
     }
 
     /**

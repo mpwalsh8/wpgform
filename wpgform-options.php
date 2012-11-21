@@ -301,7 +301,7 @@ function wpgform_settings_input()
             </td>
         </tr>
         <tr valign="top">
-            <th scope="row"><label><?php _e('Confirmation Email Format', WPGFORM_I18N_DOMAN);?></label></th>
+            <th scope="row"><label><?php _e('Confirmation Email Format', WPGFORM_I18N_DOMAIN);?></label></th>
             <td><fieldset>
             <label for="gform_email_format">
             <input name="wpgform_options[email_format]" type="radio" id="gform_email_format" value="<?php echo WPGFORM_EMAIL_FORMAT_HTML ;?>" <?php checked(WPGFORM_EMAIL_FORMAT_HTML, $wpgform_options['email_format']) ; ?> />

@@ -179,12 +179,12 @@ function wpgform_whereami($f, $l, $s = null)
     if (is_null($s))
     {
         $wpgform_debug_content .= sprintf('<h3>%s::%s</h3>', basename($f), $l) ;
-        //error_log(sprintf('%s::%s', basename($f), $l)) ;
+        error_log(sprintf('%s::%s', basename($f), $l)) ;
     }
     else
     {
         $wpgform_debug_content .= sprintf('<h3>%s::%s::%s</h3>', basename($f), $l, $s) ;
-        //error_log(sprintf('%s::%s::%s', basename($f), $l, $s)) ;
+        error_log(sprintf('%s::%s::%s', basename($f), $l, $s)) ;
     }
 }
 
