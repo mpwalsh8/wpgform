@@ -247,6 +247,8 @@ No known upgrade issues.
 * Fixed CSS for input fields so buttons are not 300px wide by default.
 * Began process of deprecating "gform" prefix which will be replaced with "wpgform" prefix for CSS classes.
 * Moved CAPTCHA (when in use) from below the submit button to above the submit button.
+* Added WordPress Google Form Custom Post Type.
+* Added new shortcode *wpgform* to support WordPress Google Form CPT.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
