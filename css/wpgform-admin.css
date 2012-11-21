@@ -1,0 +1,15 @@
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+/**
+ * CSS declarations for Google Docs Forms - WordPress Dashboard
+ *
+ * These can be copied and modified to fit the needs of
+ * a theme.  By default the only change is to make all of
+ * the fields wider than their default width and to set the
+ * default font.
+ *
+ */
+
+/* Post Screen - 32px */
+.icon32-posts-wpgform {
+    background: url(../images/forms-32.png) no-repeat left top !important;
+}
