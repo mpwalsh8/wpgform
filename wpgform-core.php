@@ -1212,8 +1212,8 @@ function wpgform_head()
     //  Load default gForm CSS?
     if ($wpgform_options['default_css'] == 1)
     {
-        wp_enqueue_style('gform',
-            plugins_url(plugin_basename(dirname(__FILE__) . '/gforms.css'))) ;
+        wp_enqueue_style('wpgform-css',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/css/wpgform.css'))) ;
     }
 
     //  Load the jQuery Validate from the Microsoft CDN, it isn't
