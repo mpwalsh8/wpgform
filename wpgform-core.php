@@ -220,6 +220,11 @@ class wpGForm
     static $response ;
 
     /**
+     * Property to hold Google Form Post Error
+     */
+    static $post_error = false ;
+
+    /**
      * Property to hold Google Form Post Status
      */
     static $posted = false ;
@@ -564,20 +569,21 @@ class wpGForm
 
         if (is_wp_error(self::$response))
         {
-            printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
-            print '<pre>' ;
-            print_r(self::$response) ;
-            print '</pre>' ;
             $error_string = self::$response->get_error_message();
-            echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+            echo '<div id="message" class="wpgform-google-error"><p>' . $error_string . '</p></div>';
             if (WPGFORM_DEBUG)
             {
-                //wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
-                //wpgform_preprint_r(self::$respone) ;
-                
+                printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
+                print '<pre>' ;
+                print_r(self::$response) ;
+                print '</pre>' ;
+                wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
+                wpgform_preprint_r(self::$respone) ;
             }
 
-            return '<div class="wpgform-google-error gform-google-error">Unable to retrieve Google Form.  Please try reloading this page.</div>' ;
+            return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
+               __('Unable to retrieve Google Form.  Please try reloading this page.', WPGFORM_I18N_DOMAIN)) ;
+
         }
         else
             $html = self::$response['body'] ;
@@ -830,7 +836,7 @@ jQuery(document).ready(function($) {
         //  Load the confirmation URL via AJAX?
         if (self::$posted && is_null($action) && !is_null($confirm) &&
             (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
-            $style === WPGFORM_CONFIRM_AJAX)
+            ($style === WPGFORM_CONFIRM_AJAX) && !self::$post_error)
         {
             $js .= PHP_EOL . '$("body").load("' . $confirm . '") ;' ;
         }
@@ -838,7 +844,7 @@ jQuery(document).ready(function($) {
         //  Load the confirmation URL via Redirect?
         if (self::$posted && is_null($action) && !is_null($confirm) &&
             (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
-            $style === WPGFORM_CONFIRM_REDIRECT)
+            ($style === WPGFORM_CONFIRM_REDIRECT) && !self::$post_error)
         {
             $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
         }
@@ -1033,6 +1039,28 @@ jQuery(document).ready(function($) {
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
+
+            //  Double check response from wp_remote_post()
+
+            if (is_wp_error(self::$response))
+            {
+                self::$post_error = true ;
+
+                $error_string = self::$response->get_error_message();
+                echo '<div id="message" class="wpgform-google-error"><p>' . $error_string . '</p></div>';
+                if (WPGFORM_DEBUG)
+                {
+                    printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
+                    print '<pre>' ;
+                    print_r(self::$response) ;
+                    print '</pre>' ;
+                    wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
+                    wpgform_preprint_r(self::$respone) ;
+                }
+
+                return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
+                   __('Unable to submit Google Form.  Please try reloading this page.', WPGFORM_I18N_DOMAIN)) ;
+            }
         }
     }
 
