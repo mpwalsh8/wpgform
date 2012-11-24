@@ -1,0 +1,147 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress Google Form\n"
+"POT-Creation-Date: 2012-11-24 11:54-0000\n"
+"PO-Revision-Date: 2012-11-24 11:54-0000\n"
+"Last-Translator: Mike Walsh <mpwalsh8@gmail.com>\n"
+"Language-Team: Mike Walsh (@mpwalsh8) <mpwalsh8@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../wpgform-core.php:165 ../wpgform-core.php:166
+msgid "Google Forms"
+msgstr ""
+
+#: ../wpgform-core.php:322 ../wpgform-core.php:337
+msgid "Unable to process Google Form short code."
+msgstr ""
+
+#: ../wpgform-core.php:465
+msgid "Unable to process Google Form."
+msgstr ""
+
+#: ../wpgform-core.php:466
+msgid "Server is responding with"
+msgstr ""
+
+#: ../wpgform-core.php:467
+msgid "403 Permission Denied"
+msgstr ""
+
+#: ../wpgform-core.php:467
+msgid "error"
+msgstr ""
+
+#: ../wpgform-core.php:585
+msgid "Unable to retrieve Google Form.  Please try reloading this page."
+msgstr ""
+
+#: ../wpgform-core.php:647
+msgid "Unexpected content encountered, unable to retrieve Google Form."
+msgstr ""
+
+#: ../wpgform-core.php:896
+msgid "Warning:  You are using an insecure browser!"
+msgstr ""
+
+#: ../wpgform-core.php:899
+msgid "Warning:  Your browser is out of date!  Please update now."
+msgstr ""
+
+#: ../wpgform-core.php:915
+msgid "Form Id:"
+msgstr ""
+
+#: ../wpgform-core.php:917
+msgid "Submitted Form Id"
+msgstr ""
+
+#: ../wpgform-core.php:920
+msgid "No Submitted Form Id"
+msgstr ""
+
+#: ../wpgform-core.php:1062
+msgid "Unable to submit Google Form.  Please try reloading this page."
+msgstr ""
+
+#: ../wpgform-core.php:1139
+msgid "View Form Submissions"
+msgstr ""
+
+#: ../wpgform-core.php:1192
+msgid "A form was submitted on your web site."
+msgstr ""
+
+#: ../wpgform-core.php:1193 ../wpgform-core.php:1204
+msgid "Form"
+msgstr ""
+
+#: ../wpgform-core.php:1194 ../wpgform-core.php:1205
+msgid "Responses"
+msgstr ""
+
+#: ../wpgform-core.php:1195 ../wpgform-core.php:1206
+msgid "Date"
+msgstr ""
+
+#: ../wpgform-core.php:1196 ../wpgform-core.php:1207
+msgid "Time"
+msgstr ""
+
+#: ../wpgform-core.php:1197 ../wpgform-core.php:1209
+msgid "Thank you"
+msgstr ""
+
+#: ../wpgform-core.php:1203
+msgid "A form was submitted on your web site"
+msgstr ""
+
+#: ../wpgform-options.php:93
+#, php-format
+msgid ""
+"Please consider making a <a href=\"%s\" target=\"_blank\">PayPal donation</"
+"a> if you find this plugin useful."
+msgstr ""
+
+#: ../wpgform-options.php:298
+#, php-format
+msgid "Custom %s CSS"
+msgstr ""
+
+#: ../wpgform-options.php:387
+#, php-format
+msgid ""
+"Enabling debug will collect data during the form rendering and processing "
+"process.<p>The data is added to the page footer but hidden with a link "
+"appearing above the form which can toggle the display of the debug data.  "
+"This data is useful when trying to understand why the plugin isn't operating "
+"as expected.</p><p>When debugging is enabled, specific transports employed "
+"by the <a href=\"%s\">WordPress HTTP API</a> can optionally be disabled.  "
+"While rarely required, disabling transports can be useful when the plugin is "
+"not communcating correctly with the Google Docs API.  <i>Extra care should "
+"be taken when disabling transports as other aspects of WordPress may not "
+"work correctly.</i>  The <a href=\"%s\">WordPress Core Control</a> plugin is "
+"recommended for advanced debugging of <a href=\"%s\">WordPress HTTP API "
+"issues.</a></p>"
+msgstr ""
+
+#: ../wpgform-post-type.php:463
+msgid "Form Name"
+msgstr ""
+
+#: ../wpgform-post-type.php:468
+msgid "Short Code"
+msgstr ""
+
+#: ../wpgform-post-type.php:469
+msgid "Form Description"
+msgstr ""
+
+#: ../wpgform-post-type.php:549
+msgid "Enter WordPress Google Form Title"
+msgstr ""
