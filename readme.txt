@@ -249,6 +249,7 @@ No known upgrade issues.
 * Moved CAPTCHA (when in use) from below the submit button to above the submit button.
 * Added WordPress Google Form Custom Post Type.
 * Added new shortcode *wpgform* to support WordPress Google Form CPT.
+* Added error checking on wp_remote_post() to prevent confirmation page redirect when data wasn't actually posted successfully.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
