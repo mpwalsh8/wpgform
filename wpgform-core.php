@@ -192,7 +192,7 @@ function wpgform_admin_init()
  */
 function wpgform_register_activation_hook()
 {
-    wpgform_init_18n() ;
+    wpgform_init_i18n() ;
     add_option('wpgform_options', wpgform_get_default_plugin_options()) ;
     add_filter('widget_text', 'do_shortcode') ;
 }
