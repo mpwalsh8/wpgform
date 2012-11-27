@@ -855,7 +855,7 @@ jQuery(document).ready(function($) {
     //  Make sure we don\'t split labels and input fields
     $("div.%sss-item").addClass("wpgform-dontsplit");
     //  Wrap all of the form content in a DIV so it can be split
-    $("#ss-form").wrapInner("<div class=\"wpgform-wrapper\"></div>");
+    $("#ss-form").wrapInner("<div style=\"border: 0px dashed blue;\" class=\"wpgform-wrapper\"></div>");
     //  Columnize the form content.
     $(function(){
         $(".wpgform-wrapper").columnize({
@@ -863,11 +863,13 @@ jQuery(document).ready(function($) {
             cssClassPrefix : "wpgform"
         });
         //  Wrap each column so it can styled easier
-        $(".wpgform-column").wrapInner("<div class=\"wpgform-column-wrapper\"></div>");
+        $(".wpgform-column").wrapInner("<div style=\"border: 0px dashed green;\" class=\"wpgform-column-wrapper\"></div>");
     });
+    $("#ss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
+    $("div.%sss-form-container").after("<div style=\"border: 0px dashed black; clear: both;\"></div>");
 });
 </script>
-        ', $prefix, $columns) ;
+        ', $prefix, $columns, $prefix) ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
         //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
