@@ -119,6 +119,15 @@ function wpgform_form_meta_box_content()
                 'required' => false
             ),
             array(
+                'name' => 'Columns',
+                'desc' => 'Number of columns to render form',
+                'id' => WPGFORM_PREFIX . 'columns',
+                'type' => 'select',
+                'options' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+                'std' => '1',
+                'required' => true
+            ),
+            array(
                 'name' => 'Legal',
                 'desc' => 'Google Legal Disclaimer',
                 'id' => WPGFORM_PREFIX . 'legal',
@@ -309,6 +318,7 @@ function wpgform_build_meta_box($mb)
                         echo '<option ', $meta == strtolower($value) ? ' selected="selected"' : '', 'value="', strtolower($value), '">', $value . '&nbsp;&nbsp;', '</option>';
                     }
                     echo '</select>';
+                    echo '<br />', '<small>', $field['desc'], '</small>';
                     break;
                 case 'radio':
                     foreach ($field['options'] as $option => $value) {
