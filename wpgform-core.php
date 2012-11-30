@@ -578,7 +578,7 @@ class wpGForm
                 print_r(self::$response) ;
                 print '</pre>' ;
                 wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
-                wpgform_preprint_r(self::$respone) ;
+                wpgform_preprint_r(self::$response) ;
             }
 
             return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
@@ -1057,7 +1057,7 @@ jQuery(document).ready(function($) {
                     print_r(self::$response) ;
                     print '</pre>' ;
                     wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
-                    wpgform_preprint_r(self::$respone) ;
+                    wpgform_preprint_r(self::$response) ;
                 }
 
                 return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
