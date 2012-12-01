@@ -532,7 +532,7 @@ class wpGForm
 
         //  Who should email confirmation be sent to?
         if (is_email($o['sendto']))
-            $sendto = $options['sendto'] ;
+            $sendto = $o['sendto'] ;
 
         //  How many columns?
         $columns = $o['columns'] ;
@@ -1037,7 +1037,7 @@ jQuery(document).ready(function($) {
             }
         
             self::$response = wp_remote_post($action,
-                array('sslverify' => false, 'body' => $body)) ;
+                array('timeout' => 15, 'sslverify' => false, 'body' => $body)) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
