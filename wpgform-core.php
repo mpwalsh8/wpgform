@@ -100,6 +100,7 @@ function wpgform_get_default_plugin_options()
        ,'custom_css_styles' => ''
        ,'donation_message' => 0
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
+       ,'http_api_timeout' => 5
        ,'browser_check' => 0
        ,'enable_debug' => 0
        ,'serialize_post_vars' => 0
@@ -454,6 +455,13 @@ class wpGForm
         //  Property short cut
         $o = &self::$options ;
 
+        $wpgform_options = wpgform_get_plugin_options() ;
+
+        if (WPGFORM_DEBUG && $wpgform_options['http_request_timeout'])
+            $timeout = $wpgform_options['http_request_timeout_value'] ;
+        else
+            $timeout = $wpgform_options['http_api_timeout'] ;
+
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
 
@@ -562,7 +570,7 @@ class wpGForm
 
         if (!self::$posted)
         {
-            self::$response = wp_remote_get($form, array('sslverify' => false)) ;
+            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout)) ;
         }
 
         //  Retrieve the HTML from the URL
@@ -728,8 +736,6 @@ class wpGForm
 
         //  Output custom CSS?
  
-        $wpgform_options = wpgform_get_plugin_options() ;
-
         if (($wpgform_options['custom_css'] == 1) && !empty($wpgform_options['custom_css_styles']))
             $css = '<style>' . $wpgform_options['custom_css_styles'] . '</style>' ;
         else
@@ -970,6 +976,11 @@ jQuery(document).ready(function($) {
 
             $wpgform_options = wpgform_get_plugin_options() ;
 
+            if (WPGFORM_DEBUG && $wpgform_options['http_request_timeout'])
+                $timeout = $wpgform_options['http_request_timeout_value'] ;
+            else
+                $timeout = $wpgform_options['http_api_timeout'] ;
+
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
             
@@ -1037,7 +1048,7 @@ jQuery(document).ready(function($) {
             }
         
             self::$response = wp_remote_post($action,
-                array('timeout' => 15, 'sslverify' => false, 'body' => $body)) ;
+                array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;

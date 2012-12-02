@@ -316,6 +316,23 @@ function wpgform_settings_input()
             </fieldset></td>
         </tr>
         <tr valign="top">
+            <th scope="row"><label><?php _e('HTTP API Timeout', WPGFORM_I18N_DOMAIN);?></label></th>
+            <td><fieldset>
+            <label for="gform_http_api_timeout">
+            <select style="width: 150px;" name="wpgform_options[http_api_timeout]" id="gform_http_api_timeout">
+            <option value="5" <?php selected($wpgform_options['http_api_timeout'], 5); ?>>5 Seconds</option>
+            <option value="10" <?php selected($wpgform_options['http_api_timeout'], 10); ?>>10 Seconds</option>
+            <option value="15" <?php selected($wpgform_options['http_api_timeout'], 15); ?>>15 Seconds</option>
+            <option value="25" <?php selected($wpgform_options['http_api_timeout'], 25); ?>>25 Seconds</option>
+            <option value="30" <?php selected($wpgform_options['http_api_timeout'], 30); ?>>30 Seconds</option>
+            <option value="45" <?php selected($wpgform_options['http_api_timeout'], 45); ?>>45 Seconds</option>
+            <option value="60" <?php selected($wpgform_options['http_api_timeout'], 60); ?>>60 Seconds</option>
+            </select>
+            <br />
+            <small><?php _e('Change the default HTTP API Timeout setting (default is 5 seconds).', WPGFORM_I18N_DOMAIN);?></small></label>
+            </fieldset></td>
+        </tr>
+        <tr valign="top">
             <th scope="row"><label><?php _e('Browser Check', WPGFORM_I18N_DOMAIN);?></label></th>
             <td><fieldset>
             <label for="gform_browser_check">
@@ -325,7 +342,7 @@ function wpgform_settings_input()
             <input name="wpgform_options[browser_check]" type="checkbox" id="gform_browser_check" value="1" <?php checked('1', $wpgform_options['browser_check']) ; ?> />
             </td>
             <td style="padding: 5px;">
-            <?php _e('Check browser compatibility?  The WordPress Google Form plugin may not work as expected with older browser versions (e.g. IE6, IE7, etc.).', WPGFORM_I18N_DOMAIN);?>
+            <?php _e('Check browser compatibility?<br/><small>The WordPress Google Form plugin may not work as expected with older browser versions (e.g. IE6, IE7, etc.).</small>', WPGFORM_I18N_DOMAIN);?>
             </td>
             </tr>
             </table>
@@ -342,7 +359,7 @@ function wpgform_settings_input()
             <input name="wpgform_options[donation_message]" type="checkbox" id="gform_donation_message" value="1" <?php checked('1', $wpgform_options['donation_message']) ; ?> />
             </td>
             <td style="padding: 5px;">
-            <?php _e('Hide the request for donation at the top of this page.<br/>The donation request will remain on the <b>About</b> tab.', WPGFORM_I18N_DOMAIN);?>
+            <?php _e('Hide the request for donation at the top of this page.<br/><small>The donation request will remain on the <b>About</b> tab.</small>', WPGFORM_I18N_DOMAIN);?>
             </td>
             </tr>
             </table>
