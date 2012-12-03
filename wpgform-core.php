@@ -24,6 +24,7 @@ define('WPGFORM_EMAIL_FORMAT_PLAIN', 'plain') ;
 define('WPGFORM_CONFIRM_AJAX', 'ajax') ;
 define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
 define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
+define('WPGFORM_CONFIRM_NONE', 'none') ;
 
 // i18n plugin domain
 define( 'WPGFORM_I18N_DOMAIN', 'wpgform' );
@@ -277,7 +278,7 @@ class wpGForm
      */
     protected static $options = array(
         'form'           => false,          // Google Form URL
-        'confirm'        => false,          // Custom confirmation page URL to redirect to
+        'confirm'        => null,          // Custom confirmation page URL to redirect to
         'alert'          => null,           // Optional Alert Message
         'class'          => 'gform',        // Container element's custom class value
         'legal'          => 'on',           // Display Google Legal Stuff
@@ -347,7 +348,7 @@ class wpGForm
      * @see gform_sc
      * @return boolean - abort processing when false
      */
-    function ProcessShortcodeOptions($options)
+    function ProcessShortCodeOptions($options)
     {
         //  Property short cut
         $o = &self::$options ;
@@ -360,6 +361,18 @@ class wpGForm
                 $o[$key] = $options[$key] ;
         }
 
+        //  If a confirm has been supplied but a style has not, default to redirect style.
+
+        if (!array_key_exists('confirm', $o) || is_null($o['confirm']) || empty($o['confirm']))
+        {
+            $o['style'] = WPGFORM_CONFIRM_NONE ;
+        }
+        elseif ((array_key_exists('confirm', $o) && !array_key_exists('style', $o)) ||
+            (array_key_exists('confirm', $o) && array_key_exists('style', $o) && $o['style'] == null))
+        {
+            $o['style'] = WPGFORM_CONFIRM_REDIRECT ;
+        }
+
         //  Validate columns - make sure it is a reasonable number
  
         if (is_numeric($o['columns']) && ($o['columns'] > 1) && ($o['columns'] == round($o['columns'])))
@@ -367,7 +380,7 @@ class wpGForm
         else
             $o['columns'] = 1 ;
 
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessShortcodeOptions') ;
+        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessShortCodeOptions') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($o) ;
 
         //  Have to have a form URL otherwise the short code is meaningless!
@@ -1106,6 +1119,7 @@ jQuery(document).ready(function($) {
      * @return HTML
      */
     function RenderGoogleForm($atts) {
+        /*
         $params = shortcode_atts(array(
             'form'           => false,                   // Google Form URL
             'confirm'        => false,                   // Custom confirmation page URL to redirect to
@@ -1127,6 +1141,8 @@ jQuery(document).ready(function($) {
             'unitethemehack' => 'off',                   // Send an email confirmation to blog admin on submission
             'style'          => WPGFORM_CONFIRM_REDIRECT // How to present the custom confirmation after submit
         ), $atts) ;
+         */
+        $params = shortcode_atts(wpGForm::$options) ;
 
         return wpGForm::ConstructGoogleForm($params) ;
     }
