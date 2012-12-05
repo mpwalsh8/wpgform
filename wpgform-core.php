@@ -267,6 +267,11 @@ class wpGForm
     static $wpgform_captcha = null ;
 
     /**
+     * Property to user email address to send email confirmation to
+     */
+    static $wpgform_user_sendto = null ;
+
+    /**
      * Property to store the various options which control the
      * HTML manipulation and generation.  These array keys map
      * to the meta data stored with the wpGForm Custom Post Type.
@@ -278,9 +283,9 @@ class wpGForm
      */
     protected static $options = array(
         'form'           => false,          // Google Form URL
-        'confirm'        => null,          // Custom confirmation page URL to redirect to
+        'confirm'        => null,           // Custom confirmation page URL to redirect to
         'alert'          => null,           // Optional Alert Message
-        'class'          => 'gform',        // Container element's custom class value
+        'class'          => 'wpgform',      // Container element's custom class value
         'legal'          => 'on',           // Display Google Legal Stuff
         'br'             => 'off',          // Insert <br> tags between labels and inputs
         'columns'        => '1',            // Number of columns to render the form in
@@ -291,6 +296,9 @@ class wpGForm
         'maph1h2'        => 'off',          // Map H1 element(s) on the form to H2 element(s)
         'email'          => 'off',          // Send an email confirmation to blog admin on submission
         'sendto'         => null,           // Send an email confirmation to a specific address on submission
+        'user_email'     => 'off',          // Send an email confirmation to user on submission
+        'user_sendto'    => null,           // Send an email confirmation to a specific address on submission
+        'results'        => false,          // Results URL
         'spreadsheet'    => false,          // Google Spreadsheet URL
         'captcha'        => 'off',          // Display a CAPTCHA when enabled
         'validation'     => 'off',          // Use jQuery validation for required fields
@@ -499,11 +507,42 @@ class wpGForm
             $suffix = $o['suffix'] ;
             $confirm = $o['confirm'] ;
             $alert = $o['alert'] ;
-            $spreadsheet = $o['spreadsheet'] ;
             $sendto = $o['sendto'] ;
+
+            //  The old short code supports the 'spreadsheet' attribute which
+            //  takes precedence over the new attribute 'results' for backward
+            //  compatibility.
+
+            $results = ($o['spreadsheet'] === false) ? $o['results'] : $o['spreadsheet'] ;
         }
 
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
+
+        //  Should email confirmation be sent to user?
+        $user_email = $o['user_email'] === 'on' ;
+
+        $user_email_html = '' ;
+        $user_email_sendto = "" ;
+
+        //  Generate the User Email HTML if requested
+
+        if ($user_email)
+        {
+            $current_user = wp_get_current_user();
+
+            if (0 != $current_user->ID)
+                $user_email_sendto = $current_user->user_email ;
+            
+            $user_email_html .= '<div class="wpgform-user-email">' ;
+            $user_email_html .= sprintf('<div class="%sss-item %sss-item-required %sss-text">', $prefix, $prefix, $prefix) ;
+            $user_email_html .= sprintf('<div class="%sss-form-entry">', $prefix) ;
+            $user_email_html .= sprintf('<label for="wpgform-user-email" class="%sss-q-title">%s', $prefix,
+               __('Email Address')) ;
+            $user_email_html .= sprintf('<span class="%sss-required-asterisk">*</span></label>', $prefix) ;
+            $user_email_html .= sprintf('<label for="wpgform-user-email" class="%sss-q-help"></label>', $prefix) ;
+            $user_email_html .= sprintf('<input style="width: 250px;" type="text" id="wpgform-user-email" class="%sss-q-short" value="%s" name="wpgform-user-email">', $prefix, $user_email_sendto) ;
+            $user_email_html .= '</div></div></div>' ;
+        }
 
         //  Display CAPTCHA?
         $captcha_html = '' ;
@@ -520,13 +559,13 @@ class wpGForm
 
             self::$wpgform_captcha = array('a' => $a, 'b' => $b, 'c' => $c) ;
 
-            $captcha_html .= '<div class="gform-captcha">' ;
+            $captcha_html .= '<div class="wpgform-captcha">' ;
             $captcha_html .= sprintf('<div class="%sss-item %sss-item-required %sss-text">', $prefix, $prefix, $prefix) ;
             $captcha_html .= sprintf('<div class="%sss-form-entry">', $prefix) ;
-            $captcha_html .= sprintf('<label for="gform-captcha" class="%sss-q-title">What is %s + %s ?', $prefix, $a, $b) ;
+            $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">What is %s + %s ?', $prefix, $a, $b) ;
             $captcha_html .= sprintf('<span class="%sss-required-asterisk">*</span></label>', $prefix) ;
-            $captcha_html .= sprintf('<label for="gform-captcha" class="%sss-q-help"></label>', $prefix) ;
-            $captcha_html .= sprintf('<input style="width: 100px;" type="text" id="gform-captcha" class="%sss-q-short" value="" name="gform-captcha">', $prefix) ;
+            $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-help"></label>', $prefix) ;
+            $captcha_html .= sprintf('<input style="width: 100px;" type="text" id="wpgform-captcha" class="%sss-q-short" value="" name="wpgform-captcha">', $prefix) ;
             $captcha_html .= '</div></div></div>' ;
         }
 
@@ -548,7 +587,7 @@ class wpGForm
         //  Should form be set to readonly?
         $readonly = $o['readonly'] === 'on' ;
 
-        //  Should email confirmation be sent?
+        //  Should email confirmation be sent to admin?
         $email = $o['email'] === 'on' ;
 
         //  Who should email confirmation be sent to?
@@ -700,11 +739,6 @@ class wpGForm
         if (!is_null($suffix))
             $html = preg_replace('/<\/label>/i', "{$suffix}</label>", $html) ;
 
-        //  Insert breaks between labels and input fields?
-
-        //if ($br)
-            //$html = preg_replace('/<\/label>[\w\n]*<input/i', '</label><br/><input', $html) ;
-
         //  Need to extract form action and rebuild form tag, and add hidden field
         //  which contains the original action.  This action is used to submit the
         //  form via wp_remote_post().
@@ -724,7 +758,7 @@ class wpGForm
 
             //  Add some hidden input fields to faciliate control of subsquent actions
             $html = preg_replace('/<\/form>/i',
-                "<input type=\"hidden\" value=\"{$action}\" name=\"gform-action\"><input type=\"hidden\" value=\"{$wgformid}\" name=\"gform-form-id\"></form>", $html) ;
+                "<input type=\"hidden\" value=\"{$action}\" name=\"wpgform-action\"><input type=\"hidden\" value=\"{$wgformid}\" name=\"wpgform-form-id\"></form>", $html) ;
         } 
         else 
         {
@@ -745,7 +779,7 @@ class wpGForm
         //  be referenced if/when needed during form processing.
 
         $html = preg_replace('/<\/form>/i', "<input type=\"hidden\" value=\"" .
-            base64_encode(serialize($o)) . "\" name=\"gform-options\"></form>", $html) ;
+            base64_encode(serialize($o)) . "\" name=\"wpgform-options\"></form>", $html) ;
 
         //  Output custom CSS?
  
@@ -763,6 +797,9 @@ class wpGForm
         //  Output Javscript for form validation, make sure any class prefix is included
         //  Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly.
         //  This jQuery script reformats the checkboxes so that Googles Python script will read them.
+
+        $vMsgs_js = array() ;
+        $vRules_js = array() ;
 
         $js = sprintf('
 <script type="text/javascript">
@@ -795,41 +832,122 @@ jQuery(document).ready(function($) {
     $("div.%sss-legal").hide();
 ', $prefix) ;
 
+        //  Is Email User enabled?
+        if ($user_email)
+        {
+            $js .= sprintf('
+    //  Construct Email User Validation
+    if ($("#ss-form input[type=submit][name=submit]").length) {
+        $("#ss-form input[type=submit][name=submit]").before(\'%s\');
+        $("div.wpgform-user-email").show();
+        $.validator.addClassRules("wpgform-user-email", {
+            required: true
+        });
+        /*
+        $("#ss-form").validate({
+            errorClass: "wpgform-error",
+			rules: {
+				"wpgform-user-email": {
+					email: true
+				}
+			},
+			messages: {
+				"wpgform-user-email": "A valid email address is required."
+			}
+		});
+        */
+    }
+', $user_email_html) ;
+            $vRules_js[] = '
+				"wpgform-user-email": {
+					email: true,
+				},
+' ;
+            $vMsgs_js[] = '
+				"wpgform-user-email": "A valid email address is required.",
+' ;
+        }
+
         //  Is CAPTCHA enabled?
-        if ($captcha) $js .= sprintf('
+        if ($captcha)
+        {
+            $js .= sprintf('
     //  Construct CAPTCHA
     $.validator.methods.equal = function(value, element, param) { return value == param; };
     if ($("#ss-form input[type=submit][name=submit]").length) {
         $("#ss-form input[type=submit][name=submit]").before(\'%s\');
-        $("div.gform-captcha").show();
-        $.validator.addClassRules("gform-captcha", {
+        $("div.wpgform-captcha").show();
+        $.validator.addClassRules("wpgform-captcha", {
             required: true
         });
+        /*
         $("#ss-form").validate({
-            errorClass: "gform-error",
+            errorClass: "wpgform-error",
 			rules: {
-				"gform-captcha": {
+				"wpgform-captcha": {
 					equal: %s
 				}
 			},
 			messages: {
-				"gform-captcha": "Incorrect answer."
+				"wpgform-captcha": "Incorrect answer."
 			}
 		});
+        */
     }
 ', $captcha_html, self::$wpgform_captcha['c']) ;
+            $vRules_js[] = sprintf('
+				"wpgform-captcha": {
+					equal: %s
+				},
+', self::$wpgform_captcha['c']) ;
+            $vMsgs_js[] = '
+				"wpgform-captcha": "Incorrect answer."
+' ;
+        }
 
         //  Include jQuery validation?
         if ($validation) $js .= sprintf('
     //  jQuery inline validation
-    $("div > .ss-item-required textarea").addClass("gform-required");
-    $("div > .ss-item-required input:not(.ss-q-other").addClass("gform-required");
-    $("div > .%sss-item-required textarea").addClass("gform-required");
-    $("div > .%sss-item-required input:not(.%sss-q-other").addClass("gform-required");
-    $.validator.addClassRules("gform-required", { required: true });
-    $("#ss-form").validate({ errorClass: "gform-error" }) ;
-', $prefix, $prefix, $prefix) ;
+    $("div > .ss-item-required textarea").addClass("wpgform-required");
+    $("div > .ss-item-required input:not(.ss-q-other").addClass("wpgform-required");
+    $("div > .%sss-item-required textarea").addClass("wpgform-required");
+    $("div > .%sss-item-required input:not(.%sss-q-other").addClass("wpgform-required");
+    $.validator.addClassRules("wpgform-required", { required: true });
+    /*
+    $("#ss-form").validate({
+        errorClass: "wpgform-error",
+        rules: {
+            %s
+        },
+        messages: {
+            %s
+        }
+    }) ;
+     */
+', $prefix, $prefix, $prefix, '', '') ;
 
+        //  Now the tricky part - need to output rules and messages
+        if ($validation)
+        {
+            $js .= '
+    $("#ss-form").validate({
+        errorClass: "wpgform-error",
+        rules: {
+' ;
+            foreach ($vRules_js as $r)
+                $js .= sprintf('%s', $r) ;
+            $js .= '
+        },
+        messages: {
+' ;
+           foreach ($vMsgs_js as $m)
+                $js .= sprintf('%s', $m) ;
+           $js .= '
+        }
+    }) ;
+' ;
+        }
+ 
         //  Always include the jQuery to clean up the checkboxes
         $js .= sprintf('
     //  Fix checkboxes to work with Google Python
@@ -896,7 +1014,12 @@ jQuery(document).ready(function($) {
         //  Send email?
         if (self::$posted && is_null($action) && $email)
         {
-            wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto, $spreadsheet) ;
+            printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
+            print_r($results) ;
+            wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto, $results) ;
+
+            if ($user_email && is_email(self::$wpgform_user_sendto))
+                wpGForm::SendConfirmationEmail($wpgform_options['email_format'], self::$wpgform_user_sendto) ;
         }
 
         //  Check browser compatibility?  The jQuery used by this plugin may
@@ -981,7 +1104,7 @@ jQuery(document).ready(function($) {
     {
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
-        if (!empty($_POST) && array_key_exists('gform-action', $_POST))
+        if (!empty($_POST) && array_key_exists('wpgform-action', $_POST))
         {
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
 
@@ -998,14 +1121,18 @@ jQuery(document).ready(function($) {
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
             
             //  Need the form ID to handle multiple forms per page
-            self::$wpgform_submitted_form_id = $_POST['gform-form-id'] ;
-            unset($_POST['gform-form-id']) ;
+            self::$wpgform_user_sendto = $_POST['wpgform-user-email'] ;
+            unset($_POST['wpgform-user-email']) ;
+
+            //  Need the form ID to handle multiple forms per page
+            self::$wpgform_submitted_form_id = $_POST['wpgform-form-id'] ;
+            unset($_POST['wpgform-form-id']) ;
 
             //  Need the action which was saved during form construction
-            $action = unserialize(base64_decode($_POST['gform-action'])) ;
-            unset($_POST['gform-action']) ;
-            $options = $_POST['gform-options'] ;
-            unset($_POST['gform-options']) ;
+            $action = unserialize(base64_decode($_POST['wpgform-action'])) ;
+            unset($_POST['wpgform-action']) ;
+            $options = $_POST['wpgform-options'] ;
+            unset($_POST['wpgform-options']) ;
             $options = unserialize(base64_decode($options)) ;
 
             if (WPGFORM_DEBUG) wpgform_preprint_r($options) ;
@@ -1124,7 +1251,7 @@ jQuery(document).ready(function($) {
             'form'           => false,                   // Google Form URL
             'confirm'        => false,                   // Custom confirmation page URL to redirect to
             'alert'          => null,                    // Optional Alert Message
-            'class'          => 'gform',                 // Container element's custom class value
+            'class'          => 'wpgform',                 // Container element's custom class value
             'legal'          => 'on',                    // Display Google Legal Stuff
             'br'             => 'off',                   // Insert <br> tags between labels and inputs
             'columns'        => '1',                     // Number of columns to render the form in
@@ -1153,21 +1280,23 @@ jQuery(document).ready(function($) {
      * Send an e-mail to the blog administrator informing
      * them of a form submission.
      * 
-     * @param string $action - action to take, register or unregister
+     * @param string $format - format of email (plain or HTML)
+     * @param string $sendto - email address to send content to
+     * @param string $results - URL of the spreadsheet which holds submitted data
      */
-    function SendConfirmationEmail($mode = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false, $spreadsheet = null)
+    function SendConfirmationEmail($format = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false, $results = null)
     {
         $wpgform_options = wpgform_get_plugin_options() ;
 
         if ($sendto === false || $sendto === null) $sendto = get_bloginfo('admin_email') ;
 
-        if ($spreadsheet === false || $spreadsheet === null)
-            $spreadsheet = 'N/A' ;
-        else
-            $spreadsheet = sprintf('<a href="%s">%s</a>',
-                $spreadsheet, __('View Form Submissions', WPGFORM_I18N_DOMAIN)) ;
+        if ($results === false || $results === null)
+            $results = 'N/A' ;
+        elseif ($format == WPGFORM_EMAIL_FORMAT_HTML)
+            $results = sprintf('<a href="%s">%s</a>',
+                $results, __('View Form Results', WPGFORM_I18N_DOMAIN)) ;
 
-        if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
+        if ($format == WPGFORM_EMAIL_FORMAT_HTML)
         {
             $headers  = 'MIME-Version: 1.0' . PHP_EOL ;
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . PHP_EOL ;
@@ -1189,7 +1318,7 @@ jQuery(document).ready(function($) {
         $headers .= sprintf("Reply-To: %s", $sendto) . PHP_EOL ;
         $headers .= sprintf("X-Mailer: PHP/%s", phpversion()) ;
 
-        if ($mode == WPGFORM_EMAIL_FORMAT_HTML)
+        if ($format == WPGFORM_EMAIL_FORMAT_HTML)
         {
             $html = '
                 <html>
@@ -1220,7 +1349,7 @@ jQuery(document).ready(function($) {
             $message = sprintf($html, get_bloginfo('name'),
                 __('A form was submitted on your web site.', WPGFORM_I18N_DOMAIN),
                 __('Form', WPGFORM_I18N_DOMAIN), get_the_title(),
-                __('Responses', WPGFORM_I18N_DOMAIN), $spreadsheet,
+                __('Responses', WPGFORM_I18N_DOMAIN), $results,
                 __('Date', WPGFORM_I18N_DOMAIN), date('Y-m-d'),
                 __('Time', WPGFORM_I18N_DOMAIN), date('H:i'),
                 __('Thank you', WPGFORM_I18N_DOMAIN), get_bloginfo('name')) ;
@@ -1238,7 +1367,7 @@ jQuery(document).ready(function($) {
             $plain .= sprintf('%s,', __('Thank you', WPGFORM_I18N_DOMAIN)) . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
 
             $message = sprintf($plain, get_the_title(),
-                $spreadsheet, date('Y-m-d'), date('H:i'), get_option('blogname')) ;
+                $results, date('Y-m-d'), date('H:i'), get_option('blogname')) ;
         }
 
         $to = sprintf('%s wpGForm Contact <%s>', get_option('blogname'), $sendto) ;
