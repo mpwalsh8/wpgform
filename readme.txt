@@ -250,6 +250,7 @@ No known upgrade issues.
 * Added WordPress Google Form Custom Post Type.
 * Added new shortcode *wpgform* to support WordPress Google Form CPT.
 * Added error checking on wp_remote_post() to prevent confirmation page redirect when data wasn't actually posted successfully.
+* Added support for optional end user email field on forms.  When enabled, the user email is required and must be valid.  This feature is only available from the Google Forms CPT editor.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
