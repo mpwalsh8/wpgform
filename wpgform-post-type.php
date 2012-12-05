@@ -206,17 +206,17 @@ function wpgform_form_meta_box_content()
                 'required' => false
             ),
             array(
-                'name' => 'Spreadsheet URL',
-                'desc' => 'The full URL to the published Google Spreadsheet.',
-                'id' => WPGFORM_PREFIX . 'spreadsheet_url',
+                'name' => 'Results',
+                'desc' => 'The full URL to the published Results Page or Google Spreadsheet.',
+                'id' => WPGFORM_PREFIX . 'results',
                 'type' => 'lgtext',
                 'std' => '',
                 'required' => false
             ),
             array(
-                'name' => 'Unite Theme Hack',
-                'desc' => 'Unite Theme Hack',
-                'id' => WPGFORM_PREFIX . 'unitethemehack',
+                'name' => 'Email End User',
+                'desc' => 'Send email to end user upon form submission.',
+                'id' => WPGFORM_PREFIX . 'user_email',
                 'type' => 'radio',
                 'options' => array('On', 'Off'),
                 'required' => false,
@@ -235,6 +235,15 @@ function wpgform_form_meta_box_content()
                 'name' => 'CAPTCHA',
                 'desc' => 'CAPTCHA',
                 'id' => WPGFORM_PREFIX . 'captcha',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => 'Unite Theme Hack',
+                'desc' => 'Unite Theme Hack',
+                'id' => WPGFORM_PREFIX . 'unitethemehack',
                 'type' => 'radio',
                 'options' => array('On', 'Off'),
                 'required' => false,
