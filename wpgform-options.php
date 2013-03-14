@@ -113,39 +113,23 @@ function wpgform_options_page()
         </div>
         <div id="gform-tabs-2">
 <?php
-    //  Instead of duplicating the FAQ content in the ReadMe.txt file,
+    //
+    //  Instead of duplicating the FAQ and Other Notes content in the ReadMe.txt file,
     //  let's simply extract it from the WordPress plugin repository!
     //
-    //  This solutution is derived from a discussion found on www.DevNetwork.net.
-    //  See full discussion:  http://www.devnetwork.net/viewtopic.php?f=38&t=102670
+	//  Fetch via the content via the WordPress Plugins API which is largely undocumented.
+    //
+    //  @see http://dd32.id.au/projects/wordpressorg-plugin-information-api-docs/
+    //
+    //  We want just the 'sections' content of the ReadMe file which will yield an array
+    //  which contains an element for each section of the ReadMe file.  We'll use 'faq' and
+    //  'other_notes'.
     //
 
-    /*
-    //  Commented regex to extract contents from <div class="main">contents</div>
-    //  where "contents" may contain nested <div>s.
-    //  Regex uses PCRE's recursive (?1) sub expression syntax to recurs group 1
+	require_once( ABSPATH . '/wp-admin/includes/plugin-install.php' );
+	$readme = plugins_api( 'plugin_information', array('slug' => 'wpgform', 'fields' => array( 'sections' ) ) );
 
-    $pattern_long = '{                    # recursive regex to capture contents of "main" DIV
-    <div\s+class="main"\s*>               # match the "main" class DIV opening tag
-      (                                   # capture "main" DIV contents into $1
-        (?:                               # non-cap group for nesting * quantifier
-          (?: (?!<div[^>]*>|</div>). )++  # possessively match all non-DIV tag chars
-        |                                 # or 
-          <div[^>]*>(?1)</div>            # recursively match nested <div>xyz</div>
-        )*                                # loop however deep as necessary
-      )                                   # end group 1 capture
-    </div>                                # match the "main" class DIV closing tag
-    }six';  // single-line (dot matches all), ignore case and free spacing modes ON
-    */
-
-    //  WordPress plugin repository places the content in DIV with a class of
-    //  "block-content" but there are actually several DIVs that have the same class.
-    //  We only want the first one.
-
-    $url = 'http://wordpress.org/extend/plugins/wpgform/faq/' ;
-    $response= wp_remote_get($url) ;
-
-    if (is_wp_error($response))
+    if (is_wp_error($readme))
     {
 ?>
 <div class="updated error"><?php _e('Unable to retrive FAQ content from WordPress plugin repository.', WPGFORM_I18N_DOMAIN);?></div>
@@ -153,90 +137,23 @@ function wpgform_options_page()
     }
     else
     {
-?>
-<?php
-        $data = &$response['body'] ;
-        $pattern_short = '{<div\s+[^>]*?class="block-content"[^>]*>((?:(?:(?!<div[^>]*>|</div>).)++|<div[^>]*>(?1)</div>)*)</div>}si';
-        $matchcount = preg_match_all($pattern_short, $data, $matches);
-
-        //  Did we find something?
-        if ($matchcount > 0)
-        {
-            //  The content we want will be the first match
-            echo($matches[1][0]); // print 1st capture group for match number i
-        }
-        else
-        {
-?>
-    <div class="updated error"><?php _e('Unable to retrive FAQ content from WordPress plugin repository.', WPGFORM_I18N_DOMAIN);?></div>
-<?php
-        }
+        echo $readme->sections['faq'] ;
     }
-        
 ?>
         </div>
         <div id="gform-tabs-3">
 <?php
-    //  Instead of duplicating the FAQ content in the ReadMe.txt file,
-    //  let's simply extract it from the WordPress plugin repository!
-    //
-    //  This solutution is derived from a discussion found on www.DevNetwork.net.
-    //  See full discussion:  http://www.devnetwork.net/viewtopic.php?f=38&t=102670
-    //
 
-    /*
-    //  Commented regex to extract contents from <div class="main">contents</div>
-    //  where "contents" may contain nested <div>s.
-    //  Regex uses PCRE's recursive (?1) sub expression syntax to recurs group 1
-
-    $pattern_long = '{                    # recursive regex to capture contents of "main" DIV
-    <div\s+class="main"\s*>               # match the "main" class DIV opening tag
-      (                                   # capture "main" DIV contents into $1
-        (?:                               # non-cap group for nesting * quantifier
-          (?: (?!<div[^>]*>|</div>). )++  # possessively match all non-DIV tag chars
-        |                                 # or 
-          <div[^>]*>(?1)</div>            # recursively match nested <div>xyz</div>
-        )*                                # loop however deep as necessary
-      )                                   # end group 1 capture
-    </div>                                # match the "main" class DIV closing tag
-    }six';  // single-line (dot matches all), ignore case and free spacing modes ON
-    */
-
-    //  WordPress plugin repository places the content in DIV with a class of
-    //  "block-content" but there are actually several DIVs that have the same class.
-    //  We only want the first one.
-
-    $url = 'http://wordpress.org/extend/plugins/wpgform/other_notes/' ;
-    $response= wp_remote_get($url) ;
-
-    if (is_wp_error($response))
+    if (is_wp_error($readme))
     {
 ?>
-<div class="updated error"><?php _e('Unable to retrive FAQ content from WordPress plugin repository.', WPGFORM_I18N_DOMAIN);?></div>
+<div class="updated error"><?php _e('Unable to retrive Usage content from WordPress plugin repository.', WPGFORM_I18N_DOMAIN);?></div>
 <?php
     }
     else
     {
-?>
-<?php
-        $data = &$response['body'] ;
-        $pattern_short = '{<div\s+[^>]*?class="block-content"[^>]*>((?:(?:(?!<div[^>]*>|</div>).)++|<div[^>]*>(?1)</div>)*)</div>}si';
-        $matchcount = preg_match_all($pattern_short, $data, $matches);
-
-        //  Did we find something?
-        if ($matchcount > 0)
-        {
-            //  The content we want will be the first match
-            echo($matches[1][0]); // print 1st capture group for match number i
-        }
-        else
-        {
-?>
-<div class="updated error"><?php _e('Unable to retrive FAQ content from WordPress plugin repository.', WPGFORM_I18N_DOMAIN);?></div>
-<?php
-        }
+        echo $readme->sections['other_notes'] ;
     }
-        
 ?>
         </div>
         <div id="gform-tabs-4">
