@@ -616,13 +616,14 @@ class wpGForm
         if (!is_null($confirm))
             $confirm = str_replace(array('&#038;','&#38;','&amp;'), '&', $confirm) ;
         
+        //error_log($form) ;
         //  The initial rendering of the form content is done using this
         //  "remote get", all subsequent renderings will be the result of
         //  "post processing".
 
         if (!self::$posted)
         {
-            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout)) ;
+            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
         }
 
         //  Retrieve the HTML from the URL
@@ -909,9 +910,9 @@ jQuery(document).ready(function($) {
         if ($validation) $js .= sprintf('
     //  jQuery inline validation
     $("div > .ss-item-required textarea").addClass("wpgform-required");
-    $("div > .ss-item-required input:not(.ss-q-other").addClass("wpgform-required");
+    $("div > .ss-item-required input:not(.ss-q-other)").addClass("wpgform-required");
     $("div > .%sss-item-required textarea").addClass("wpgform-required");
-    $("div > .%sss-item-required input:not(.%sss-q-other").addClass("wpgform-required");
+    $("div > .%sss-item-required input:not(.%sss-q-other)").addClass("wpgform-required");
     $.validator.addClassRules("wpgform-required", { required: true });
     /*
     $("#ss-form").validate({
@@ -1121,8 +1122,11 @@ jQuery(document).ready(function($) {
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
             
             //  Need the form ID to handle multiple forms per page
-            self::$wpgform_user_sendto = $_POST['wpgform-user-email'] ;
-            unset($_POST['wpgform-user-email']) ;
+            if (array_key_exists('wpgform-user-email', $_POST))
+            {
+                self::$wpgform_user_sendto = $_POST['wpgform-user-email'] ;
+                unset($_POST['wpgform-user-email']) ;
+            }
 
             //  Need the form ID to handle multiple forms per page
             self::$wpgform_submitted_form_id = $_POST['wpgform-form-id'] ;
@@ -1417,7 +1421,7 @@ function wpgform_head()
 }
 
 /**
- * wpgform_head()
+ * wpgform_footer()
  *
  * WordPress footer actions
  *
