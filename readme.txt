@@ -3,14 +3,14 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
-Tested up to: 3.4.2
+Tested up to: 3.5.1
 Stable tag: 0.45
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
 == Description ==
 
-Fetches a published Google Form using a `[gform form='']` WordPress shortcode, removes the Gooogle wrapper HTML and then renders it as an HTML form embedded in your blog post or page. The only required parameter is `form`, which specifies the form you'd like to retrieve. Recommended but optional, you can also pass a URL for a confirmation page.  The confirmation page will override the default Google`Thank You` page and offers better integration with your WordPress site.  You can also supply a customized `class` value for styling the form.
+Fetches a published Google Form using a WordPress shortcode, removes the Gooogle wrapper HTML and then renders it as an HTML form embedded in your blog post or page. The only required parameter is the URL to the Google `form`, which specifies the form you'd like to retrieve. Recommended but optional, you can also provide a URL for a confirmation page.  The confirmation page will override the default Google `Thank You` page and offers better integration with your WordPress site.  You can also supply a customized `class` value for styling the form.  There are a number of other options, refer to the documentation for further details.
 
 For example, suppose you want to integrate the form at `https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0`, (not a real URL) use the following shortcode in your WordPress post or page:
 
@@ -25,9 +25,20 @@ Currently, this plugin only supports Google Forms that are "Published as a web p
 1. Install using the WordPress Pluin Installer (search for `WordPress Google Form`) or download `WordPress Google Form`, extract the `wpgforms` folder and upload `wpgforms` to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Configure `WP Goolge Forms` from the `Settings` menu as appropriate.
-1. Use the `[gform form='<full_url_to_form>']` shortcode wherever you'd like to insert the Google Form.
+1. Recommended:  Create a Google Form Custom Post Type and then use the `[wpgform id='<Google Form CPT Id>']` shortcode wherever you'd like to insert the Google Form.
+1. Alternatively:  Use the `[gform form='<full_url_to_form>']` shortcode wherever you'd like to insert the Google Form.
 
 == Usage ==
+
+As features have been added, usage of the `gform` shortcode has grown increasing complex.  Begining with v0.46, a second shortcode, `wpgform` has been introduced in conjunction with a Custom Post Type to define forms. Usage of the new shortcode and Custom Post Type is much, much easier than the complexities of the original `gform` shortcode.  Users are strong encouraged to migrate usage to the new shortcode and Custom Post Type.  New features will only be added to the Custom Post Type usage model.
+
+The WordPress Google Form shortcode `wpgform` supports a single attribute.  The rest of the controls are derived from the information stored with the Custom Post Type.
+
+`[wpgform id='<Google Form CPT Id>']`
+
+*NOTE:*  In the above syntax, values enclosed in angle brackets <>, indicate a string you need to replace with an appropriate value.  Do not include the angle brackets in your string!
+
+* __id__:  The numeric id of the Google Form Custom Post Type.
 
 The WordPress Google Form shortcode `gform` supports a number of attributes that allow further control and customization of the Google Form.
 
@@ -253,6 +264,7 @@ No known upgrade issues.
 * Added support for optional end user email field on forms.  When enabled, the user email is required and must be valid.  This feature is only available from the Google Forms CPT editor.
 * Migrated scraping of WordPress Plugin Repository content from wp_remote_get() and HTML parsing to use WordPress Plugin API eliminating potential problems with preg_match_all() which was prone to crashing on some installations.
 * Fixed jQuery syntax error in validation selector which caused CAPTCA jQuery not to run on some browsers (e.g. Chrome).
+* Added URL of page where form was submitted from to confirmation email.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
