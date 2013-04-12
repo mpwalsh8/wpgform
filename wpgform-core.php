@@ -1015,8 +1015,6 @@ jQuery(document).ready(function($) {
         //  Send email?
         if (self::$posted && is_null($action) && $email)
         {
-            printf('<h3>%s::%s</h3>', basename(__FILE__), __LINE__) ;
-            print_r($results) ;
             wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto, $results) ;
 
             if ($user_email && is_email(self::$wpgform_user_sendto))
@@ -1339,6 +1337,7 @@ jQuery(document).ready(function($) {
                 <ul>
                 <li>%s:  %s</li>
                 <li>%s:  %s</li>
+                <li>%s:  %s</li>
                 <li>%s: %s</li>
                 <li>%s: %s</li>
                 </ul>
@@ -1353,6 +1352,7 @@ jQuery(document).ready(function($) {
             $message = sprintf($html, get_bloginfo('name'),
                 __('A form was submitted on your web site.', WPGFORM_I18N_DOMAIN),
                 __('Form', WPGFORM_I18N_DOMAIN), get_the_title(),
+                __('URL', WPGFORM_I18N_DOMAIN), get_permalink(),
                 __('Responses', WPGFORM_I18N_DOMAIN), $results,
                 __('Date', WPGFORM_I18N_DOMAIN), date('Y-m-d'),
                 __('Time', WPGFORM_I18N_DOMAIN), date('H:i'),
@@ -1364,13 +1364,14 @@ jQuery(document).ready(function($) {
             $plain .= sprintf('%s:',
                 __('A form was submitted on your web site', WPGFORM_I18N_DOMAIN)) . PHP_EOL . PHP_EOL ;
             $plain .= sprintf('%s:', __('Form', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL ;
+            $plain .= sprintf('%s:', __('URL', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL ;
             $plain .= sprintf('%s:', __('Responses', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL ;
             $plain .= sprintf('%s:', __('Date', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL ;
             $plain .= sprintf('%s:', __('Time', WPGFORM_I18N_DOMAIN)) .'  %s' . PHP_EOL . PHP_EOL ;
             
             $plain .= sprintf('%s,', __('Thank you', WPGFORM_I18N_DOMAIN)) . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
 
-            $message = sprintf($plain, get_the_title(),
+            $message = sprintf($plain, get_the_title(), get_permalink(),
                 $results, date('Y-m-d'), date('H:i'), get_option('blogname')) ;
         }
 
