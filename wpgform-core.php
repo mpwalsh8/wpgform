@@ -633,7 +633,6 @@ class wpGForm
         if (!is_null($confirm))
             $confirm = str_replace(array('&#038;','&#38;','&amp;'), '&', $confirm) ;
         
-        //error_log($form) ;
         //  The initial rendering of the form content is done using this
         //  "remote get", all subsequent renderings will be the result of
         //  "post processing".
@@ -1124,10 +1123,6 @@ jQuery(document).ready(function($) {
  
             if (!is_null($log['form']))
                 add_post_meta($log['form'], WPGFORM_LOG_ENTRY_META_KEY, $log, false) ;
-            //elseif (!is_null($log['post_id']))
-                //add_post_meta($log['post_id'], WPGFORM_LOG_ENTRY_META_KEY, $log, false) ;
-
-            //error_log(sprintf('Form submitted:  %s', print_r($log, true))) ;
         }
 
         return $html ;
@@ -1188,8 +1183,8 @@ jQuery(document).ready(function($) {
             //  The name of the form fields are munged, they need
             //  to be restored before the parameters can be posted
 
-            $patterns = array('/^entry_([0-9]+)_(single|group)_/', '/^entry_([0-9]+)_/') ;
-            $replacements = array('entry.\1.\2.', 'entry.\1.') ;
+            $patterns = array('/^entry_([0-9]+)_(single|group)_/', '/^entry_([0-9]+)_/', '/^entry_([0-9]+)/') ;
+            $replacements = array('entry.\1.\2.', 'entry.\1.', 'entry.\1') ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
@@ -1209,6 +1204,17 @@ jQuery(document).ready(function($) {
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
                         $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
+                    if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
+                }
+                else if ($key === 'draftResponse')
+                {
+                    //  draftResponse is a special parameter for multi-page forms and needs
+                    //  some special processing.  We need to remove the escapes on double quotes.
+
+                    $value = preg_replace('/\\\"/', '"', $value) ;
+
+                    if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
+                    $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                 }
                 else
                 {
@@ -1236,7 +1242,7 @@ jQuery(document).ready(function($) {
                 array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
-            if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
+            //if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
 
             //  Double check response from wp_remote_post()
 
