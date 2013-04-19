@@ -283,7 +283,6 @@ class wpGForms_List_Table extends WP_List_Table {
                 {
                     case 'delete':
                         $c++ ;
-                            WPGFORM_LOG_ENTRY_META_KEY, $meta_values[$form]->meta_value), true)) ;
                         delete_post_meta($meta_values[$form]->form,
                             WPGFORM_LOG_ENTRY_META_KEY, maybe_unserialize($meta_values[$form]->meta_value)) ;
                         break ;
@@ -501,7 +500,7 @@ function wpgform_render_list_page(){
  * @param $d array
  * @return stdObject
  */
-function wpGFomrArrayToObject($d)
+function wpGFormArrayToObject($d)
 {
     if (is_array($d)) {
         /*
