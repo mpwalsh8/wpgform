@@ -265,6 +265,8 @@ No known upgrade issues.
 * Migrated scraping of WordPress Plugin Repository content from wp_remote_get() and HTML parsing to use WordPress Plugin API eliminating potential problems with preg_match_all() which was prone to crashing on some installations.
 * Fixed jQuery syntax error in validation selector which caused CAPTCA jQuery not to run on some browsers (e.g. Chrome).
 * Added URL of page where form was submitted from to confirmation email.
+* Added support for logging form submissions as post meta data.
+* Fixed problems with multi-page Google forms introduced with re-design of Google Forms.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
