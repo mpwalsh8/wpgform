@@ -325,7 +325,7 @@ class wpGForms_List_Table extends WP_List_Table {
          * First, lets decide how many records per page to show
          */
         //$per_page = wpgform_get_user_settings_table_rows() ;
-        $per_page = 3 ;
+        $per_page = 10 ;
 
         if ($per_page === false) $per_page = 10 ;
 
@@ -347,6 +347,8 @@ class wpGForms_List_Table extends WP_List_Table {
             'total_items' => $totalitems[0]->count,
             'total_pages' => $totalpages,
             'per_page' => $per_page,
+            'post_type' => WPGFORM_CPT_FORM,
+            'page' => 'wpgform-entry-log-page'
         ) );
         //The pagination links are automatically built according to those parameters
  
