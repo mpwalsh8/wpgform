@@ -25,6 +25,7 @@ define('WPGFORM_CONFIRM_AJAX', 'ajax') ;
 define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
 define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
 define('WPGFORM_CONFIRM_NONE', 'none') ;
+define('WPGFORM_LOG_ENTRY_META_KEY', '_wpgform_log_entry') ;
 
 // i18n plugin domain
 define( 'WPGFORM_I18N_DOMAIN', 'wpgform' );
@@ -170,7 +171,23 @@ function wpgform_admin_menu()
     add_action('admin_footer-'.$wpgform_options_page, 'wpgform_options_admin_footer') ;
     add_action('admin_print_scripts-'.$wpgform_options_page, 'wpgform_options_print_scripts') ;
     add_action('admin_print_styles-'.$wpgform_options_page, 'wpgform_options_print_styles') ;
+
+    add_submenu_page(
+        'edit.php?post_type=wpgform',
+        'WordPress Google Form Submission Log', /*page title*/
+        'Form Submission Log', /*menu title*/
+        'manage_options', /*roles and capabiliyt needed*/
+        'wpgform-entry-log-page',
+        'wpgform_entry_log_page' /*replace with your own function*/
+    );
 }
+
+function wpgform_entry_log_page()
+{
+    require_once('wpgform-logging.php') ;
+}
+
+
 
 /**
  * wpgform_admin_init()
@@ -1086,6 +1103,32 @@ jQuery(document).ready(function($) {
         }
 
         $html = $onetime_html . $html ;
+
+        //  Log form submission?
+        if (self::$posted && is_null($action))
+        {
+            $log = array(
+                'url' => $_SERVER['URL']
+               ,'timestamp' => date('Y-m-d H:i:s')
+               ,'remote_addr' => $_SERVER['REMOTE_ADDR']
+               ,'remote_host' => $_SERVER['REMOTE_HOST']
+               ,'http_referer' => $_SERVER['HTTP_REFERER']
+               ,'http_user_agent' => $_SERVER['HTTP_USER_AGENT']
+               ,'form' => (array_key_exists('id', $o) ? $o['id'] : null)
+               ,'post_id' => get_the_ID()
+            ) ;
+               
+            //  Try and log against the Google Form post ID but
+            //  fall back to Post or Page ID if the old short code
+            //  is being used.
+ 
+            if (!is_null($log['form']))
+                add_post_meta($log['form'], WPGFORM_LOG_ENTRY_META_KEY, $log, false) ;
+            //elseif (!is_null($log['post_id']))
+                //add_post_meta($log['post_id'], WPGFORM_LOG_ENTRY_META_KEY, $log, false) ;
+
+            //error_log(sprintf('Form submitted:  %s', print_r($log, true))) ;
+        }
 
         return $html ;
     }
