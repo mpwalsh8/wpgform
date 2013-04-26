@@ -103,6 +103,7 @@ function wpgform_get_default_plugin_options()
        ,'donation_message' => 0
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
        ,'http_api_timeout' => 5
+       ,'form_submission_log' => 0
        ,'browser_check' => 0
        ,'enable_debug' => 0
        ,'serialize_post_vars' => 0
@@ -639,7 +640,7 @@ class wpGForm
 
         if (!self::$posted)
         {
-            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'locale' => 'en_US')) ;
         }
 
         //  Retrieve the HTML from the URL
@@ -802,6 +803,13 @@ class wpGForm
  
         if (($wpgform_options['custom_css'] == 1) && !empty($wpgform_options['custom_css_styles']))
             $css = '<style>' . $wpgform_options['custom_css_styles'] . '</style>' ;
+        else
+            $css = '' ;
+
+        //  Output form specific custom CSS?
+ 
+        if (($wpgform_options['custom_css'] == 1) && !empty($o['form_css']))
+            $css = '<style>' . $o['form_css'] . '</style>' ;
         else
             $css = '' ;
 
