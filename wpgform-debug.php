@@ -83,6 +83,8 @@ function wpgform_debug()
         wpgform_preprint_r($_POST) ;
         wpgform_whereami(__FILE__, __LINE__, '$_GET') ;
         wpgform_preprint_r($_GET) ;
+        wpgform_whereami(__FILE__, __LINE__, 'locale') ;
+        wpgform_preprint_r(setlocale(LC_ALL,NULL)) ;
 
         if (array_key_exists('init', $wp_filter))
         {
@@ -106,21 +108,21 @@ function wpgform_show_debug_content()
     global $wpgform_debug_content ;
 ?>
 <style>
-h2.gform-debug {
+h2.wpgform-debug {
     text-align: center;
     background-color: #ffebe8;
     border: 2px solid #ff0000;
 }
 
-div.gform-debug {
+div.wpgform-debug {
     padding: 10px;
 }
 
-div.gform-debug h2 {
+div.wpgform-debug h2 {
     background-color: #f00;
 }
 
-div.gform-debug h3 {
+div.wpgform-debug h3 {
     padding: 10px;
     color: #fff;
     font-weight: bold;
@@ -128,7 +130,7 @@ div.gform-debug h3 {
     background-color: #024593;
 }
 
-div.gform-debug pre {
+div.wpgform-debug pre {
     color: #000;
     text-align: left;
     border: 1px solid #000000;
@@ -137,21 +139,21 @@ div.gform-debug pre {
 </style>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-        $("div.gform-debug").hide();
-        $("a.gform-debug-wrapper").show();
-        $("a.gform-debug-wrapper").text("Show wpGForm Debug Content");
+        $("div.wpgform-debug").hide();
+        $("a.wpgform-debug-wrapper").show();
+        $("a.wpgform-debug-wrapper").text("Show wpGForm Debug Content");
  
-    $("a.gform-debug-wrapper").click(function(){
-    $("div.gform-debug").slideToggle();
+    $("a.wpgform-debug-wrapper").click(function(){
+    $("div.wpgform-debug").slideToggle();
 
-    if ($("a.gform-debug-wrapper").text() == "Show wpGForm Debug Content")
-        $("a.gform-debug-wrapper").text("Hide wpGForm Debug Content");
+    if ($("a.wpgform-debug-wrapper").text() == "Show wpGForm Debug Content")
+        $("a.wpgform-debug-wrapper").text("Hide wpGForm Debug Content");
     else
-        $("a.gform-debug-wrapper").text("Show wpGForm Debug Content");
+        $("a.wpgform-debug-wrapper").text("Show wpGForm Debug Content");
     });
 });
 </script>
-<div class="gform-debug">
+<div class="wpgform-debug">
     <?php echo $wpgform_debug_content ; ?>
 </div>
 <?php
