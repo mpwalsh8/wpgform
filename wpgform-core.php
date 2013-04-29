@@ -115,6 +115,11 @@ function wpgform_get_default_plugin_options()
        ,'ssl_verify' => 0
        ,'http_request_timeout' => 0
        ,'http_request_timeout_value' => 30
+       ,'override_google_default_text' => 1
+       ,'required_text_override' => 'Required - override'
+       ,'submit_button_text_override' => 'Submit - override'
+       ,'back_button_text_override' => 'Back - override'
+       ,'continue_button_text_override' => 'Continue - override'
 	) ;
 
 	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
@@ -142,7 +147,7 @@ function wpgform_get_plugin_options()
     //  Since the array keys are used to build the form, we need for them
     //  to "exist" so if they don't, they are created and set to null.
 
-    $plugin_options = get_option('wpgform_options', $default_options) ;
+    $plugin_options = array_merge($default_options, get_option('wpgform_options', $default_options)) ;
 
     //  If the array key doesn't exist, it means it is a check box option
     //  that is not enabled so the array element(s) needs to be set to zero.
@@ -491,6 +496,8 @@ class wpGForm
      */
     function ConstructGoogleForm()
     {
+        $locale_cookie = new WP_HTTP_Cookie(array('name' => 'locale', 'value' => get_locale())) ;
+
         //  Property short cut
         $o = &self::$options ;
 
@@ -503,6 +510,9 @@ class wpGForm
 
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
+
+        $override_google_default_text = $wpgform_options['override_google_default_text'] === 1 ;
+        $override_google_default_text = true ;
 
         //  Some servers running ModSecurity issue 403 errors because something
         //  in the form's POST parameters has triggered a positive match on a rule.
@@ -640,7 +650,8 @@ class wpGForm
 
         if (!self::$posted)
         {
-            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'locale' => 'en_US')) ;
+            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'cookies' => array($locale_cookie))) ;
+            //self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
         }
 
         //  Retrieve the HTML from the URL
@@ -980,6 +991,19 @@ jQuery(document).ready(function($) {
         this.name = this.name + \'[]\';
     });
 ', $prefix) ;
+
+        //  Replace Google supplied text?
+        if ($override_google_default_text) $js .= sprintf('
+    //  Replace Google supplied text
+    $("div.%sss-required-asterisk").text("* %s");
+    $("div.%sss-form-container :input[name=\"back\"]").attr("value", "\u00ab %s");
+    $("div.%sss-form-container :input[name=\"continue\"]").attr("value", "%s \u00bb");
+    $("div.%sss-form-container :input[name=\"submit\"]").attr("value", "%s");'
+        , $prefix, $wpgform_options['required_text_override']
+        , $prefix, $wpgform_options['back_button_text_override']
+        , $prefix, $wpgform_options['continue_button_text_override']
+        , $prefix, $wpgform_options['submit_button_text_override']) ;
+
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= sprintf('
     //  Put form in read-only mode
