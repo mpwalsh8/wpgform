@@ -267,6 +267,8 @@ No known upgrade issues.
 * Added URL of page where form was submitted from to confirmation email.
 * Added support for logging form submissions as post meta data.
 * Fixed problems with multi-page Google forms introduced with re-design of Google Forms.
+* Added support for overriding the default Google Button and Required text.  This is useful when Google servers think the form should be rendered in a language that isn't the same as the rest of the form (e.g. Chinese).
+* Rearranged Options page to support new options.  Debug tab is now Advanced Options.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
