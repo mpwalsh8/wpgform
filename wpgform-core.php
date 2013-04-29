@@ -116,10 +116,10 @@ function wpgform_get_default_plugin_options()
        ,'http_request_timeout' => 0
        ,'http_request_timeout_value' => 30
        ,'override_google_default_text' => 0
-       ,'required_text_override' => 'Required - override'
-       ,'submit_button_text_override' => 'Submit - override'
-       ,'back_button_text_override' => 'Back - override'
-       ,'continue_button_text_override' => 'Continue - override'
+       ,'required_text_override' => __('Required', WPGFORM_I18N_DOMAIN)
+       ,'submit_button_text_override' => __('Submit', WPGFORM_I18N_DOMAIN)
+       ,'back_button_text_override' => __('Back', WPGFORM_I18N_DOMAIN)
+       ,'continue_button_text_override' => __('Continue', WPGFORM_I18N_DOMAIN)
 	) ;
 
 	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
@@ -810,18 +810,16 @@ class wpGForm
             base64_encode(serialize($o)) . "\" name=\"wpgform-options\"></form>", $html) ;
 
         //  Output custom CSS?
+
+        $css = '' ;
  
         if (($wpgform_options['custom_css'] == 1) && !empty($wpgform_options['custom_css_styles']))
-            $css = '<style>' . $wpgform_options['custom_css_styles'] . '</style>' ;
-        else
-            $css = '' ;
+            $css .= '<style>' . $wpgform_options['custom_css_styles'] . '</style>' ;
 
         //  Output form specific custom CSS?
  
         if (($wpgform_options['custom_css'] == 1) && !empty($o['form_css']))
-            $css = '<style>' . $o['form_css'] . '</style>' ;
-        else
-            $css = '' ;
+            $css .= '<style>' . $o['form_css'] . '</style>' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
         $patterns = array('/[\r\n]+/', '/ +/') ;
