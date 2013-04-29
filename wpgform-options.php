@@ -99,9 +99,9 @@ function wpgform_options_page()
     <div id="wpgform-tabs">
         <ul>
         <li><a href="#wpgform-tabs-1"><?php _e('Options', WPGFORM_I18N_DOMAIN);?></a></li>
-        <li><a href="#wpgform-tabs-2"><?php _e('FAQs', WPGFORM_I18N_DOMAIN);?></a></li>
-        <li><a href="#wpgform-tabs-3"><?php _e('Usage', WPGFORM_I18N_DOMAIN);?></a></li>
-        <li><a href="#wpgform-tabs-4"><?php _e('Debug', WPGFORM_I18N_DOMAIN);?></a></li>
+        <li><a href="#wpgform-tabs-2"><?php _e('Advanced Options', WPGFORM_I18N_DOMAIN);?></a></li>
+        <li><a href="#wpgform-tabs-3"><?php _e('FAQs', WPGFORM_I18N_DOMAIN);?></a></li>
+        <li><a href="#wpgform-tabs-4"><?php _e('Usage', WPGFORM_I18N_DOMAIN);?></a></li>
         <li><a href="#wpgform-tabs-5"><?php _e('About', WPGFORM_I18N_DOMAIN);?></a></li>
         </ul>
         <div id="wpgform-tabs-1">
@@ -112,6 +112,13 @@ function wpgform_options_page()
             </form>
         </div>
         <div id="wpgform-tabs-2">
+            <form method="post" action="options.php">
+                <?php settings_fields('wpgform_options') ; ?>
+                <?php wpgform_settings_advanced_options() ; ?>
+                <input type="submit" name="Submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+            </form>
+        </div>
+        <div id="wpgform-tabs-3">
 <?php
     //
     //  Instead of duplicating the FAQ and Other Notes content in the ReadMe.txt file,
@@ -141,7 +148,7 @@ function wpgform_options_page()
     }
 ?>
         </div>
-        <div id="wpgform-tabs-3">
+        <div id="wpgform-tabs-4">
 <?php
 
     if (is_wp_error($readme))
@@ -155,13 +162,6 @@ function wpgform_options_page()
         echo $readme->sections['other_notes'] ;
     }
 ?>
-        </div>
-        <div id="wpgform-tabs-4">
-            <form method="post" action="options.php">
-                <?php settings_fields('wpgform_options') ; ?>
-                <?php wpgform_settings_debug() ; ?>
-                <input type="submit" name="Submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-            </form>
         </div>
         <div id="wpgform-tabs-5">
         <h4><?php _e('About WordPress Google Form', WPGFORM_I18N_DOMAIN);?></h4>
@@ -302,6 +302,11 @@ function wpgform_settings_input()
         </tr>
     </table>
     <br /><br />
+    <input name="wpgform_options[override_google_text_translation]" type="hidden" id="wpgform_override_google_text_translation" value="<?php echo $wpgform_options['override_google_text_translation'] ; ?>" />
+    <input name="wpgform_options[required_text_override]" type="hidden" id="wpgform_required_text_override" value="<?php echo $wpgform_options['required_text_override'] ; ?>" />
+    <input name="wpgform_options[submit_button_text_override]" type="hidden" id="wpgform_submit_button_text_override" value="<?php echo $wpgform_options['submit_button_text_override'] ; ?>" />
+    <input name="wpgform_options[back_button_text_override]" type="hidden" id="wpgform_back_button_text_override" value="<?php echo $wpgform_options['back_button_text_override'] ; ?>" />
+    <input name="wpgform_options[continue_button_text_override]" type="hidden" id="wpgform_continue_button_text_override" value="<?php echo $wpgform_options['continue_button_text_override'] ; ?>" />
     <input name="wpgform_options[enable_debug]" type="hidden" id="wpgform_enable_debug" value="<?php echo $wpgform_options['enable_debug'] ; ?>" />
     <input name="wpgform_options[fsockopen_transport]" type="hidden" id="wpgform_fsockopen_transport" value="<?php echo $wpgform_options['fsockopen_transport'] ; ?>" />
     <input name="wpgform_options[streams_transport]" type="hidden" id="wpgform_streams_transport" value="<?php echo $wpgform_options['streams_transport'] ; ?>" />
@@ -314,17 +319,61 @@ function wpgform_settings_input()
 }
 
 /**
- * wpgform_settings_debug()
+ * wpgform_settings_advanced_options()
  *
  * Build the form content and populate with any current plugin settings.
  *
  * @return none
  */
-function wpgform_settings_debug()
+function wpgform_settings_advanced_options()
 {
     $wpgform_options = wpgform_get_plugin_options() ;
 ?>
     <table class="form-table">
+        <tr valign="top">
+            <th scope="row"><label><?php _e('Google Default Text', WPGFORM_I18N_DOMAIN);?></label></th>
+            <td>
+            <fieldset>
+            <label for="wpgform_override_google_default_text">
+            <input name="wpgform_options[override_google_default_text]" type="checkbox" id="wpgform_override_google_default_text" value="1" <?php checked('1', $wpgform_options['override_google_default_text']) ; ?> />
+            <?php _e('Override <i><b>Google Default Text</b></i>', WPGFORM_I18N_DOMAIN);?></label>
+            <br />
+            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+            <th><?php _e('Required', WPGFORM_I18N_DOMAIN);?></th>
+            <td>
+            <label for="wpgform_required_text_override">
+            <input name="wpgform_options[required_text_override]" type="text" id="wpgform_required_text_override" value="<?php echo $wpgform_options['required_text_override'] ; ?>" /><br />
+           <small><?php _e('This is text that indicates a field is required.', WPGFORM_I18N_DOMAIN);?></small></label>
+            </td>
+            </tr>
+            <tr>
+            <th><?php _e('Submit Button', WPGFORM_I18N_DOMAIN);?></th>
+            <td>
+            <label for="wpgform_submit_button_text_override">
+            <input name="wpgform_options[submit_button_text_override]" type="text" id="wpgform_submit_button_text_override" value="<?php echo $wpgform_options['submit_button_text_override'] ; ?>" /><br />
+           <small><?php _e('This is text used for the Submit button.', WPGFORM_I18N_DOMAIN);?></small></label>
+            </td>
+            </tr>
+            <tr>
+            <th><?php _e('Back Button', WPGFORM_I18N_DOMAIN);?></th>
+            <td>
+            <label for="wpgform_back_button_text_override">
+            <input name="wpgform_options[back_button_text_override]" type="text" id="wpgform_back_button_text_override" value="<?php echo $wpgform_options['back_button_text_override'] ; ?>" /><br />
+           <small><?php _e('This is text used for the Back button.', WPGFORM_I18N_DOMAIN);?></small></label>
+            </td>
+            </tr>
+            <tr>
+            <th><?php _e('Continue Button', WPGFORM_I18N_DOMAIN);?></th>
+            <td>
+            <label for="wpgform_continue_button_text_override">
+            <input name="wpgform_options[continue_button_text_override]" type="text" id="wpgform_continue_button_text_override" value="<?php echo $wpgform_options['continue_button_text_override'] ; ?>" /><br />
+           <small><?php _e('This is text used for the Continue button.', WPGFORM_I18N_DOMAIN);?></small></label>
+            </td>
+            </tr>
+            </table>
+            </fieldset></td>
+        </tr>
         <tr valign="top">
         <th scope="row"><label><?php _e('Enable Debug', WPGFORM_I18N_DOMAIN);?></label></th>
             <td><fieldset>
