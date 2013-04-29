@@ -115,7 +115,7 @@ function wpgform_get_default_plugin_options()
        ,'ssl_verify' => 0
        ,'http_request_timeout' => 0
        ,'http_request_timeout_value' => 30
-       ,'override_google_default_text' => 1
+       ,'override_google_default_text' => 0
        ,'required_text_override' => 'Required - override'
        ,'submit_button_text_override' => 'Submit - override'
        ,'back_button_text_override' => 'Back - override'
@@ -511,8 +511,7 @@ class wpGForm
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
 
-        $override_google_default_text = $wpgform_options['override_google_default_text'] === 1 ;
-        $override_google_default_text = true ;
+        $override_google_default_text = (int)$wpgform_options['override_google_default_text'] === 1 ;
 
         //  Some servers running ModSecurity issue 403 errors because something
         //  in the form's POST parameters has triggered a positive match on a rule.
