@@ -84,6 +84,7 @@ function wpgform_debug()
         wpgform_whereami(__FILE__, __LINE__, '$_GET') ;
         wpgform_preprint_r($_GET) ;
         wpgform_whereami(__FILE__, __LINE__, 'locale') ;
+        wpgform_preprint_r(get_locale()) ;
         wpgform_preprint_r(setlocale(LC_ALL,NULL)) ;
 
         if (array_key_exists('init', $wp_filter))
