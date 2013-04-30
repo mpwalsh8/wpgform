@@ -107,3 +107,15 @@ textarea.ss-q-long {
     font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
 tr.ss-gridrow {}
+
+/**
+ * New Google Forms CSS 2013-04-30
+ */
+
+div.ss-form-container div.disclaimer {
+    display: none;
+}
+
+div.ss-secondary-text {
+    display: none;
+}
