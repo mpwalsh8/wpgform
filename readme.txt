@@ -137,7 +137,7 @@ There are two ways to customize the Google Form CSS.
 
 = Default Google Form CSS =
 
-As of 2012-14-15, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
+As of 2012-12-15, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
 
 `
 label.gform-error,
@@ -269,6 +269,8 @@ No known upgrade issues.
 * Fixed problems with multi-page Google forms introduced with re-design of Google Forms.
 * Added support for overriding the default Google Button and Required text.  This is useful when Google servers think the form should be rendered in a language that isn't the same as the rest of the form (e.g. Chinese).
 * Rearranged Options page to support new options.  Debug tab is now Advanced Options.
+* Fixed CAPCHA bug when validation wasn't specifically enabled.  CAPTCHA requires validation.
+* Added default CSS to suppress new Google Forms footer disclaimer.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
