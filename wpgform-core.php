@@ -596,6 +596,9 @@ class wpGForm
             $captcha_html .= '</div></div></div>' ;
         }
 
+        //  Use jQuery validation?  Force it on when CAPTCHA is on
+        $validation = $o['validation'] === 'on' | $captcha ;
+
         //  Output the H1 title included in the Google Form?
         $title = $o['title'] === 'on' ;
 
@@ -604,9 +607,6 @@ class wpGForm
 
         //  Insert <br> elements between labels and input boxes?
         $br = $o['br'] === 'on' ;
-
-        //  Use jQuery validation?
-        $validation = $o['validation'] === 'on' ;
 
         //  Google Legal Stuff?
         $legal = $o['legal'] !== 'off' ;
@@ -913,19 +913,6 @@ jQuery(document).ready(function($) {
         $.validator.addClassRules("wpgform-captcha", {
             required: true
         });
-        /*
-        $("#ss-form").validate({
-            errorClass: "wpgform-error",
-			rules: {
-				"wpgform-captcha": {
-					equal: %s
-				}
-			},
-			messages: {
-				"wpgform-captcha": "Incorrect answer."
-			}
-		});
-        */
     }
 ', $captcha_html, self::$wpgform_captcha['c']) ;
             $vRules_js[] = sprintf('
