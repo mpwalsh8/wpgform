@@ -271,6 +271,8 @@ No known upgrade issues.
 * Rearranged Options page to support new options.  Debug tab is now Advanced Options.
 * Fixed CAPCHA bug when validation wasn't specifically enabled.  CAPTCHA requires validation.
 * Added default CSS to suppress new Google Forms footer disclaimer.
+* Added more overrides for Google Default text (Hints for Radio Buttons and Check Boxes, the Other option for Radio Buttons).
+* Fixed a bug which lost current state of Override Settings which disabled overrides.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
