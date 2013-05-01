@@ -120,6 +120,9 @@ function wpgform_get_default_plugin_options()
        ,'submit_button_text_override' => __('Submit', WPGFORM_I18N_DOMAIN)
        ,'back_button_text_override' => __('Back', WPGFORM_I18N_DOMAIN)
        ,'continue_button_text_override' => __('Continue', WPGFORM_I18N_DOMAIN)
+       ,'radio_buttons_text_override' => __('Mark only one oval.', WPGFORM_I18N_DOMAIN)
+       ,'radio_buttons_other_text_override' => __('Other:', WPGFORM_I18N_DOMAIN)
+       ,'check_boxes_text_override' => __('Check all that apply.', WPGFORM_I18N_DOMAIN)
 	) ;
 
 	return apply_filters('wpgform_default_plugin_options', $default_plugin_options) ;
@@ -978,12 +981,20 @@ jQuery(document).ready(function($) {
 
         //  Replace Google supplied text?
         if ($override_google_default_text) $js .= sprintf('
-    //  Replace Google supplied text
+    //  Replace Google supplied text with "override" values
     $("div.%sss-required-asterisk").text("* %s");
+    $("div.%sss-radio div.%sss-printable-hint").text("%s");
+    $("div.%sss-radio label:last+span.%sss-q-other-container").prev().contents().filter(function() {
+        return this.nodeType == Node.TEXT_NODE;
+    })[0].nodeValue = "%s";
+    $("div.%sss-checkbox div.%sss-printable-hint").text("%s");
     $("div.%sss-form-container :input[name=\"back\"]").attr("value", "\u00ab %s");
     $("div.%sss-form-container :input[name=\"continue\"]").attr("value", "%s \u00bb");
     $("div.%sss-form-container :input[name=\"submit\"]").attr("value", "%s");'
         , $prefix, $wpgform_options['required_text_override']
+        , $prefix, $prefix, $wpgform_options['radio_buttons_text_override']
+        , $prefix, $prefix, $wpgform_options['radio_buttons_other_text_override']
+        , $prefix, $prefix, $wpgform_options['check_boxes_text_override']
         , $prefix, $wpgform_options['back_button_text_override']
         , $prefix, $wpgform_options['continue_button_text_override']
         , $prefix, $wpgform_options['submit_button_text_override']) ;
