@@ -119,3 +119,7 @@ div.ss-form-container div.disclaimer {
 div.ss-secondary-text {
     display: none;
 }
+
+div.password-warning {
+    display: none;
+}
