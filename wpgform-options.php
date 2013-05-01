@@ -302,11 +302,14 @@ function wpgform_settings_input()
         </tr>
     </table>
     <br /><br />
-    <input name="wpgform_options[override_google_text_translation]" type="hidden" id="wpgform_override_google_text_translation" value="<?php echo $wpgform_options['override_google_text_translation'] ; ?>" />
+    <input name="wpgform_options[override_google_default_text]" type="hidden" id="wpgform_override_google_default_text" value="<?php echo $wpgform_options['override_google_default_text'] ; ?>" />
     <input name="wpgform_options[required_text_override]" type="hidden" id="wpgform_required_text_override" value="<?php echo $wpgform_options['required_text_override'] ; ?>" />
     <input name="wpgform_options[submit_button_text_override]" type="hidden" id="wpgform_submit_button_text_override" value="<?php echo $wpgform_options['submit_button_text_override'] ; ?>" />
     <input name="wpgform_options[back_button_text_override]" type="hidden" id="wpgform_back_button_text_override" value="<?php echo $wpgform_options['back_button_text_override'] ; ?>" />
     <input name="wpgform_options[continue_button_text_override]" type="hidden" id="wpgform_continue_button_text_override" value="<?php echo $wpgform_options['continue_button_text_override'] ; ?>" />
+    <input name="wpgform_options[radio_buttons_text_override]" type="hidden" id="wpgform_radio_buttons_text_override" value="<?php echo $wpgform_options['radio_buttons_text_override'] ; ?>" />
+    <input name="wpgform_options[radio_buttons_other_text_override]" type="hidden" id="wpgform_radio_buttons_other_text_override" value="<?php echo $wpgform_options['radio_buttons_other_text_override'] ; ?>" />
+    <input name="wpgform_options[check_boxes_text_override]" type="hidden" id="wpgform_check_boxes_text_override" value="<?php echo $wpgform_options['check_boxes_text_override'] ; ?>" />
     <input name="wpgform_options[enable_debug]" type="hidden" id="wpgform_enable_debug" value="<?php echo $wpgform_options['enable_debug'] ; ?>" />
     <input name="wpgform_options[fsockopen_transport]" type="hidden" id="wpgform_fsockopen_transport" value="<?php echo $wpgform_options['fsockopen_transport'] ; ?>" />
     <input name="wpgform_options[streams_transport]" type="hidden" id="wpgform_streams_transport" value="<?php echo $wpgform_options['streams_transport'] ; ?>" />
@@ -369,6 +372,30 @@ function wpgform_settings_advanced_options()
             <label for="wpgform_continue_button_text_override">
             <input name="wpgform_options[continue_button_text_override]" type="text" id="wpgform_continue_button_text_override" value="<?php echo $wpgform_options['continue_button_text_override'] ; ?>" /><br />
            <small><?php _e('This is text used for the Continue button.', WPGFORM_I18N_DOMAIN);?></small></label>
+            </td>
+            </tr>
+            <tr>
+            <th><?php _e('Radio Buttons', WPGFORM_I18N_DOMAIN);?></th>
+            <td>
+            <label for="wpgform_radio_buttons_text_override">
+            <input name="wpgform_options[radio_buttons_text_override]" type="text" id="wpgform_radio_buttons_text_override" value="<?php echo $wpgform_options['radio_buttons_text_override'] ; ?>" /><br />
+           <small><?php _e('This is text used for the Radio Buttons hint.', WPGFORM_I18N_DOMAIN);?></small></label>
+            </td>
+            </tr>
+            <tr>
+            <th><?php _e('Radio Buttons - Other', WPGFORM_I18N_DOMAIN);?></th>
+            <td>
+            <label for="wpgform_radio_buttons_other_text_override">
+            <input name="wpgform_options[radio_buttons_other_text_override]" type="text" id="wpgform_radio_buttons_other_text_override" value="<?php echo $wpgform_options['radio_buttons_other_text_override'] ; ?>" /><br />
+           <small><?php _e('This is text used for the Radio Buttons Other option.', WPGFORM_I18N_DOMAIN);?></small></label>
+            </td>
+            </tr>
+            <tr>
+            <th><?php _e('Check Boxes', WPGFORM_I18N_DOMAIN);?></th>
+            <td>
+            <label for="wpgform_check_boxes_text_override">
+            <input name="wpgform_options[check_boxes_text_override]" type="text" id="wpgform_check_boxes_text_override" value="<?php echo $wpgform_options['check_boxes_text_override'] ; ?>" /><br />
+           <small><?php _e('This is text used for the Check Boxes hint.', WPGFORM_I18N_DOMAIN);?></small></label>
             </td>
             </tr>
             </table>
