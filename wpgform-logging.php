@@ -302,6 +302,20 @@ class wpGForms_List_Table extends WP_List_Table {
             'action', 'action2', 'form', '_wp_http_referer', '_wp_nonce' ), $_SERVER['REQUEST_URI'] );
     }
     
+    
+    /**
+     * Overload of parent class in order to make the pagination work with the Custom Post Type
+     *
+     */
+    function pagination($which) {
+        $_SERVER['REQUEST_URI'] = add_query_arg(array(
+            'post_type' => WPGFORM_CPT_FORM
+           ,'page' => 'wpgform-entry-log-page'
+        ), $_SERVER['REQUEST_URI']) ;
+
+        parent::pagination($which) ;
+    }
+
     /** ************************************************************************
      * REQUIRED! This is where you prepare your data for display. This method will
      * usually be used to query the database, sort and filter the data, and generally
@@ -316,7 +330,6 @@ class wpGForms_List_Table extends WP_List_Table {
      * @uses $this->get_pagenum()
      * @uses $this->set_pagination_args()
      **************************************************************************/
-
     function prepare_items() {
         global $wpdb, $_wp_column_headers;
         $screen = get_current_screen() ;
