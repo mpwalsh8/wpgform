@@ -81,6 +81,7 @@ function wpgform_options_page()
 {
 ?>
 <div class="wrap">
+
 <?php
     if (function_exists('screen_icon')) screen_icon() ;
 ?>
@@ -165,9 +166,28 @@ function wpgform_options_page()
         </div>
         <div id="wpgform-tabs-5">
         <h4><?php _e('About WordPress Google Form', WPGFORM_I18N_DOMAIN);?></h4>
+<div style="margin-left: 25px; text-align: center; float: right;" class="postbox">
+<h3 class="hndle"><span><?php _e('Make a Donation', MAILUSERS_I18N_DOMAIN);?></span></h3>
+<div class="inside">
+<div style="text-align: center; font-size: 0.75em;padding:0px 5px;margin:0px auto;"><!-- PayPal box wrapper -->
+<div><!-- PayPal box-->
+	<p style="margin: 0.25em 0"><b>WordPress Goolge Forms <?php echo WPGFORM_VERSION; ?></b></p>
+	<p style="margin: 0.25em 0"><a href="http://wordpress.org/extend/plugins/wpgform/" target="_blank"><?php _e('Plugin\'s Home Page', MAILUSERS_I18N_DOMAIN); ?></a></p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="DK4MS3AA983CC">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+</div><!-- PayPal box -->
+</div>
+</div><!-- inside -->
+</div><!-- postbox -->
+<div>
+
         <p><?php _e('An easy to implement integration of a Google Form with WordPress. This plugin allows you to leverage the power of Google Docs Spreadsheets and Forms to collect data while retaining the look and feel of your WordPress based web site.  The forms can optionally be styled to better integrate with your WordPress theme.', WPGFORM_I18N_DOMAIN);?></p>
-        <p>WordPress Google Form is based on the <a href="http://codex.wordpress.org/HTTP_API"><b>WordPress HTTP API</b></a> and in particular, the <a href="http://codex.wordpress.org/Function_API/wp_remote_get"><b>wp_remote_get()</b></a> and <a href="http://codex.wordpress.org/Function_API/wp_remote_post"><b>wp_remote_post()</b></a> functions for retrieving and posting the form.  WordPress Google Form also makes use of the <a href="http://codex.wordpress.org/Function_Reference/wp_kses"><b>wp_kses()</b></a> function for processing the HTML retrieved from Google and extracting the relevant parts of the form.</p><p>If you find this plugin useful, please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC" target="_blank">making small donation towards this plugin</a> to help keep it up to date.</p>
-        <p><?php printf('WordPress Google Form is based on the <a href="%s"><b>WordPress HTTP API</b></a> and in particular, the <a href="%s"><b>wp_remote_get()</b></a> and <a href="http://codex.wordpress.org/Function_API/wp_remote_post"><b>wp_remote_post()</b></a> functions for retrieving and posting the form.  WordPress Google Form also makes use of the <a href="%s"><b>wp_kses()</b></a> function for processing the HTML retrieved from Google and extracting the relevant parts of the form.</p><p>If you find this plugin useful, please consider <a href="%s" target="_blank">making small donation towards this plugin</a> to help keep it up to date.</p>', 'http://codex.wordpress.org/HTTP_API', 'http://codex.wordpress.org/Function_API/wp_remote_get', 'http://codex.wordpress.org/Function_Reference/wp_kses', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC');?>
+        <p><?php _e('WordPress Google Form is based on the <a href="%s"><b>WordPress HTTP API</b></a> and in particular, the <a href="%s"><b>wp_remote_get()</b></a> and <a href="http://codex.wordpress.org/Function_API/wp_remote_post"><b>wp_remote_post()</b></a> functions for retrieving and posting the form.  WordPress Google Form also makes use of the <a href="%s"><b>wp_kses()</b></a> function for processing the HTML retrieved from Google and extracting the relevant parts of the form.</p><p>If you find this plugin useful, please consider <a href="%s" target="_blank">making small donation towards this plugin</a> to help keep it up to date.</p>', 'http://codex.wordpress.org/HTTP_API', 'http://codex.wordpress.org/Function_API/wp_remote_get', 'http://codex.wordpress.org/Function_Reference/wp_kses', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC', WPGFORM_I18N_DOMAIN);?>
+</div>
         </div>
     </div>
 </div>
@@ -218,11 +238,33 @@ function wpgform_settings_input()
             </td>
         </tr>
         <tr valign="top">
+            <th scope="row"><label><?php _e('CAPTCHA Options', WPGFORM_I18N_DOMAIN);?></label></th>
+            <td><fieldset>
+            <label for="wpgform_captcha_terms">
+            <input name="wpgform_options[captcha_terms]" type="radio" id="wpgform_captcha_terms" value="2" <?php checked(2, $wpgform_options['captcha_terms']) ; ?> />
+            <?php _e('Use two (2) terms for CAPTCHA:  e.g. A + B = C (when enabled).', WPGFORM_I18N_DOMAIN);?></label>
+            <br/>
+            <input name="wpgform_options[captcha_terms]" type="radio" id="wpgform_captcha_terms" value="3" <?php checked(3, $wpgform_options['captcha_terms']) ; ?> />
+            <?php _e('Use three  (3) terms for CAPTCHA:  e.g. A + B - C = D (when enabled).', WPGFORM_I18N_DOMAIN);?></label>
+            <br />
+            <label for="wpgform_captcha_operator_plus">
+            <input name="wpgform_options[captcha_operator_plus]" type="checkbox" id="wpgform_captcha_operator_plus" value="1" <?php checked('1', $wpgform_options['captcha_operator_plus']) ; ?> />
+            <?php _e('Addition:  +', WPGFORM_I18N_DOMAIN);?><br /></label>
+            <label for="wpgform_captcha_operator_minus">
+            <input name="wpgform_options[captcha_operator_minus]" type="checkbox" id="wpgform_captcha_operator_minus" value="1" <?php checked('1', $wpgform_options['captcha_operator_minus']) ; ?> />
+            <?php _e('Subtraction:  -', WPGFORM_I18N_DOMAIN);?><br /></label>
+            <label for="wpgform_captcha_operator_mult">
+            <input name="wpgform_options[captcha_operator_mult]" type="checkbox" id="wpgform_captcha_operator_mult" value="1" <?php checked('1', $wpgform_options['captcha_operator_mult']) ; ?> />
+            <?php _e('Multiplication:  *', WPGFORM_I18N_DOMAIN);?><br /></label>
+            <small><?php _e('Choose which operators can be used for CAPTCHA validation (when enabled)', WPGFORM_I18N_DOMAIN);?></small>
+            </fieldset></td>
+        </tr>
+        <tr valign="top">
             <th scope="row"><label><?php _e('Confirmation Email Format', WPGFORM_I18N_DOMAIN);?></label></th>
             <td><fieldset>
             <label for="wpgform_email_format">
             <input name="wpgform_options[email_format]" type="radio" id="wpgform_email_format" value="<?php echo WPGFORM_EMAIL_FORMAT_HTML ;?>" <?php checked(WPGFORM_EMAIL_FORMAT_HTML, $wpgform_options['email_format']) ; ?> />
-            Send confirmation email (when used) in HTML format.</label>
+            <?php _e('Send confirmation email (when used) in HTML format.', WPGFORM_I18N_DOMAIN);?></label>
             <br/>
             <input name="wpgform_options[email_format]" type="radio" id="wpgform_email_format" value="<?php echo WPGFORM_EMAIL_FORMAT_PLAIN ;?>" <?php checked(WPGFORM_EMAIL_FORMAT_PLAIN, $wpgform_options['email_format']) ; ?> />
             <?php _e('Send confirmation email (when used) in Plain Text format.', WPGFORM_I18N_DOMAIN);?></label>
@@ -230,57 +272,6 @@ function wpgform_settings_input()
             <label for="bcc_blog_admin">
             <input name="wpgform_options[bcc_blog_admin]" type="checkbox" id="wpgform_bcc_blog_admin" value="1" <?php checked('1', $wpgform_options['bcc_blog_admin']) ; ?> />
             <?php _e('Bcc Blog Admin on Confirmation Email (when used)', WPGFORM_I18N_DOMAIN);?></label>
-            </fieldset></td>
-        </tr>
-        <tr valign="top">
-            <th scope="row"><label><?php _e('HTTP API Timeout', WPGFORM_I18N_DOMAIN);?></label></th>
-            <td><fieldset>
-            <label for="wpgform_http_api_timeout">
-            <select style="width: 150px;" name="wpgform_options[http_api_timeout]" id="wpgform_http_api_timeout">
-            <option value="5" <?php selected($wpgform_options['http_api_timeout'], 5); ?>>5 Seconds</option>
-            <option value="10" <?php selected($wpgform_options['http_api_timeout'], 10); ?>>10 Seconds</option>
-            <option value="15" <?php selected($wpgform_options['http_api_timeout'], 15); ?>>15 Seconds</option>
-            <option value="25" <?php selected($wpgform_options['http_api_timeout'], 25); ?>>25 Seconds</option>
-            <option value="30" <?php selected($wpgform_options['http_api_timeout'], 30); ?>>30 Seconds</option>
-            <option value="45" <?php selected($wpgform_options['http_api_timeout'], 45); ?>>45 Seconds</option>
-            <option value="60" <?php selected($wpgform_options['http_api_timeout'], 60); ?>>60 Seconds</option>
-            </select>
-            <br />
-            <small><?php _e('Change the default HTTP API Timeout setting (default is 5 seconds).', WPGFORM_I18N_DOMAIN);?></small></label>
-            </fieldset></td>
-        </tr>
-        <tr valign="top">
-            <th scope="row"><label><?php _e('Enable Form Submission Logging', WPGFORM_I18N_DOMAIN);?></label></th>
-            <td><fieldset>
-            <label for="wpgform_form_submission_log">
-            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
-            <tr>
-            <td style="padding: 5px 0px; vertical-align: top;">
-            <input name="wpgform_options[form_submission_log]" type="checkbox" id="wpgform_form_submission_log" value="1" <?php checked('1', $wpgform_options['form_submission_log']) ; ?> />
-            </td>
-            <td style="padding: 5px;">
-            <?php _e('Log WordPress Google Form Submissions?<br/><small>Form submissions can be logged which will track a number of client related metrics upon form submission.</small>', WPGFORM_I18N_DOMAIN);?>
-            </td>
-            </tr>
-            </table>
-            </label>
-            </fieldset></td>
-        </tr>
-        <tr valign="top">
-            <th scope="row"><label><?php _e('Browser Check', WPGFORM_I18N_DOMAIN);?></label></th>
-            <td><fieldset>
-            <label for="wpgform_browser_check">
-            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
-            <tr>
-            <td style="padding: 5px 0px; vertical-align: top;">
-            <input name="wpgform_options[browser_check]" type="checkbox" id="wpgform_browser_check" value="1" <?php checked('1', $wpgform_options['browser_check']) ; ?> />
-            </td>
-            <td style="padding: 5px;">
-            <?php _e('Check browser compatibility?<br/><small>The WordPress Google Form plugin may not work as expected with older browser versions (e.g. IE6, IE7, etc.).</small>', WPGFORM_I18N_DOMAIN);?>
-            </td>
-            </tr>
-            </table>
-            </label>
             </fieldset></td>
         </tr>
         <tr valign="top">
@@ -318,6 +309,8 @@ function wpgform_settings_input()
     <input name="wpgform_options[local_ssl_verify]" type="hidden" id="wpgform_local_ssl_verify" value="<?php echo $wpgform_options['local_ssl_verify'] ; ?>" />
     <input name="wpgform_options[http_request_timeout]" type="hidden" id="wpgform_http_request_timeout" value="<?php echo $wpgform_options['http_request_timeout'] ; ?>" />
     <input name="wpgform_options[http_request_timeout_value]" type="hidden" id="wpgform_http_request_timeout_value" value="<?php echo $wpgform_options['http_request_timeout_value'] ; ?>" />
+    <input name="wpgform_options[browser_check]" type="hidden" id="wpgform_browser_check" value="<?php echo $wpgform_options['browser_check'] ; ?>" />
+    <input name="wpgform_options[submission_log]" type="hidden" id="wpgform_submission_log" value="<?php echo $wpgform_options['submission_log'] ; ?>" />
 <?php
 }
 
@@ -333,6 +326,23 @@ function wpgform_settings_advanced_options()
     $wpgform_options = wpgform_get_plugin_options() ;
 ?>
     <table class="form-table">
+        <tr valign="top">
+            <th scope="row"><label><?php _e('Enable Form Submission Logging', WPGFORM_I18N_DOMAIN);?></label></th>
+            <td><fieldset>
+            <label for="wpgform_form_submission_log">
+            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+            <td style="padding: 5px 0px; vertical-align: top;">
+            <input name="wpgform_options[form_submission_log]" type="checkbox" id="wpgform_form_submission_log" value="1" <?php checked('1', $wpgform_options['form_submission_log']) ; ?> />
+            </td>
+            <td style="padding: 5px;">
+            <?php _e('Log WordPress Google Form Submissions?<br/><small>Form submissions can be logged which will track a number of client related metrics upon form submission.</small>', WPGFORM_I18N_DOMAIN);?>
+            </td>
+            </tr>
+            </table>
+            </label>
+            </fieldset></td>
+        </tr>
         <tr valign="top">
             <th scope="row"><label><?php _e('Google Default Text', WPGFORM_I18N_DOMAIN);?></label></th>
             <td>
@@ -402,6 +412,40 @@ function wpgform_settings_advanced_options()
             </fieldset></td>
         </tr>
         <tr valign="top">
+            <th scope="row"><label><?php _e('HTTP API Timeout', WPGFORM_I18N_DOMAIN);?></label></th>
+            <td><fieldset>
+            <label for="wpgform_http_api_timeout">
+            <select style="width: 150px;" name="wpgform_options[http_api_timeout]" id="wpgform_http_api_timeout">
+            <option value="5" <?php selected($wpgform_options['http_api_timeout'], 5); ?>>5 Seconds</option>
+            <option value="10" <?php selected($wpgform_options['http_api_timeout'], 10); ?>>10 Seconds</option>
+            <option value="15" <?php selected($wpgform_options['http_api_timeout'], 15); ?>>15 Seconds</option>
+            <option value="25" <?php selected($wpgform_options['http_api_timeout'], 25); ?>>25 Seconds</option>
+            <option value="30" <?php selected($wpgform_options['http_api_timeout'], 30); ?>>30 Seconds</option>
+            <option value="45" <?php selected($wpgform_options['http_api_timeout'], 45); ?>>45 Seconds</option>
+            <option value="60" <?php selected($wpgform_options['http_api_timeout'], 60); ?>>60 Seconds</option>
+            </select>
+            <br />
+            <small><?php _e('Change the default HTTP API Timeout setting (default is 5 seconds).', WPGFORM_I18N_DOMAIN);?></small></label>
+            </fieldset></td>
+        </tr>
+        <tr valign="top">
+            <th scope="row"><label><?php _e('Browser Check', WPGFORM_I18N_DOMAIN);?></label></th>
+            <td><fieldset>
+            <label for="wpgform_browser_check">
+            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+            <td style="padding: 5px 0px; vertical-align: top;">
+            <input name="wpgform_options[browser_check]" type="checkbox" id="wpgform_browser_check" value="1" <?php checked('1', $wpgform_options['browser_check']) ; ?> />
+            </td>
+            <td style="padding: 5px;">
+            <?php _e('Check browser compatibility?<br/><small>The WordPress Google Form plugin may not work as expected with older browser versions (e.g. IE6, IE7, etc.).</small>', WPGFORM_I18N_DOMAIN);?>
+            </td>
+            </tr>
+            </table>
+            </label>
+            </fieldset></td>
+        </tr>
+        <tr valign="top">
         <th scope="row"><label><?php _e('Enable Debug', WPGFORM_I18N_DOMAIN);?></label></th>
             <td><fieldset>
             <label for="wpgform_enable_debug">
@@ -462,8 +506,11 @@ function wpgform_settings_advanced_options()
     <input name="wpgform_options[custom_css]" type="hidden" id="wpgform_custom_css" value="<?php echo $wpgform_options['custom_css'] ; ?>" />
     <input name="wpgform_options[custom_css_styles]" type="hidden" id="wpgform_custom_css_styles" value="<?php echo $wpgform_options['custom_css_styles'] ; ?>" />
     <input name="wpgform_options[donation_message]" type="hidden" id="wpgform_donation_message" value="<?php echo $wpgform_options['donation_message'] ; ?>" />
+    <input name="wpgform_options[captcha_terms]" type="hidden" id="wpgform_captcha_terms" value="<?php echo $wpgform_options['captcha_terms'] ; ?>" />
+    <input name="wpgform_options[captcha_operator_plus]" type="hidden" id="wpgform_captcha_operator_plus" value="<?php echo $wpgform_options['captcha_operator_plus'] ; ?>" />
+    <input name="wpgform_options[captcha_operator_minus]" type="hidden" id="wpgform_captcha_operator_minus" value="<?php echo $wpgform_options['captcha_operator_minus'] ; ?>" />
+    <input name="wpgform_options[captcha_operator_mult]" type="hidden" id="wpgform_captcha_operator_mult" value="<?php echo $wpgform_options['captcha_operator_mult'] ; ?>" />
     <input name="wpgform_options[email_format]" type="hidden" id="wpgform_email_format" value="<?php echo $wpgform_options['email_format'] ; ?>" />
-    <input name="wpgform_options[browser_check]" type="hidden" id="wpgform_browser_check" value="<?php echo $wpgform_options['browser_check'] ; ?>" />
     <input name="wpgform_options[serialize_post_vars]" type="hidden" id="wpgform_serialize_post_vars" value="<?php echo $wpgform_options['serialize_post_vars'] ; ?>" />
     <input name="wpgform_options[bcc_blog_admin]" type="hidden" id="wpgform_bcc_blog_admin" value="<?php echo $wpgform_options['bcc_blog_admin'] ; ?>" />
 <?php
