@@ -273,6 +273,10 @@ No known upgrade issues.
 * Added default CSS to suppress new Google Forms footer disclaimer.
 * Added more overrides for Google Default text (Hints for Radio Buttons and Check Boxes, the Other option for Radio Buttons).
 * Fixed a bug which lost current state of Override Settings which disabled overrides.
+* Added support for CAPTCHA operators (+, -, *)
+* Added support for three (3) CAPTCHA terms
+* Fixed Pagination bug when viewing the form submission log.
+* Re-arranged Options tabs so most common options are the Options tab, less common on the Advanced tab.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
