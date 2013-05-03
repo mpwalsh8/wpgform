@@ -101,6 +101,10 @@ function wpgform_get_default_plugin_options()
        ,'custom_css' => 0
        ,'custom_css_styles' => ''
        ,'donation_message' => 0
+       ,'captcha_terms' => 2
+       ,'captcha_operator_plus' => 1
+       ,'captcha_operator_minus' => 0
+       ,'captcha_operator_mult' => 0
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
        ,'http_api_timeout' => 5
        ,'form_submission_log' => 0
@@ -150,7 +154,8 @@ function wpgform_get_plugin_options()
     //  Since the array keys are used to build the form, we need for them
     //  to "exist" so if they don't, they are created and set to null.
 
-    $plugin_options = array_merge($default_options, get_option('wpgform_options', $default_options)) ;
+    //$plugin_options = array_merge($default_options, get_option('wpgform_options', $default_options)) ;
+    $plugin_options = wp_parse_args(get_option('wpgform_options', $default_options)) ;
 
     //  If the array key doesn't exist, it means it is a check box option
     //  that is not enabled so the array element(s) needs to be set to zero.
@@ -583,16 +588,41 @@ class wpGForm
 
         if ($captcha)
         {
-            $a = rand(0, 19) ;
-            $b = rand(5, 24) ;
-            $c = $a + $b ;
+            $captcha_operators = array() ;
 
-            self::$wpgform_captcha = array('a' => $a, 'b' => $b, 'c' => $c) ;
+            if ((int)$wpgform_options['captcha_operator_plus'] === 1) $captcha_operators[] = '+' ;
+            if ((int)$wpgform_options['captcha_operator_minus'] === 1) $captcha_operators[] = '-' ;
+            if ((int)$wpgform_options['captcha_operator_mult'] === 1) $captcha_operators[] = '*' ;
+
+            //  Default to addition if for some reason no operators are enabled
+            if (empty($captcha_operators)) $captcha_operators[] = '+' ;
+
+            //  Get random operator for A and B terms
+            $op1 = $captcha_operators[rand(0, count($captcha_operators) - 1)] ;
+            //  Get random operator for including C term when using 3 terms, use '+' otherwise
+            $op2 = ((int)$wpgform_options['captcha_terms'] === 3) ? $captcha_operators[rand(0, count($captcha_operators) - 1)] : '+';
+
+            //  Generate a random value for A
+            $a = rand(0, 19) ;
+            //  Generate a random value for B
+            $b = rand(0, 19) ;
+            //  Generate a random value for C only when using 3 terms, use 0 otherwise
+            $c = ((int)$wpgform_options['captcha_terms'] === 3) ? rand(0, 19) : 0 ;
+
+            if ((int)$wpgform_options['captcha_terms'] === 2)
+                $x = eval('return sprintf("%s%s%s", $a, $op1, $b);') ;
+            else
+                $x = eval('return sprintf("%s%s%s%s%s", $a, $op1, $b, $op2, $c);') ;
+
+            self::$wpgform_captcha = array('a' => $a, 'b' => $b, 'c' => $c, 'x' => $x) ;
 
             $captcha_html .= '<div class="wpgform-captcha">' ;
             $captcha_html .= sprintf('<div class="%sss-item %sss-item-required %sss-text">', $prefix, $prefix, $prefix) ;
             $captcha_html .= sprintf('<div class="%sss-form-entry">', $prefix) ;
-            $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">What is %s + %s ?', $prefix, $a, $b) ;
+            if ((int)$wpgform_options['captcha_terms'] === 2)
+                $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">What is %s %s %s ?', $prefix, $a, $op1, $b) ;
+            else
+                $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">What is %s %s %s %s %s?', $prefix, $a, $op1, $b, $op2, $c) ;
             $captcha_html .= sprintf('<span class="%sss-required-asterisk">*</span></label>', $prefix) ;
             $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-help"></label>', $prefix) ;
             $captcha_html .= sprintf('<input style="width: 100px;" type="text" id="wpgform-captcha" class="%sss-q-short" value="" name="wpgform-captcha">', $prefix) ;
@@ -922,7 +952,7 @@ jQuery(document).ready(function($) {
 				"wpgform-captcha": {
 					equal: %s
 				},
-', self::$wpgform_captcha['c']) ;
+', self::$wpgform_captcha['x']) ;
             $vMsgs_js[] = '
 				"wpgform-captcha": "Incorrect answer."
 ' ;
