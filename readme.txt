@@ -278,6 +278,7 @@ No known upgrade issues.
 * Fixed Pagination bug when viewing the form submission log.
 * Re-arranged Options tabs so most common options are the Options tab, less common on the Advanced tab.
 * Added support for rendering forms on public CPT URLs.
+* Fixed odd Javascript syntax error which is only an issue with IE7.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
