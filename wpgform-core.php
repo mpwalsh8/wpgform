@@ -925,19 +925,6 @@ jQuery(document).ready(function($) {
         $.validator.addClassRules("wpgform-user-email", {
             required: true
         });
-        /*
-        $("#ss-form").validate({
-            errorClass: "wpgform-error",
-			rules: {
-				"wpgform-user-email": {
-					email: true
-				}
-			},
-			messages: {
-				"wpgform-user-email": "A valid email address is required."
-			}
-		});
-        */
     }
 ', $user_email_html) ;
             $vRules_js[] = '
@@ -967,7 +954,7 @@ jQuery(document).ready(function($) {
             $vRules_js[] = sprintf('
 				"wpgform-captcha": {
 					equal: %s
-				},
+				}
 ', self::$wpgform_captcha['x']) ;
             $vMsgs_js[] = '
 				"wpgform-captcha": "Incorrect answer."
@@ -982,17 +969,6 @@ jQuery(document).ready(function($) {
     $("div > .%sss-item-required textarea").addClass("wpgform-required");
     $("div > .%sss-item-required input:not(.%sss-q-other)").addClass("wpgform-required");
     $.validator.addClassRules("wpgform-required", { required: true });
-    /*
-    $("#ss-form").validate({
-        errorClass: "wpgform-error",
-        rules: {
-            %s
-        },
-        messages: {
-            %s
-        }
-    }) ;
-     */
 ', $prefix, $prefix, $prefix, '', '') ;
 
         //  Now the tricky part - need to output rules and messages
@@ -1004,7 +980,7 @@ jQuery(document).ready(function($) {
         rules: {
 ' ;
             foreach ($vRules_js as $r)
-                $js .= sprintf('%s', $r) ;
+                $js .= sprintf('%s%s', $r, $r === end($vRules_js) ? '' : ',') ;
             $js .= '
         },
         messages: {
@@ -1095,6 +1071,7 @@ jQuery(document).ready(function($) {
     $("#ss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
     $("div.%sss-form-container").after("<div style=\"border: 0px dashed black; clear: both;\"></div>");
 });
+alert("is this running?");
 </script>
         ', $prefix, $columns, $prefix) ;
 
@@ -1531,9 +1508,16 @@ function wpgform_head()
 
     //  Load the jQuery Validate from the Microsoft CDN, it isn't
     //  available from the Google CDN or I'd load it from there!
-    wp_register_script('jquery-validate',
-        'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.js',
-        array('jquery'), false, true) ;
+
+    if (defined('SCRIPT_DEBUG')) {
+        wp_register_script('jquery-validate',
+            'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js',
+            array('jquery'), false, true) ;
+    } else {
+        wp_register_script('jquery-validate',
+            'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js',
+            array('jquery'), false, true) ;
+    }
     wp_enqueue_script('jquery-validate') ;
 
     //  Load the jQuery Columnizer script from the plugin
