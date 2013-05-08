@@ -277,6 +277,7 @@ No known upgrade issues.
 * Added support for three (3) CAPTCHA terms
 * Fixed Pagination bug when viewing the form submission log.
 * Re-arranged Options tabs so most common options are the Options tab, less common on the Advanced tab.
+* Added support for rendering forms on public CPT URLs.
 
 = Version 0.45 =
 * Updated load of jQuery UI Tabs CSS to latest version.
