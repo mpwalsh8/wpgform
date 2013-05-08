@@ -81,8 +81,24 @@ function wpgform_init()
         add_filter('widget_text', 'do_shortcode') ;
 
     add_filter('the_content', 'wpautop');
+    add_filter('the_content', 'wpgform_the_content');
     add_action('template_redirect', 'wpgform_head') ;
     add_action('wp_footer', 'wpgform_footer') ;
+}
+
+/**
+ * Filter to render a Google Form when a public CPT URL is
+ * requested.  The filter will inject the proper shortcode into
+ * the content which is then in turn processed by WordPress to
+ * render the form as a regular short code would be processed.
+ *
+ * @param $content string post content
+ * @since v0.46
+ */
+function wpgform_the_content($content)
+{
+    return (WPGFORM_CPT_FORM == get_post_type(get_the_ID())) ?
+        sprintf('[wpgform id=\'%s\']', get_the_ID()) : $content ;
 }
 
 add_action('init', array('wpGForm', 'ProcessGoogleForm')) ;
@@ -1015,7 +1031,7 @@ jQuery(document).ready(function($) {
     $("div.%sss-required-asterisk").text("* %s");
     $("div.%sss-radio div.%sss-printable-hint").text("%s");
     $("div.%sss-radio label:last+span.%sss-q-other-container").prev().contents().filter(function() {
-        return this.nodeType == Node.TEXT_NODE;
+        return this.nodeType == 3;
     })[0].nodeValue = "%s";
     $("div.%sss-checkbox div.%sss-printable-hint").text("%s");
     $("div.%sss-form-container :input[name=\"back\"]").attr("value", "\u00ab %s");
