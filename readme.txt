@@ -4,15 +4,17 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.45
+Stable tag: 0.46
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
 == Description ==
 
-Fetches a published Google Form using a WordPress shortcode, removes the Gooogle wrapper HTML and then renders it as an HTML form embedded in your blog post or page. The only required parameter is the URL to the Google `form`, which specifies the form you'd like to retrieve. Recommended but optional, you can also provide a URL for a confirmation page.  The confirmation page will override the default Google `Thank You` page and offers better integration with your WordPress site.  You can also supply a customized `class` value for styling the form.  There are a number of other options, refer to the documentation for further details.
+Fetches a published Google Form using a WordPress custom post or shortcode, removes the Gooogle wrapper HTML and then renders it as an HTML form embedded in your blog post or page. When using Google Form post type, the *wpgform* shortcode accepts one parameter, *id*, which is the post id of the form.  When using the deprecated *gform* shortcode, the only required parameter is `form` which is set to the URL to the Google Form URL.  Recommended but optional, you can also provide a custom URL for a confirmation page if you don't care for the default Google text.  The confirmation page will override the default Google `Thank You` page and offers better integration with your WordPress site.  There are a number of other options, refer to the documentation for further details.
 
 For example, suppose you want to integrate the form at `https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0`, (not a real URL) use the following shortcode in your WordPress post or page:
+
+    [wpgform id='861']
 
     [gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0']
 
@@ -25,12 +27,12 @@ Currently, this plugin only supports Google Forms that are "Published as a web p
 1. Install using the WordPress Pluin Installer (search for `WordPress Google Form`) or download `WordPress Google Form`, extract the `wpgforms` folder and upload `wpgforms` to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Configure `WP Goolge Forms` from the `Settings` menu as appropriate.
-1. Recommended:  Create a Google Form Custom Post Type and then use the `[wpgform id='<Google Form CPT Id>']` shortcode wherever you'd like to insert the Google Form.
+1. Recommended:  Create a Google Form Custom Post Type and then use the `[wpgform id='<Google Form CPT Id>']` shortcode wherever you'd like to insert the Google Form or simply publish the form and use it's permalink URL.
 1. Alternatively:  Use the `[gform form='<full_url_to_form>']` shortcode wherever you'd like to insert the Google Form.
 
 == Usage ==
 
-As features have been added, usage of the `gform` shortcode has grown increasing complex.  Begining with v0.46, a second shortcode, `wpgform` has been introduced in conjunction with a Custom Post Type to define forms. Usage of the new shortcode and Custom Post Type is much, much easier than the complexities of the original `gform` shortcode.  Users are strong encouraged to migrate usage to the new shortcode and Custom Post Type.  New features will only be added to the Custom Post Type usage model.
+As features have been added, usage of the `gform` shortcode has grown increasing complex.  Begining with v0.46, a second shortcode, `wpgform` has been introduced in conjunction with a Custom Post Type to define forms deprecating usage of the `gformn` shortcode. Usage of the new shortcode and Custom Post Type is much, much easier than the complexities of the original `gform` shortcode.  Users are strong encouraged to migrate usage to the new shortcode and Custom Post Type.  New features will only be added to the Custom Post Type usage model.
 
 The WordPress Google Form shortcode `wpgform` supports a single attribute.  The rest of the controls are derived from the information stored with the Custom Post Type.
 
@@ -116,10 +118,10 @@ label.ss-q-title:after {
 Unfortunately not.  I understand that the older behavior is preferable as it looks cleaner for the end user however there is no way to support multi-page Google Forms using the old model.  The requirement to support multi-page Google Forms is a higher priority than the older confirmation model based on the overwhelming feedback received to support multi-page forms.  In v0.26 a new confirmation behavior was introduced which uses AJAX to update the page with the content from the custom confirmation page.  In v0.27 the redirection mechanism has returned to be the default behavior but if the AJAX methodology is preferred, it is available by setting the `style='ajax'` attribute within the shortcode.
 
 = Can I change the range of values the CAPCTHA is based on? =
-Not at this time.
+Not at this time.  However, you can choose between two (2) or three (3) terms for the CAPTCHA.
 
 = Can I change the math operator the CAPTCHA is based on? =
-Not at this time.
+Yes.  Beginning in v0.46 you can specify which operator(s) (+, -, *) the CAPTCHA will be based on.
 
 = How do specify which fields go in which columns when splitting a form across multiple columns? =
 This isn't possible.  The process of splitting the form into columns is automatic and will try to balance the colummn content.  You can rearrange the fields on the Google side to have some affect on their placement but there isn't any control over the exact column layout or where splits are inserted.
