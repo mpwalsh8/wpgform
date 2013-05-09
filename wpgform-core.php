@@ -1071,7 +1071,6 @@ jQuery(document).ready(function($) {
     $("#ss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
     $("div.%sss-form-container").after("<div style=\"border: 0px dashed black; clear: both;\"></div>");
 });
-alert("is this running?");
 </script>
         ', $prefix, $columns, $prefix) ;
 
