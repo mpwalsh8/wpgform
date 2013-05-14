@@ -999,20 +999,23 @@ jQuery(document).ready(function($) {
     //  Replace Google supplied text with "override" values
     $("div.%sss-required-asterisk").text("* %s");
     $("div.%sss-radio div.%sss-printable-hint").text("%s");
-    $("div.%sss-radio label:last+span.%sss-q-other-container").prev().contents().filter(function() {
-        return this.nodeType == 3;
-    })[0].nodeValue = "%s";
+    if ($("div.%sss-radio label:last+span.%sss-q-other-container").length) {
+        $("div.%sss-radio label:last+span.%sss-q-other-container").prev().contents().filter(function() {
+            return this.nodeType == 3;
+        })[0].nodeValue = "%s";
+    }
     $("div.%sss-checkbox div.%sss-printable-hint").text("%s");
     $("div.%sss-form-container :input[name=\"back\"]").attr("value", "\u00ab %s");
     $("div.%sss-form-container :input[name=\"continue\"]").attr("value", "%s \u00bb");
     $("div.%sss-form-container :input[name=\"submit\"]").attr("value", "%s");'
-        , $prefix, $wpgform_options['required_text_override']
-        , $prefix, $prefix, $wpgform_options['radio_buttons_text_override']
-        , $prefix, $prefix, $wpgform_options['radio_buttons_other_text_override']
-        , $prefix, $prefix, $wpgform_options['check_boxes_text_override']
-        , $prefix, $wpgform_options['back_button_text_override']
-        , $prefix, $wpgform_options['continue_button_text_override']
-        , $prefix, $wpgform_options['submit_button_text_override']) ;
+        ,$prefix, $wpgform_options['required_text_override']
+        ,$prefix, $prefix, $wpgform_options['radio_buttons_text_override']
+        ,$prefix, $prefix
+        ,$prefix, $prefix, $wpgform_options['radio_buttons_other_text_override']
+        ,$prefix, $prefix, $wpgform_options['check_boxes_text_override']
+        ,$prefix, $wpgform_options['back_button_text_override']
+        ,$prefix, $wpgform_options['continue_button_text_override']
+        ,$prefix, $wpgform_options['submit_button_text_override']) ;
 
         //  Before closing the <script> tag, is the form read only?
         if ($readonly) $js .= sprintf('
