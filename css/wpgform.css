@@ -116,6 +116,10 @@ div.ss-form-container div.disclaimer {
     display: none;
 }
 
+div.ss-q-help {
+    display: inline !important;
+}
+
 div.ss-secondary-text {
     display: none;
 }
