@@ -255,7 +255,10 @@ No known upgrade issues.
 
 == Changelog ==
 
-= Version 0.46 =
+= Version 0.48 =
+* Fixed a Javascript error which occurs when using Google Default text overrides AND the form didn't have an "Other" radio button choice.
+
+= Version 0.47 =
 * Fixed jQuery syntax errors introduced in certain combinations of form options which resulted in the confirmation page not working.
 
 = Version 0.46 =
