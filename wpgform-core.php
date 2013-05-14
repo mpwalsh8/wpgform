@@ -929,12 +929,10 @@ jQuery(document).ready(function($) {
 ', $user_email_html) ;
             $vRules_js[] = '
 				"wpgform-user-email": {
-					email: true,
-				},
-' ;
+					email: true
+				}' ;
             $vMsgs_js[] = '
-				"wpgform-user-email": "A valid email address is required.",
-' ;
+				"wpgform-user-email": "A valid email address is required."' ;
         }
 
         //  Is CAPTCHA enabled?
@@ -977,20 +975,15 @@ jQuery(document).ready(function($) {
             $js .= '
     $("#ss-form").validate({
         errorClass: "wpgform-error",
-        rules: {
-' ;
+        rules: {' ;
             foreach ($vRules_js as $r)
-                $js .= sprintf('%s%s', $r, $r === end($vRules_js) ? '' : ',') ;
+                $js .= sprintf('%s%s', $r, $r === end($vRules_js) ? '        },' : ',') ;
             $js .= '
-        },
-        messages: {
-' ;
+        messages: {' ;
            foreach ($vMsgs_js as $m)
-                $js .= sprintf('%s', $m) ;
+                $js .= sprintf('%s%s', $m, $m === end($vMsgs_js) ? '        }' : ',') ;
            $js .= '
-        }
-    }) ;
-' ;
+    }) ;' ;
         }
  
         //  Always include the jQuery to clean up the checkboxes
@@ -1033,23 +1026,7 @@ jQuery(document).ready(function($) {
         if (self::$posted && is_null($action) && !is_null($alert) &&
             (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1))
         {
-            $js .= PHP_EOL . 'alert("' . $alert . '") ;' ;
-        }
-
-        //  Load the confirmation URL via AJAX?
-        if (self::$posted && is_null($action) && !is_null($confirm) &&
-            (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
-            ($style === WPGFORM_CONFIRM_AJAX) && !self::$post_error)
-        {
-            $js .= PHP_EOL . '$("body").load("' . $confirm . '") ;' ;
-        }
-
-        //  Load the confirmation URL via Redirect?
-        if (self::$posted && is_null($action) && !is_null($confirm) &&
-            (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
-            ($style === WPGFORM_CONFIRM_REDIRECT) && !self::$post_error)
-        {
-            $js .= PHP_EOL . 'window.location.replace("' . $confirm . '") ;' ;
+            $js .= PHP_EOL . '    alert("' . $alert . '") ;' ;
         }
 
         //  Add jQuery to support multiple columns
@@ -1070,9 +1047,27 @@ jQuery(document).ready(function($) {
     });
     $("#ss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
     $("div.%sss-form-container").after("<div style=\"border: 0px dashed black; clear: both;\"></div>");
-});
-</script>
         ', $prefix, $columns, $prefix) ;
+
+        //  Load the confirmation URL via AJAX?
+        if (self::$posted && is_null($action) && !is_null($confirm) &&
+            (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
+            ($style === WPGFORM_CONFIRM_AJAX) && !self::$post_error)
+        {
+            $js .= PHP_EOL . '    //  Confirmation page by AJAX page load' ;
+            $js .= PHP_EOL . '    $("body").load("' . $confirm . '") ;' ;
+        }
+
+        //  Load the confirmation URL via Redirect?
+        if (self::$posted && is_null($action) && !is_null($confirm) &&
+            (self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1) &&
+            ($style === WPGFORM_CONFIRM_REDIRECT) && !self::$post_error)
+        {
+            $js .= PHP_EOL . '    //  Confirmation page by redirect' ;
+            $js .= PHP_EOL . '    window.location.replace("' . $confirm . '") ;' ;
+        }
+
+        $js .= PHP_EOL . '});' . PHP_EOL . '</script>' ;
 
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
         //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
