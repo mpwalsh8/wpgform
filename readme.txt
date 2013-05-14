@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.46
+Stable tag: 0.47
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -254,6 +254,9 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.46 =
+* Fixed jQuery syntax errors introduced in certain combinations of form options which resulted in the confirmation page not working.
 
 = Version 0.46 =
 * Added support for columns!  New *columns='N'* short code attribute will split the form into columns.
