@@ -976,13 +976,19 @@ jQuery(document).ready(function($) {
     $("#ss-form").validate({
         errorClass: "wpgform-error",
         rules: {' ;
-            foreach ($vRules_js as $r)
-                $js .= sprintf('%s%s', $r, $r === end($vRules_js) ? '        },' : ',') ;
+            if (empty($vRules_js))
+                $js .= '},' ;
+            else
+                foreach ($vRules_js as $r)
+                    $js .= sprintf('%s%s', $r, $r === end($vRules_js) ? '        },' : ',') ;
             $js .= '
         messages: {' ;
-           foreach ($vMsgs_js as $m)
-                $js .= sprintf('%s%s', $m, $m === end($vMsgs_js) ? '        }' : ',') ;
-           $js .= '
+            if (empty($vMsgs_js))
+                $js .= '}' ;
+            else
+                foreach ($vMsgs_js as $m)
+                    $js .= sprintf('%s%s', $m, $m === end($vMsgs_js) ? '        }' : ',') ;
+            $js .= '
     }) ;' ;
         }
  
