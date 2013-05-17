@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.50
+Stable tag: 0.51
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -79,11 +79,35 @@ Yes, there are two ways to change the style (aka apearance) of the form.
 
 Google Forms include plenty of [CSS](http://en.wikipedia.org/wiki/Cascading_Style_Sheets) hooks. Refer to the **CSS** section for further details on styling the form.  There are also some CSS solutions posted to questions users have raised in the Tips and Tricks section of [this page](http://michaelwalsh.org/wordpress/wordpress-plugins/wpgform/tips-and-tricks/).
 
+= Why are the buttons and some other text on form in Chinese (or some other language)? =
+
+This problem occurred fairly infrequently with the older version of Google Forms but with the upgrade in early 2013, it seems to happen much more often.  The solution to this problem depends on which URL format your published Google Form takes on (old or new).
+
+If your form URL looks like this, then you are using the older version of Google Forms:
+
+`https://docs.google.com/spreadsheet/viewform?formkey=dE56R1ZldXo4a0N3VTNMNEpSemdGV3c6MQ#gid=0`
+
+To force the language to English, you need to include the parameter **hl=en**.  Placement doesn't matter except it must appear before the #gid=0 (or similar syntax depending on which sheet you're using).  You will either need to prefix or append the & character to ensure the parameter is passed correctly.
+
+`https://docs.google.com/spreadsheet/viewform?formkey=dE56R1ZldXo4a0N3VTNMNEpSemdGV3c6MQ&hl=en#gid=0`
+
+If your form URL looks like this, then you are using the new version of Google Forms:
+
+`https://docs.google.com/forms/d/1iQndtNhFFiLHPdTpvuYKifdsxN7XQSFa9D8CsTU8aTc/viewform`
+
+To force the form to use English you would append **"?hl=en"** to the URL so it looks like this:
+
+`https://docs.google.com/forms/d/1iQndtNhFFiLHPdTpvuYKifdsxN7XQSFa9D8CsTU8aTc/viewform?hl=en`
+
+You can find an [example Google Form with French buttons](http://michaelwalsh.org/wordpress/wordpress-plugins/wpgform/sample-form-in-french/) on the plugin web site.
+
 = Why do I get a 403 error? =
 
 There a number of reasons to get a 403 error but by far the most common one encountered so far is due to ModSecurity being installed by your web hosting provider.  Not all providers deploy ModSecurity but enough do that it comes up every once in a while.  If your provider is running ModSecurity and your version of the plugin is v0.30 or lower, you will likely see odd behavior where when the form is submitted, the page is simply rendered again and the data is never actually sent to Google.  There isn't any error message to indicate what might be wrong.
 
 Version 0.31 fixes this problem for *most* cases but there is still a chance that it could crop up.  If your provider has enabled ModSecurity AND someone answers one of the questions on your form with a URL (e.g. http://www.example.com), then very likely ModSecurity will kick in an issue a 403 error.  The plugin is now smart enough to detect when the error is issued and let you know what is wrong.  Unfortunately there isn't currently a solution to allow URLs as responses when ModSecurity issues a 403 error.
+
+Some themes filter page content which could potentially affect forms.  If the filter modifies the Google Form HTML in such a way (e.g. changing the value of a hidden form variable) such that it is different that what Google is expecting upon form submission, a 403 error may result.
 
 = No matter what I do, I always get the "Unable to retrieve Google Form.  Please try reloading this page." error message.  Why is this? =
 
@@ -128,7 +152,7 @@ This isn't possible.  The process of splitting the form into columns is automati
 
 == CSS ==
 
-As of 2011-09-21, Google Forms make use of 20+ CSS class definitions.  By default, the WordPress Google Form plugin includes CSS declarations for all of the classes however the bulk of them are empty.  The default CSS sets the font and makes the entry boxes wider.  The default CSS that ships with WordPress Google Form can optionally be turned off via the WordPress Google Form settings.
+Google Forms make use of 20+ CSS class definitions.  By default, the WordPress Google Form plugin includes CSS declarations for all of the classes however the bulk of them are empty.  The default CSS sets the font and makes the entry boxes wider.  The default CSS that ships with WordPress Google Form can optionally be turned off via the WordPress Google Form settings.
 
 = Customizing Google Form CSS =
 
@@ -139,9 +163,19 @@ There are two ways to customize the Google Form CSS.
 
 = Default Google Form CSS =
 
-As of 2012-12-15, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.
+As of 2013-05-17, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.  Some of the classes are redundant to account for both the new and old style of Google Forms.
 
 `
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+/**
+ * CSS declarations for Google Docs Forms
+ *
+ * These can be copied and modified to fit the needs of
+ * a theme.  By default the only change is to make all of
+ * the fields wider than their default width and to set the
+ * default font.
+ */
+
 label.gform-error,
 label.wpgform-error {
     float: right;
@@ -241,6 +275,33 @@ textarea.ss-q-long {
     font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
 tr.ss-gridrow {}
+
+/**
+ * New Google Forms CSS 2013-04-30
+ */
+
+div.ss-form-container div.disclaimer {
+    display: none;
+}
+
+div.ss-q-help {
+}
+
+div.ss-secondary-text {
+}
+
+/*  This hides the "Never submit passwords through Google Forms." warning. */
+div.ss-form-entry > div.ss-secondary-text {
+    display: none;
+}
+
+div.password-warning {
+    display: none;
+}
+
+div.ss-form-container li {
+    list-style-type: none;
+}
 `
 
 == Screenshots ==
@@ -254,6 +315,10 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.51 =
+* Added FAQ content for common questions.
+* Updated CSS information to account for CSS changes in new Google Forms.
 
 = Version 0.50 =
 * Fixed jQuery syntax error which happens when validation is on but CAPTCHA and Email User is off.
