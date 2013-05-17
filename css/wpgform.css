@@ -122,6 +122,11 @@ div.ss-q-help {
 div.ss-secondary-text {
 }
 
+/*  This hides the "Never submit passwords through Google Forms." warning. */
+div.ss-form-entry > div.ss-secondary-text {
+    display: none;
+}
+
 div.password-warning {
     display: none;
 }
