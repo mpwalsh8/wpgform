@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.49
+Stable tag: 0.50
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -254,6 +254,10 @@ tr.ss-gridrow {}
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.50 =
+* Fixed jQuery syntax error which happens when validation is on but CAPTCHA and Email User is off.
+* Added new CSS to hide the "Never submit passwords through Google Forms." message by default.
 
 = Version 0.49 =
 * Inadvertently made help text invisible with CSS, updated default CSS accordingly.
