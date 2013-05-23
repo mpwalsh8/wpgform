@@ -171,7 +171,7 @@ function wpgform_options_page()
 <div class="inside">
 <div style="text-align: center; font-size: 0.75em;padding:0px 5px;margin:0px auto;"><!-- PayPal box wrapper -->
 <div><!-- PayPal box-->
-	<p style="margin: 0.25em 0"><b>WordPress Goolge Forms v<?php echo WPGFORM_VERSION; ?></b></p>
+	<p style="margin: 0.25em 0"><b>WordPress Google Form v<?php echo WPGFORM_VERSION; ?></b></p>
 	<p style="margin: 0.25em 0"><a href="http://wordpress.org/extend/plugins/wpgform/" target="_blank"><?php _e('Plugin\'s Home Page', MAILUSERS_I18N_DOMAIN); ?></a></p>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
