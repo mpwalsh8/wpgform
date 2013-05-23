@@ -170,14 +170,13 @@ function wpgform_get_plugin_options()
     //  Since the array keys are used to build the form, we need for them
     //  to "exist" so if they don't, they are created and set to null.
 
-    //$plugin_options = array_merge($default_options, get_option('wpgform_options', $default_options)) ;
-    $plugin_options = wp_parse_args(get_option('wpgform_options', $default_options)) ;
+    $plugin_options = wp_parse_args(get_option('wpgform_options'), $default_options) ;
 
     //  If the array key doesn't exist, it means it is a check box option
     //  that is not enabled so the array element(s) needs to be set to zero.
 
-    foreach ($default_options as $key => $value)
-        if (!array_key_exists($key, $plugin_options)) $plugin_options[$key] = 0 ;
+    //foreach ($default_options as $key => $value)
+    //    if (!array_key_exists($key, $plugin_options)) $plugin_options[$key] = 0 ;
 
     return $plugin_options ;
 }
