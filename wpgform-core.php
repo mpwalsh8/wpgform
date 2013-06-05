@@ -699,6 +699,7 @@ class wpGForm
         {
             self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'cookies' => array($locale_cookie))) ;
             //self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+            error_log(print_r(self::$response, true)) ;
         }
 
         //  Retrieve the HTML from the URL
@@ -730,7 +731,7 @@ class wpGForm
         //  we don't want.  This gets rid of the HTML wrapper from the Google page.
 
         $allowed_tags = array(
-            'a' => array('href' => array(), 'title' => array(), 'target' => array())
+            'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'class' => array())
            ,'b' => array()
            ,'abbr' => array('title' => array()),'acronym' => array('title' => array())
            ,'code' => array()
