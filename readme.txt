@@ -316,6 +316,10 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.53 =
+* Added CSS rule to hide Google's new Edit Link "feature".
+* Added support for link (A) elements with class attributes when call wp_kses().
+
 = Version 0.52 =
 * Fixed typos on Options page.
 * Fixed long standing bug with Default Options sometimes not initializing or saving correctly.
