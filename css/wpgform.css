@@ -135,6 +135,12 @@ div.ss-form-container li {
     list-style-type: none;
 }
 
+/*  2013-06-04:  Hide "Edit this Form" link */
 a.ss-edit-link {
+    display: none;
+}
+
+/*  2013-06-06:  Hide help text for scales */
+div.aria-only-help {
     display: none;
 }
