@@ -369,14 +369,10 @@ class wpGForm
     function gform_sc($options)
     {
         if (self::ProcessShortCodeOptions($options))
-        {
             return self::ConstructGoogleForm() ;
-        }
         else
-        {
             return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
                __('Unable to process Google Form short code.', WPGFORM_I18N_DOMAIN)) ;
-        }
     }
 
     /**
@@ -469,15 +465,14 @@ class wpGForm
                 return false ;
         }
         else
-        {
             return false ;
-        }
 
-        // get current form meta data
+        // get current form meta data fields
 
-        $mb = wpgform_form_meta_box_content() ;
+        $fields = array_merge(wpgform_primary_meta_box_content(true),
+            wpgform_secondary_meta_box_content(true), wpgform_validation_meta_box_content(true)) ;
 
-        foreach ($mb['fields'] as $field)
+        foreach ($fields as $field)
         {
             //  Only show the fields which are not hidden
             if ($field['type'] !== 'hidden')
@@ -699,7 +694,7 @@ class wpGForm
         {
             self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'cookies' => array($locale_cookie))) ;
             //self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
-            error_log(print_r(self::$response, true)) ;
+            //error_log(print_r(self::$response, true)) ;
         }
 
         //  Retrieve the HTML from the URL
@@ -931,8 +926,8 @@ jQuery(document).ready(function($) {
 				"wpgform-user-email": {
 					email: true
 				}' ;
-            $vMsgs_js[] = '
-				"wpgform-user-email": "A valid email address is required."' ;
+            $vMsgs_js[] = sprintf('
+				"wpgform-user-email": "%s"', __('A valid email address is required.', WPGFORM_I18N_DOMAIN)) ;
         }
 
         //  Is CAPTCHA enabled?
@@ -945,7 +940,7 @@ jQuery(document).ready(function($) {
         $("#ss-form input[type=submit][name=submit]").before(\'%s\');
         $("div.wpgform-captcha").show();
         $.validator.addClassRules("wpgform-captcha", {
-            required: true
+            required: true,
         });
     }
 ', $captcha_html, self::$wpgform_captcha['c']) ;
@@ -954,9 +949,26 @@ jQuery(document).ready(function($) {
 					equal: %s
 				}
 ', self::$wpgform_captcha['x']) ;
-            $vMsgs_js[] = '
-				"wpgform-captcha": "Incorrect answer."
-' ;
+            $vMsgs_js[] = sprintf('
+                "wpgform-captcha": "%s"
+', __('Incorrect answer.', WPGFORM_I18N_DOMAIN)) ;
+        }
+
+        //  Build extra jQuery Validation rules
+
+        $fields = wpgform_validation_meta_box_content(true) ;
+
+        foreach ($fields as $field)
+        {
+            if ('validation' == $field['type'])
+            {
+    	        $meta_field = get_post_meta($o['id'], $field['id'], true);
+                $meta_type = get_post_meta($o['id'], $field['type_id'], true);
+                $meta_value = get_post_meta($o['id'], $field['value_id'], true);
+
+                foreach ($meta_field as $key => $value)
+                    $extras[$value] = sprintf('{%s: %s}', $meta_type[$key], empty($meta_value) ? 'true' : $meta_value) ;
+            }
         }
 
         //  Include jQuery validation?
@@ -976,6 +988,11 @@ jQuery(document).ready(function($) {
     $("#ss-form").validate({
         errorClass: "wpgform-error",
         rules: {' ;
+            if (!empty($extras))
+            {
+                foreach ($extras as $key => $value)
+                    $js .= sprintf('"%s": %s%s', $key, $value, $value === end($extras) ? '        ,' : ',') ;
+            }
             if (empty($vRules_js))
                 $js .= '},' ;
             else
@@ -1528,6 +1545,31 @@ function wpgform_head()
             plugins_url(plugin_basename(dirname(__FILE__) . '/js/jquery.columnizer.js')),
         array('jquery'), false, true) ;
     wp_enqueue_script('jquery-columnizer') ;
+
+    //  Load the WordPress Google Form jQuery Validate script from the plugin
+    wp_register_script('wpgform-jquery-validate',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/js/wpgform.js')),
+        array('jquery', 'jquery-validate'), false, true) ;
+    wp_enqueue_script('wpgform-jquery-validate') ;
+    wp_localize_script('wpgform-jquery-validate', 'wpgform_script_vars', array(
+        'required' => __('This field is required.', WPGFORM_I18N_DOMAIN),
+        'remote' => __('Please fix this field.', WPGFORM_I18N_DOMAIN),
+        'email' => __('Please enter a valid email address.', WPGFORM_I18N_DOMAIN),
+        'url' => __('-->Please enter a valid URL.', WPGFORM_I18N_DOMAIN),
+        'date' => __('Please enter a valid date.', WPGFORM_I18N_DOMAIN),
+        'dateISO' => __('Please enter a valid date (ISO).', WPGFORM_I18N_DOMAIN),
+        'number' => __('Please enter a valid number.', WPGFORM_I18N_DOMAIN),
+        'digits' => __('Please enter only digits.', WPGFORM_I18N_DOMAIN),
+        'creditcard' => __('Please enter a valid credit card number.', WPGFORM_I18N_DOMAIN),
+        'equalTo' => __('Please enter the same value again.,', WPGFORM_I18N_DOMAIN),
+        'accept' => __('Please enter a value with a valid extension.', WPGFORM_I18N_DOMAIN),
+        'maxlength' => __('Please enter no more than {0} characters.', WPGFORM_I18N_DOMAIN),
+        'minlength' => __('Please enter at least {0} characters.', WPGFORM_I18N_DOMAIN),
+        'rangelength' => __('Please enter a value between {0} and {1} characters long.', WPGFORM_I18N_DOMAIN),
+        'range' => __('Please enter a value between {0} and {1}.', WPGFORM_I18N_DOMAIN),
+        'max' => __('Please enter a value less than or equal to {0}.', WPGFORM_I18N_DOMAIN),
+        'min' => __('Please enter a value greater than or equal to {0}.', WPGFORM_I18N_DOMAIN)
+    )) ;
 }
 
 /**
