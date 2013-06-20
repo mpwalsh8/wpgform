@@ -316,6 +316,11 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.54 =
+* Added internationalization support for jQuery Validation messages.
+* New language support files.
+* New jQuery Validation based custom validation option.
+
 = Version 0.53 =
 * Added CSS rule to hide Google's new Edit Link "feature".
 * Added support for link (A) elements with class attributes when call wp_kses().
