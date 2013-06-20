@@ -970,6 +970,8 @@ jQuery(document).ready(function($) {
                     $extras[$value] = sprintf('{%s: %s}', $meta_type[$key], empty($meta_value) ? 'true' : $meta_value) ;
             }
         }
+        error_log(print_r($meta_value, true)) ;
+        error_log(print_r($extras, true)) ;
 
         //  Include jQuery validation?
         if ($validation) $js .= sprintf('

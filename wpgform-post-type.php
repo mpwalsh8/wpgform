@@ -367,12 +367,6 @@ function wpgform_add_primary_meta_box()
 
     add_meta_box($mb['id'], $mb['title'],
         'wpgform_show_validation_meta_box', $mb['page'], $mb['context'], $mb['priority']);
-
-    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-    
-    //require_once('mb_2.php') ;
-    //$myVersionOfTags = new Tags_Like_Meta_box( array( 'ID' => 'wpgform_advanced_validation', 'nice_name' => 'Advanced Validation' ));
-    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 }
 
 // Callback function to show fields in meta box
@@ -394,13 +388,14 @@ function wpgform_show_validation_meta_box()
 {
     $mb = wpgform_validation_meta_box_content() ;
     wpgform_build_meta_box($mb) ;
-    //wpgform_build_validation_meta_box($mb) ;
 }
 
 /**
  * Build meta box form
  *
  * @see http://www.deluxeblogtips.com/2010/04/how-to-create-meta-box-wordpress-post.html
+ * @see http://wp.tutsplus.com/tutorials/reusable-custom-meta-boxes-part-3-extra-fields/
+ * @see http://wp.tutsplus.com/tutorials/reusable-custom-meta-boxes-part-4-using-the-data/
  *
  */
 function wpgform_build_meta_box($mb)
@@ -429,15 +424,19 @@ function wpgform_build_meta_box($mb)
                 case 'lgtext':
                     echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" size="30" style="width:97%" />', '<br />', '<small>', $field['desc'], '</small>';
                     break;
+
                 case 'medtext':
                     echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" size="30" style="width:47%" />', '<br />', '<small>', $field['desc'], '</small>';
                     break;
+
                 case 'smtext':
                     echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" size="30" style="width:27%" />', '<br />', '<small>', $field['desc'], '</small>';
                     break;
+
                 case 'textarea':
                     echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="4" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>', '<br />', '<small>', $field['desc'], '</small>';
                     break;
+
                 case 'select':
                     echo '<select name="', $field['id'], '" id="', $field['id'], '">';
                     foreach ($field['options'] as $option => $value) {
@@ -446,15 +445,18 @@ function wpgform_build_meta_box($mb)
                     echo '</select>';
                     echo '<br />', '<small>', $field['desc'], '</small>';
                     break;
+
                 case 'radio':
                     foreach ($field['options'] as $option => $value) {
                         echo '<input type="radio" name="', $field['id'], '" value="', strtolower($value), '"', $meta == strtolower($value) ? ' checked="checked"' : '', ' />&nbsp;', $value, $field['br'] === true ? '<br />' : '&nbsp;&nbsp;';
                     }
                     echo '<br />', '<small>', $field['desc'], '</small>';
                     break;
+
                 case 'checkbox':
                     echo '<input type="checkbox" name="', $field['id'], '" id="', $field['id'], '"', $meta ? ' checked="checked"' : '', ' />';
                     break;
+
                 case 'validation':
 	                $meta_field = get_post_meta($post->ID, $field['id'], true);
                     $meta_type = get_post_meta($post->ID, $field['type_id'], true);
@@ -462,20 +464,19 @@ function wpgform_build_meta_box($mb)
 
                     echo '<a class="repeatable-add button" href="#">+</a>
 			                <ul id="'.$field['id'].'-repeatable" class="custom_repeatable">';
+
 	                $i = 0;
+
 	                if ($meta_field) {
 		                foreach($meta_field as $key => $value) {
-			                //echo '<li><span class="sort hndle">|||</span>' ;
 			                echo '<li>' ;
-						    //echo '<label for="'.$field['id'].'['.$i.']">Field</label>' ;
+
 						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Name', WPGFORM_I18N_DOMAIN)) ;
 						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="'.$meta_field[$key].'" size="30" />' ;
-						    //echo '<label for="'.$field['type_id'].'['.$i.']">Check</label>' ;
+
 						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
                             echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
-                            //error_log(print_r($meta_type, true)) ;
                             foreach ($field['options'] as $option) {
-                                //error_log(print_r(array($option, $i, $meta_type[$i], (boolean)$meta_type[$i] == $option), true)) ;
                                 echo '<option ', $meta_type[$key] == $option ? 'selected="selected" ' : '', 'value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
                             }
                             echo '</select>';
@@ -483,6 +484,7 @@ function wpgform_build_meta_box($mb)
 						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
 						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="'.$meta_value[$key].'" size="15" />' ;
 						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
+
 			                $i++;
 		                }
 	                } else {
@@ -499,16 +501,11 @@ function wpgform_build_meta_box($mb)
 						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
 						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="15" />' ;
 						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
-                            /*
-		                echo '<li><span class="sort hndle">|||</span>
-					                <input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="" size="20" />
-					                <input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="30" />
-					                <a class="repeatable-remove button" href="#">-</a></li>';
-                             */
 	                }
 	                echo '</ul>
 		                <small>'.$field['desc'].'</small>';
                     break;
+
                 default :
                     break ;
             }
@@ -520,113 +517,14 @@ function wpgform_build_meta_box($mb)
     echo '</table>';
 }
 
-/**
- * Build meta box form
- *
- * @see http://www.deluxeblogtips.com/2010/04/how-to-create-meta-box-wordpress-post.html
- * @see http://wp.tutsplus.com/tutorials/reusable-custom-meta-boxes-part-3-extra-fields/
- * @see http://wp.tutsplus.com/tutorials/reusable-custom-meta-boxes-part-4-using-the-data/
- *
- */
-function wpgform_build_validation_meta_box($mb)
-{
-    global $post;
-
-    // Use nonce for verification
-    echo '<input type="hidden" name="' . WPGFORM_PREFIX .
-        'meta_box_nonce" value="', wp_create_nonce(plugin_basename(__FILE__)), '" />';
-
-    echo '<table class="form-table">';
-
-    foreach ($mb['fields'] as $field)
-    {
-        //  Only show the fields which are not hidden
-        if ($field['type'] === 'validation')
-        {
-            // get current post meta data
-            $meta_field = get_post_meta($post->ID, $field['id'], true);
-            $meta_type = get_post_meta($post->ID, $field['type_id'], true);
-            $meta_value = get_post_meta($post->ID, $field['value_id'], true);
-
-            error_log(print_r($meta_field, true)) ;
-            error_log(print_r($meta_type, true)) ;
-            error_log(print_r($meta_value, true)) ;
-    
-            echo '<tr>',
-                    '<th style="width:20%"><label for="', $field['id'], '">', $field['name'], '</label></th>',
-                    '<td>';
-            switch ($field['type']) {
-                case 'validation':
-	                echo '<a class="repeatable-add button" href="#">+</a>
-			                <ul id="'.$field['id'].'-repeatable" class="custom_repeatable">';
-	                $i = 0;
-	                if ($meta_field) {
-		                foreach($meta_field as $key => $value) {
-			                //echo '<li><span class="sort hndle">|||</span>' ;
-			                echo '<li>' ;
-						    //echo '<label for="'.$field['id'].'['.$i.']">Field</label>' ;
-						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Name', WPGFORM_I18N_DOMAIN)) ;
-						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="'.$meta_field[$key].'" size="30" />' ;
-						    //echo '<label for="'.$field['type_id'].'['.$i.']">Check</label>' ;
-						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
-                            echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
-                            //error_log(print_r($meta_type, true)) ;
-                            foreach ($field['options'] as $option) {
-                                //error_log(print_r(array($option, $i, $meta_type[$i], (boolean)$meta_type[$i] == $option), true)) ;
-                                echo '<option ', $meta_type[$key] == $option ? 'selected="selected" ' : '', 'value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
-                            }
-                            echo '</select>';
-
-						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
-						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="'.$meta_value[$key].'" size="15" />' ;
-						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
-			                $i++;
-		                }
-	                } else {
-			                echo '<li>' ;
-						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Field', WPGFORM_I18N_DOMAIN)) ;
-						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="" size="30" />' ;
-						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
-                            echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
-                            foreach ($field['options'] as $option) {
-                                echo '<option value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
-                            }
-                            echo '</select>';
-
-						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
-						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="15" />' ;
-						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
-                            /*
-		                echo '<li><span class="sort hndle">|||</span>
-					                <input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="" size="20" />
-					                <input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="30" />
-					                <a class="repeatable-remove button" href="#">-</a></li>';
-                             */
-	                }
-	                echo '</ul>
-		                <span class="description">'.$field['desc'].'</span>';
-                    break;
-                default :
-                    break ;
-            }
-            echo     '<td>',
-                '</tr>';
-        }
-    }
-
-    echo '</table>';
-}
-    //wpgform_whereami(__FILE__, __LINE__) ;
 add_action( 'quick_edit_custom_box', 'wpgform_add_quick_edit_nonce', 10, 2 );
 //add_action( 'quick_edit_custom_box', function() { error_log(__LINE__) ; }, 10, 2 );
-    //wpgform_whereami(__FILE__, __LINE__) ;
 /**
  * Action to add a nonce to the quick edit form for the custom post types
  *
  */
 function wpgform_add_quick_edit_nonce($column_name, $post_type)
 {
-    //error_log(__LINE__) ;
     //wpgform_whereami(__FILE__, __LINE__) ;
     static $printNonce = true ;
 
@@ -648,7 +546,6 @@ add_action('save_post', 'wpgform_save_meta_box_data');
  */
 function wpgform_save_meta_box_data($post_id)
 {
-        error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     global $post ;
 
     // verify nonce - needs to come from either a CPT Edit screen or CPT Quick Edit
@@ -658,7 +555,6 @@ function wpgform_save_meta_box_data($post_id)
         (isset( $_POST[WPGFORM_PREFIX . 'meta_box_qe_nonce']) &&
         wp_verify_nonce($_POST[WPGFORM_PREFIX . 'meta_box_qe_nonce'], plugin_basename(__FILE__))))
     {
-        error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
         //wpgform_whereami(__FILE__, __LINE__) ;
         // check for autosave - if autosave, simply return
 
@@ -696,8 +592,6 @@ function wpgform_save_meta_box_data($post_id)
         //  the Short URL field.
 
         //wpgform_preprint_r($_POST) ;
-        error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-        error_log(print_r($_POST, true)) ;
         foreach ($fields as $field)
         {
             //  Only update other Post Meta fields when on the edit screen - ignore in quick edit mode
@@ -727,7 +621,6 @@ function wpgform_save_meta_box_data($post_id)
                 }
                 else
                 {
-        error_log(sprintf('%s::%s -->%s', basename(__FILE__), __LINE__, $field['id'])) ;
                     delete_post_meta($post_id, $field['id']) ;
                 }
             }
