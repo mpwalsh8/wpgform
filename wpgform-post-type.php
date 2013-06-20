@@ -62,40 +62,47 @@ function wpgform_register_post_types()
 }
 
 //  Build custom meta box support
+//
+//  There are three (3) meta boxes.  The primary meta box collects
+//  the key fields and longer text input fields.  The secondary meta
+//  box provides on/off settings and other selectable options.  The
+//  third meta box allows entry of advanced validation rules and is
+//  hidden by default.
+//
 
 /**
- * Define the WordPress Google Form Meta Box fields so they can be
- * used to construct the form as well as validate it and save it.
+ * Define the WordPress Google Form Primary Meta Box fields so they
+ * can be used to construct the form as well as validate and save it.
  *
  */
-function wpgform_form_meta_box_content()
+function wpgform_primary_meta_box_content($fieldsonly = false)
 {
-    return array(
-        'id' => 'wpgform-meta-box',
+    $content = array(
+        'id' => 'wpgform-primary-meta-box',
         'title' => 'Google Form Details',
         'page' => WPGFORM_CPT_FORM,
         'context' => 'normal',
         'priority' => 'high',
         'fields' => array(
             array(
-                'name' => 'Form URL',
-                'desc' => 'The full URL to the published Google Form.',
+                'name' => __('Form URL', WPGFORM_I18N_DOMAIN),
+                'desc' => __('The full URL to the published Google Form', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'form',
                 'type' => 'lgtext',
                 'std' => '',
                 'required' => true
             ),
             array(
-                'name' => 'Confirm URL',
-                'desc' => 'The full URL to the optional Confirmation Page.',
+                'name' => __('Confirm URL', WPGFORM_I18N_DOMAIN),
+                'desc' => __('The full URL to the optional Confirmation Page', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'confirm',
                 'type' => 'lgtext',
                 'std' => '',
                 'required' => false
             ),
             array(
-                'name' => 'Style',
-                'desc' => 'Custom Confirmation Page Style',
+                'name' => __('Style', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Custom Confirmation Page Style', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'style',
                 'type' => 'select',
                 'options' => array('None', 'Redirect', 'AJAX'),
@@ -103,94 +110,24 @@ function wpgform_form_meta_box_content()
                 'br' => true
             ),
             array(
-                'name' => 'Alert',
-                'desc' => 'Javascript Alert Box message displayed upon submission',
+                'name' => __('Alert', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Javascript Alert Box message displayed upon submission', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'alert',
                 'type' => 'lgtext',
                 'std' => '',
                 'required' => false
             ),
             array(
-                'name' => 'Class',
-                'desc' => 'CSS class(es) to add to the form\'s containing DIV',
+                'name' => __('Class', WPGFORM_I18N_DOMAIN),
+                'desc' => __('CSS class(es) to add to the form\'s containing DIV', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'class',
                 'type' => 'medtext',
                 'std' => '',
                 'required' => false
             ),
             array(
-                'name' => 'Columns',
-                'desc' => 'Number of columns to render form',
-                'id' => WPGFORM_PREFIX . 'columns',
-                'type' => 'select',
-                'options' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-                'std' => '1',
-                'required' => true
-            ),
-            array(
-                'name' => 'Legal',
-                'desc' => 'Google Legal Disclaimer',
-                'id' => WPGFORM_PREFIX . 'legal',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'Read Only',
-                'desc' => 'Set the form Read Only',
-                'id' => WPGFORM_PREFIX . 'readonly',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'BR',
-                'desc' => 'Insert &lt;BR&gt; tags between labels and input box',
-                'id' => WPGFORM_PREFIX . 'br',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'CSS Prefix',
-                'desc' => 'Prefix to add to all Google CSS classes',
-                'id' => WPGFORM_PREFIX . 'css_prefix',
-                'type' => 'smtext',
-                'std' => '',
-                'required' => false
-            ),
-            array(
-                'name' => 'CSS Suffix',
-                'desc' => 'Suffix to add to all Google CSS classes',
-                'id' => WPGFORM_PREFIX . 'css_suffix',
-                'type' => 'smtext',
-                'std' => '',
-                'required' => false
-            ),
-            array(
-                'name' => 'Title',
-                'desc' => 'Show or Hide the Google Form\'s title',
-                'id' => WPGFORM_PREFIX . 'title',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'Map H1 to H2',
-                'desc' => 'Map the Form\'s H1 elements to H2 elements',
-                'id' => WPGFORM_PREFIX . 'maph1h2',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'Email',
-                'desc' => 'Send email upon form submission',
+                'name' => __('Email', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Send email upon form submission', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'email',
                 'type' => 'radio',
                 'options' => array('On', 'Off'),
@@ -198,60 +135,16 @@ function wpgform_form_meta_box_content()
                 'br' => false
             ),
             array(
-                'name' => 'Send To',
-                'desc' => 'E-mail Address send submission email to',
+                'name' => __('Send To', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Email address send submission email to', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'sendto',
                 'type' => 'medtext',
                 'std' => '',
                 'required' => false
             ),
             array(
-                'name' => 'Results',
-                'desc' => 'The full URL to the published Results Page or Google Spreadsheet.',
-                'id' => WPGFORM_PREFIX . 'results',
-                'type' => 'lgtext',
-                'std' => '',
-                'required' => false
-            ),
-            array(
-                'name' => 'Email End User',
-                'desc' => 'Send email to end user upon form submission.',
-                'id' => WPGFORM_PREFIX . 'user_email',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'Validation',
-                'desc' => 'jQuery Validation',
-                'id' => WPGFORM_PREFIX . 'validation',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'CAPTCHA',
-                'desc' => 'CAPTCHA',
-                'id' => WPGFORM_PREFIX . 'captcha',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'Unite Theme Hack',
-                'desc' => 'Unite Theme Hack',
-                'id' => WPGFORM_PREFIX . 'unitethemehack',
-                'type' => 'radio',
-                'options' => array('On', 'Off'),
-                'required' => false,
-                'br' => false
-            ),
-            array(
-                'name' => 'Form CSS',
-                'desc' => 'Form specific CSS classes',
+                'name' => __('Form CSS', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Form specific CSS rules', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'form_css',
                 'type' => 'textarea',
                 'std' => '',
@@ -259,25 +152,249 @@ function wpgform_form_meta_box_content()
             ),
         )
     ) ;
+
+    return $fieldsonly ? $content['fields'] : $content ;
 }
 
-add_action('admin_menu', 'wpgform_add_form_meta_box') ;
+/**
+ * Define the WordPress Google Form Secondary Meta Box fields so they
+ * can be used to construct the form as well as validate and save it.
+ *
+ */
+function wpgform_secondary_meta_box_content($fieldsonly = false)
+{
+    $content = array(
+        'id' => 'wpgform-secondary-meta-box',
+        'title' => 'Google Form Options',
+        'page' => WPGFORM_CPT_FORM,
+        'context' => 'side',
+        'priority' => 'high',
+        'fields' => array(
+            array(
+                'name' => __('CAPTCHA', WPGFORM_I18N_DOMAIN),
+                'desc' => __('CAPTCHA', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'captcha',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Columns', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Split form into columns', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'columns',
+                'type' => 'select',
+                'options' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+                'std' => '1',
+                'required' => true
+            ),
+            array(
+                'name' => __('Email End User', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Send email to end user upon form submission', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'user_email',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Legal', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Google Legal Disclaimer', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'legal',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Read Only', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Set the form Read Only', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'readonly',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('BR', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Insert &lt;BR&gt; tags between labels and input box', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'br',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('CSS Prefix', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Prefix to add to all Google CSS classes', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'css_prefix',
+                'type' => 'text',
+                'std' => '',
+                'required' => false
+            ),
+            array(
+                'name' => __('CSS Suffix', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Suffix to add to all Google CSS classes', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'css_suffix',
+                'type' => 'text',
+                'std' => '',
+                'required' => false
+            ),
+            array(
+                'name' => __('Title', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Show or Hide the Google Form\'s title', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'title',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Map H1 to H2', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Map H1 elements to H2 elements', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'maph1h2',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Unite Theme Hack', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Unite Theme Hack', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'unitethemehack',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+        )
+    ) ;
+
+    return $fieldsonly ? $content['fields'] : $content ;
+}
+
+/**
+ * Define the WordPress Google Form Validation Meta Box fields so they
+ * can be used to construct the form as well as validate and save it.
+ *
+ */
+function wpgform_validation_meta_box_content($fieldsonly = false)
+{
+    $content = array(
+        'id' => 'wpgform-validation-meta-box',
+        'title' => 'Google Form Field Validation',
+        'page' => WPGFORM_CPT_FORM,
+        'context' => 'normal',
+        'priority' => 'high',
+        'fields' => array(
+            array(
+                'name' => __('Validation', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Enable default jQuery Validation on all required fields', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'validation',
+                'type' => 'radio',
+                'options' => array('On', 'Off'),
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Form Fields', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, etc.) - <a href="http://jqueryvalidation.org/rules">Additional details on jQuery Rules</a>', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'validation_field_name',
+                'type' => 'validation',
+                'std' => '',
+                'required' => true,
+                'type_id' => WPGFORM_PREFIX . 'validation_field_type',
+                'value_id' => WPGFORM_PREFIX . 'validation_field_value',
+                'options' => array(
+                    'required',
+                    'remote',
+                    'email',
+                    'url',
+                    'date',
+                    'dateISO',
+                    'number',
+                    'digits',
+                    'creditcard',
+                    'equalTo',
+                    'accept',
+                    'maxlength',
+                    'minlength',
+                    'rangelength',
+                    'range',
+                    'max',
+                    'min',
+                ),
+            ),
+            array(
+                'name' => __('Type', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Type of validation', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'validation_field_type',
+                'type' => 'hidden',
+                'std' => '',
+                'required' => true
+            ),
+            array(
+                'name' => __('Value', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Value to validate against', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'validation_field_value',
+                'type' => 'hidden',
+                'std' => '',
+                'required' => false
+            ),
+        )
+    ) ;
+
+    return $fieldsonly ? $content['fields'] : $content ;
+}
+
+add_action('admin_menu', 'wpgform_add_primary_meta_box') ;
 //add_action('admin_menu', 'wpgform_add_player_profile_meta_box') ;
 
 // Add form meta box
-function wpgform_add_form_meta_box()
+function wpgform_add_primary_meta_box()
 {
-    $mb = wpgform_form_meta_box_content() ;
+    $mb = wpgform_primary_meta_box_content() ;
 
     add_meta_box($mb['id'], $mb['title'],
-        'wpgform_show_form_meta_box', $mb['page'], $mb['context'], $mb['priority']);
+        'wpgform_show_primary_meta_box', $mb['page'], $mb['context'], $mb['priority']);
+
+    $mb = wpgform_secondary_meta_box_content() ;
+
+    add_meta_box($mb['id'], $mb['title'],
+        'wpgform_show_secondary_meta_box', $mb['page'], $mb['context'], $mb['priority']);
+
+    $mb = wpgform_validation_meta_box_content() ;
+
+    add_meta_box($mb['id'], $mb['title'],
+        'wpgform_show_validation_meta_box', $mb['page'], $mb['context'], $mb['priority']);
+
+    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+    
+    //require_once('mb_2.php') ;
+    //$myVersionOfTags = new Tags_Like_Meta_box( array( 'ID' => 'wpgform_advanced_validation', 'nice_name' => 'Advanced Validation' ));
+    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 }
 
 // Callback function to show fields in meta box
-function wpgform_show_form_meta_box()
+function wpgform_show_primary_meta_box()
 {
-    $mb = wpgform_form_meta_box_content() ;
+    $mb = wpgform_primary_meta_box_content() ;
     wpgform_build_meta_box($mb) ;
+}
+
+// Callback function to show fields in meta box
+function wpgform_show_secondary_meta_box()
+{
+    $mb = wpgform_secondary_meta_box_content() ;
+    wpgform_build_meta_box($mb) ;
+}
+
+// Callback function to show validation in meta box
+function wpgform_show_validation_meta_box()
+{
+    $mb = wpgform_validation_meta_box_content() ;
+    wpgform_build_meta_box($mb) ;
+    //wpgform_build_validation_meta_box($mb) ;
 }
 
 /**
@@ -338,6 +455,60 @@ function wpgform_build_meta_box($mb)
                 case 'checkbox':
                     echo '<input type="checkbox" name="', $field['id'], '" id="', $field['id'], '"', $meta ? ' checked="checked"' : '', ' />';
                     break;
+                case 'validation':
+	                $meta_field = get_post_meta($post->ID, $field['id'], true);
+                    $meta_type = get_post_meta($post->ID, $field['type_id'], true);
+                    $meta_value = get_post_meta($post->ID, $field['value_id'], true);
+
+                    echo '<a class="repeatable-add button" href="#">+</a>
+			                <ul id="'.$field['id'].'-repeatable" class="custom_repeatable">';
+	                $i = 0;
+	                if ($meta_field) {
+		                foreach($meta_field as $key => $value) {
+			                //echo '<li><span class="sort hndle">|||</span>' ;
+			                echo '<li>' ;
+						    //echo '<label for="'.$field['id'].'['.$i.']">Field</label>' ;
+						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Name', WPGFORM_I18N_DOMAIN)) ;
+						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="'.$meta_field[$key].'" size="30" />' ;
+						    //echo '<label for="'.$field['type_id'].'['.$i.']">Check</label>' ;
+						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
+                            echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
+                            //error_log(print_r($meta_type, true)) ;
+                            foreach ($field['options'] as $option) {
+                                //error_log(print_r(array($option, $i, $meta_type[$i], (boolean)$meta_type[$i] == $option), true)) ;
+                                echo '<option ', $meta_type[$key] == $option ? 'selected="selected" ' : '', 'value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
+                            }
+                            echo '</select>';
+
+						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
+						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="'.$meta_value[$key].'" size="15" />' ;
+						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
+			                $i++;
+		                }
+	                } else {
+			                echo '<li>' ;
+						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Field', WPGFORM_I18N_DOMAIN)) ;
+						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="" size="30" />' ;
+						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
+                            echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
+                            foreach ($field['options'] as $option) {
+                                echo '<option value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
+                            }
+                            echo '</select>';
+
+						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
+						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="15" />' ;
+						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
+                            /*
+		                echo '<li><span class="sort hndle">|||</span>
+					                <input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="" size="20" />
+					                <input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="30" />
+					                <a class="repeatable-remove button" href="#">-</a></li>';
+                             */
+	                }
+	                echo '</ul>
+		                <small>'.$field['desc'].'</small>';
+                    break;
                 default :
                     break ;
             }
@@ -349,6 +520,102 @@ function wpgform_build_meta_box($mb)
     echo '</table>';
 }
 
+/**
+ * Build meta box form
+ *
+ * @see http://www.deluxeblogtips.com/2010/04/how-to-create-meta-box-wordpress-post.html
+ * @see http://wp.tutsplus.com/tutorials/reusable-custom-meta-boxes-part-3-extra-fields/
+ * @see http://wp.tutsplus.com/tutorials/reusable-custom-meta-boxes-part-4-using-the-data/
+ *
+ */
+function wpgform_build_validation_meta_box($mb)
+{
+    global $post;
+
+    // Use nonce for verification
+    echo '<input type="hidden" name="' . WPGFORM_PREFIX .
+        'meta_box_nonce" value="', wp_create_nonce(plugin_basename(__FILE__)), '" />';
+
+    echo '<table class="form-table">';
+
+    foreach ($mb['fields'] as $field)
+    {
+        //  Only show the fields which are not hidden
+        if ($field['type'] === 'validation')
+        {
+            // get current post meta data
+            $meta_field = get_post_meta($post->ID, $field['id'], true);
+            $meta_type = get_post_meta($post->ID, $field['type_id'], true);
+            $meta_value = get_post_meta($post->ID, $field['value_id'], true);
+
+            error_log(print_r($meta_field, true)) ;
+            error_log(print_r($meta_type, true)) ;
+            error_log(print_r($meta_value, true)) ;
+    
+            echo '<tr>',
+                    '<th style="width:20%"><label for="', $field['id'], '">', $field['name'], '</label></th>',
+                    '<td>';
+            switch ($field['type']) {
+                case 'validation':
+	                echo '<a class="repeatable-add button" href="#">+</a>
+			                <ul id="'.$field['id'].'-repeatable" class="custom_repeatable">';
+	                $i = 0;
+	                if ($meta_field) {
+		                foreach($meta_field as $key => $value) {
+			                //echo '<li><span class="sort hndle">|||</span>' ;
+			                echo '<li>' ;
+						    //echo '<label for="'.$field['id'].'['.$i.']">Field</label>' ;
+						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Name', WPGFORM_I18N_DOMAIN)) ;
+						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="'.$meta_field[$key].'" size="30" />' ;
+						    //echo '<label for="'.$field['type_id'].'['.$i.']">Check</label>' ;
+						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
+                            echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
+                            //error_log(print_r($meta_type, true)) ;
+                            foreach ($field['options'] as $option) {
+                                //error_log(print_r(array($option, $i, $meta_type[$i], (boolean)$meta_type[$i] == $option), true)) ;
+                                echo '<option ', $meta_type[$key] == $option ? 'selected="selected" ' : '', 'value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
+                            }
+                            echo '</select>';
+
+						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
+						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="'.$meta_value[$key].'" size="15" />' ;
+						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
+			                $i++;
+		                }
+	                } else {
+			                echo '<li>' ;
+						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Field', WPGFORM_I18N_DOMAIN)) ;
+						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="" size="30" />' ;
+						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
+                            echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
+                            foreach ($field['options'] as $option) {
+                                echo '<option value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
+                            }
+                            echo '</select>';
+
+						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
+						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="15" />' ;
+						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
+                            /*
+		                echo '<li><span class="sort hndle">|||</span>
+					                <input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="" size="20" />
+					                <input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="30" />
+					                <a class="repeatable-remove button" href="#">-</a></li>';
+                             */
+	                }
+	                echo '</ul>
+		                <span class="description">'.$field['desc'].'</span>';
+                    break;
+                default :
+                    break ;
+            }
+            echo     '<td>',
+                '</tr>';
+        }
+    }
+
+    echo '</table>';
+}
     //wpgform_whereami(__FILE__, __LINE__) ;
 add_action( 'quick_edit_custom_box', 'wpgform_add_quick_edit_nonce', 10, 2 );
 //add_action( 'quick_edit_custom_box', function() { error_log(__LINE__) ; }, 10, 2 );
@@ -381,6 +648,7 @@ add_action('save_post', 'wpgform_save_meta_box_data');
  */
 function wpgform_save_meta_box_data($post_id)
 {
+        error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     global $post ;
 
     // verify nonce - needs to come from either a CPT Edit screen or CPT Quick Edit
@@ -390,6 +658,7 @@ function wpgform_save_meta_box_data($post_id)
         (isset( $_POST[WPGFORM_PREFIX . 'meta_box_qe_nonce']) &&
         wp_verify_nonce($_POST[WPGFORM_PREFIX . 'meta_box_qe_nonce'], plugin_basename(__FILE__))))
     {
+        error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
         //wpgform_whereami(__FILE__, __LINE__) ;
         // check for autosave - if autosave, simply return
 
@@ -416,7 +685,8 @@ function wpgform_save_meta_box_data($post_id)
         //  return if the post isn't a CPT which shouldn't happen
 
         if (get_post_type($post_id) == WPGFORM_CPT_FORM)
-            $mb = wpgform_form_meta_box_content() ;
+            $fields = array_merge(wpgform_primary_meta_box_content(true),
+                wpgform_secondary_meta_box_content(true), wpgform_validation_meta_box_content(true)) ;
         else
             return $post_id ;
 
@@ -426,7 +696,9 @@ function wpgform_save_meta_box_data($post_id)
         //  the Short URL field.
 
         //wpgform_preprint_r($_POST) ;
-        foreach ($mb['fields'] as $field)
+        error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+        error_log(print_r($_POST, true)) ;
+        foreach ($fields as $field)
         {
             //  Only update other Post Meta fields when on the edit screen - ignore in quick edit mode
 
@@ -452,6 +724,11 @@ function wpgform_save_meta_box_data($post_id)
                     {
                         //wpgform_whereami(__FILE__, __LINE__);
                     }
+                }
+                else
+                {
+        error_log(sprintf('%s::%s -->%s', basename(__FILE__), __LINE__, $field['id'])) ;
+                    delete_post_meta($post_id, $field['id']) ;
                 }
             }
         }
@@ -530,7 +807,7 @@ add_filter('manage_edit-wpgform_sortable_columns', 'wpgform_form_sortable_column
 
 /**
  * Set up a footer hook to rearrange the post editing screen
- * for the WPGFORM_CPT_PLAYER custom post type.  The meta box which has all
+ * for the WPGFORM_CPT_FORM custom post type.  The meta box which has all
  * of the custom fields in it will appear before the Visual Editor.
  * This is accomplished using a simple jQuery script once the
  * document is loaded.
@@ -543,6 +820,16 @@ function wpgform_admin_footer_hook()
 
     if (get_post_type($post) == WPGFORM_CPT_FORM)
     {
+        //  wpGForm needs jQuery!
+        wp_enqueue_script('jquery') ;
+
+        //  Load the WordPress Google Form jQuery Admin script from the plugin
+        wp_register_script('wpgform-jquery-admin',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/js/wpgform-admin.js')),
+            array('jquery'), false, true) ;
+        wp_enqueue_script('wpgform-jquery-admin') ;
+        return;
+
 ?>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
@@ -555,7 +842,7 @@ function wpgform_admin_footer_hook()
 }
 
 /**  Hook into the Admin Footer */
-//add_action('admin_footer','wpgform_admin_footer_hook');
+add_action('admin_footer','wpgform_admin_footer_hook');
 
 /**  Filter to change the Title field for the Player post type */
 add_filter('enter_title_here', 'wpgform_enter_title_here_filter') ;
@@ -569,14 +856,6 @@ function wpgform_enter_title_here_filter($title)
     else
         return $title ;
 }
-
-/** Filter to show all posts for Position and Roster Taxonomies when viewing an archive */
-//add_filter('option_posts_per_page', 'wpgform_option_posts_per_page' );
-
-function wpgform_option_posts_per_page( $value ) {
-    return (!is_admin() && (is_tax(WPGFORM_TAX_POSITION ) || is_tax(WPGFORM_TAX_ROSTER))) ? -1 : $value ;
-}
-
 
 /**
  * wpgform_admin_css()
