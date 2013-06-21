@@ -966,8 +966,11 @@ jQuery(document).ready(function($) {
                 $meta_type = get_post_meta($o['id'], $field['type_id'], true);
                 $meta_value = get_post_meta($o['id'], $field['value_id'], true);
 
-                foreach ($meta_field as $key => $value)
-                    $extras[$value] = sprintf('{%s: %s}', $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+                if (!empty($meta_field)) {
+                    foreach ($meta_field as $key => $value)
+                        $extras[$value] = sprintf('{%s: %s}',
+                            $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+                }
             }
         }
 
