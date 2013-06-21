@@ -717,10 +717,10 @@ function wpgform_admin_footer_hook()
         wp_enqueue_script('jquery') ;
 
         //  Load the WordPress Google Form jQuery Admin script from the plugin
-        wp_register_script('wpgform-jquery-admin',
-            plugins_url(plugin_basename(dirname(__FILE__) . '/js/wpgform-admin.js')),
+        wp_register_script('wpgform-post-type',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/js/wpgform-post-type.js')),
             array('jquery'), false, true) ;
-        wp_enqueue_script('wpgform-jquery-admin') ;
+        wp_enqueue_script('wpgform-post-type') ;
         return;
 
 ?>
