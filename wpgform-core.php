@@ -967,11 +967,9 @@ jQuery(document).ready(function($) {
                 $meta_value = get_post_meta($o['id'], $field['value_id'], true);
 
                 foreach ($meta_field as $key => $value)
-                    $extras[$value] = sprintf('{%s: %s}', $meta_type[$key], empty($meta_value) ? 'true' : $meta_value) ;
+                    $extras[$value] = sprintf('{%s: %s}', $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
             }
         }
-        error_log(print_r($meta_value, true)) ;
-        error_log(print_r($extras, true)) ;
 
         //  Include jQuery validation?
         if ($validation) $js .= sprintf('
@@ -1557,7 +1555,7 @@ function wpgform_head()
         'required' => __('This field is required.', WPGFORM_I18N_DOMAIN),
         'remote' => __('Please fix this field.', WPGFORM_I18N_DOMAIN),
         'email' => __('Please enter a valid email address.', WPGFORM_I18N_DOMAIN),
-        'url' => __('-->Please enter a valid URL.', WPGFORM_I18N_DOMAIN),
+        'url' => __('Please enter a valid URL.', WPGFORM_I18N_DOMAIN),
         'date' => __('Please enter a valid date.', WPGFORM_I18N_DOMAIN),
         'dateISO' => __('Please enter a valid date (ISO).', WPGFORM_I18N_DOMAIN),
         'number' => __('Please enter a valid number.', WPGFORM_I18N_DOMAIN),
