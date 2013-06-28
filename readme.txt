@@ -320,6 +320,7 @@ No known upgrade issues.
 * Added internationalization support for jQuery Validation messages.
 * New language support files.
 * New jQuery Validation based custom validation option.
+* Fixed problem with escaped characters ending up in Google spreadsheet.
 
 = Version 0.53 =
 * Added CSS rule to hide Google's new Edit Link "feature".
