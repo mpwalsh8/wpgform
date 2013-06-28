@@ -1304,7 +1304,9 @@ jQuery(document).ready(function($) {
             //  appropriate HTML entity or some variety of it.  Need to undo
             //  that so the URL can be actually be used.
     
+            $body = stripslashes_deep(urldecode($body)) ;
             $action = str_replace(array('&#038;','&#38;','&amp;'), '&', $action) ;
+
             if (WPGFORM_DEBUG)
             {
                 wpgform_preprint_r($action) ;
