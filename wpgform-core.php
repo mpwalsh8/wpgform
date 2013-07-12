@@ -758,8 +758,8 @@ class wpGForm
         if (WPGFORM_DEBUG)
         {
             wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
-            wpgform_preprint_r(self::$response) ;
-            wpgform_preprint_r(htmlspecialchars($html)) ;
+            wpgform_htmlspecialchars_preprint_r(self::$response) ;
+            //wpgform_htmlspecialchars_preprint_r($html) ;
         }
 
         //  Need to filter the HTML retrieved from the form and strip off the stuff
@@ -809,7 +809,7 @@ class wpGForm
         if (WPGFORM_DEBUG)
         {
             wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
-            wpgform_preprint_r($html) ;
+            wpgform_htmlspecialchars_preprint_r($html) ;
         }
 
         //  Did we end up with anything prior to the first DIV?  If so, remove it as
@@ -820,7 +820,7 @@ class wpGForm
         if (WPGFORM_DEBUG)
         {
             wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
-            wpgform_preprint_r($html) ;
+            wpgform_htmlspecialchars_preprint_r($html) ;
             wpgform_preprint_r($first_div) ;
         }
 

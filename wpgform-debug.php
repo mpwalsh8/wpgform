@@ -165,6 +165,21 @@ function wpgform_preprint_r()
     }
     wpgform_error_log(func_get_args()) ;
 }
+
+/**
+ * Debug functions
+ */
+function wpgform_htmlspecialchars_preprint_r()
+{
+    global $wpgform_debug_content ;
+
+    $numargs = func_num_args() ;
+    $arg_list = func_get_args() ;
+    for ($i = 0; $i < $numargs; $i++) {
+	    $wpgform_debug_content .= sprintf('<pre style="text-align:left;">%s</pre>', htmlspecialchars(print_r($arg_list[$i], true))) ;
+    }
+    wpgform_error_log(func_get_args()) ;
+}
 /**
  * Debug functions
  */
