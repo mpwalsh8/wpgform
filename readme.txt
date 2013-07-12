@@ -321,6 +321,7 @@ No known upgrade issues.
 * New language support files.
 * New jQuery Validation based custom validation option.
 * Fixed problem with escaped characters ending up in Google spreadsheet.
+* Moved transport control out of debug module and into core code so it can be a permanent setting for some server environments.
 
 = Version 0.53 =
 * Added CSS rule to hide Google's new Edit Link "feature".
