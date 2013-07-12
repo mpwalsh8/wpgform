@@ -759,7 +759,7 @@ class wpGForm
         {
             wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
             wpgform_preprint_r(self::$response) ;
-            wpgform_preprint_r(htmlspecialchars(($html)) ;
+            wpgform_preprint_r(htmlspecialchars($html)) ;
         }
 
         //  Need to filter the HTML retrieved from the form and strip off the stuff
