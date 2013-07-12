@@ -22,47 +22,6 @@ $wpgform_debug_content = '' ;
 add_action('init', 'wpgform_debug', 0) ;
 add_action('wp_footer', 'wpgform_show_debug_content') ;
 
-//  In debug mode several filters can be disabled for debugging purposes.
-
-$wpgform_options = wpgform_get_plugin_options() ;
-
-//  Change the HTTP Time out
-if ($wpgform_options['http_request_timeout'] == 1)
-{
-    if (is_int($wpgform_options['http_request_timeout_value'])
-        || ctype_digit($wpgform_options['http_request_timeout_value']))
-        add_filter('http_request_timeout', 'wpgform_http_request_timeout') ;
-}
-
-//  Disable fsockopen transport?
-if ($wpgform_options['fsockopen_transport'] == 1)
-    add_filter('use_fsockopen_transport', '__return_false') ;
-
-//  Disable streams transport?
-if ($wpgform_options['streams_transport'] == 1)
-    add_filter('use_streams_transport', '__return_false') ;
-
-//  Disable curl transport?
-if ($wpgform_options['curl_transport'] == 1)
-    add_filter('use_curl_transport', '__return_false') ;
-
-//  Disable local ssl verify?
-if ($wpgform_options['local_ssl_verify'] == 1)
-    add_filter('https_local_ssl_verify', '__return_false') ;
-
-//  Disable ssl verify?
-if ($wpgform_options['ssl_verify'] == 1)
-    add_filter('https_ssl_verify', '__return_false') ;
-
-/**
- * Optional filter to change HTTP Request Timeout
- *
- */
-function wpgform_http_request_timeout($timeout) {
-    $wpgform_options = wpgform_get_plugin_options() ;
-    return $wpgform_options['http_request_timeout'] ;
-}
-
 /**
  * Debug action to examine server variables
  *
@@ -117,6 +76,7 @@ h2.wpgform-debug {
 
 div.wpgform-debug {
     padding: 10px;
+    direction: ltr;
 }
 
 div.wpgform-debug h2 {

@@ -44,10 +44,45 @@ function wpgform_init_i18n()
 	}
 }
 
-
-
 //  Need the plugin options to initialize debug
 $wpgform_options = wpgform_get_plugin_options() ;
+
+//  Disable fsockopen transport?
+if ($wpgform_options['fsockopen_transport'] == 1)
+    add_filter('use_fsockopen_transport', '__return_false') ;
+
+//  Disable streams transport?
+if ($wpgform_options['streams_transport'] == 1)
+    add_filter('use_streams_transport', '__return_false') ;
+
+//  Disable curl transport?
+if ($wpgform_options['curl_transport'] == 1)
+    add_filter('use_curl_transport', '__return_false') ;
+
+//  Disable local ssl verify?
+if ($wpgform_options['local_ssl_verify'] == 1)
+    add_filter('https_local_ssl_verify', '__return_false') ;
+
+//  Disable ssl verify?
+if ($wpgform_options['ssl_verify'] == 1)
+    add_filter('https_ssl_verify', '__return_false') ;
+
+//  Change the HTTP Time out?
+if ($wpgform_options['http_request_timeout'] == 1)
+{
+    if (is_int($wpgform_options['http_request_timeout_value'])
+        || ctype_digit($wpgform_options['http_request_timeout_value']))
+        add_filter('http_request_timeout', 'wpgform_http_request_timeout') ;
+}
+
+/**
+ * Optional filter to change HTTP Request Timeout
+ *
+ */
+function wpgform_http_request_timeout($timeout) {
+    $wpgform_options = wpgform_get_plugin_options() ;
+    return $wpgform_options['http_request_timeout'] ;
+}
 
 //  Enable debug content?
 define('WPGFORM_DEBUG', $wpgform_options['enable_debug'] == 1) ;
@@ -692,8 +727,8 @@ class wpGForm
 
         if (!self::$posted)
         {
-            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'cookies' => array($locale_cookie))) ;
-            //self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+            //self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'cookies' => array($locale_cookie))) ;
+            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
             //error_log(print_r(self::$response, true)) ;
         }
 
@@ -720,7 +755,12 @@ class wpGForm
         else
             $html = self::$response['body'] ;
 
-        if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
+        if (WPGFORM_DEBUG)
+        {
+            wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
+            wpgform_preprint_r(self::$response) ;
+            wpgform_preprint_r(htmlspecialchars(($html)) ;
+        }
 
         //  Need to filter the HTML retrieved from the form and strip off the stuff
         //  we don't want.  This gets rid of the HTML wrapper from the Google page.
@@ -766,10 +806,23 @@ class wpGForm
 
         $html = wp_kses($html, $allowed_tags) ;
 
+        if (WPGFORM_DEBUG)
+        {
+            wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
+            wpgform_preprint_r($html) ;
+        }
+
         //  Did we end up with anything prior to the first DIV?  If so, remove it as
         //  it should have been removed by wp_kses() but sometimes stuff slips through!
 
         $first_div = strpos($html, '<div') ;
+
+        if (WPGFORM_DEBUG)
+        {
+            wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
+            wpgform_preprint_r($html) ;
+            wpgform_preprint_r($first_div) ;
+        }
 
         //  If there are no DIVs, then we have garbage and should stop now!
 
