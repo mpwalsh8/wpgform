@@ -1232,14 +1232,16 @@ jQuery(document).ready(function($) {
         //  Log form submission?
         if (self::$posted && is_null($action))
         {
+            $unknown = __('Unknown', WPGFORM_I18N_DOMAIN) ;
+
             $log = array(
-                'url' => $_SERVER['URL']
+                'url' => array_key_exists('URL', $_SERVER) ? $_SERVER['URL'] : $unknown
                ,'timestamp' => date('Y-m-d H:i:s')
-               ,'remote_addr' => $_SERVER['REMOTE_ADDR']
-               ,'remote_host' => $_SERVER['REMOTE_HOST']
-               ,'http_referer' => $_SERVER['HTTP_REFERER']
-               ,'http_user_agent' => $_SERVER['HTTP_USER_AGENT']
-               ,'form' => (array_key_exists('id', $o) ? $o['id'] : null)
+               ,'remote_addr' => array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : $unknown
+               ,'remote_host' => array_key_exists('REMOTE_HOST', $_SERVER) ? $_SERVER['REMOTE_HOST'] : $unknown
+               ,'http_referer' => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : $unknown
+               ,'http_user_agent' => array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : $unknown
+               ,'form' => array_key_exists('id', $o) ? $o['id'] : null
                ,'post_id' => get_the_ID()
             ) ;
                
