@@ -322,6 +322,7 @@ No known upgrade issues.
 * New jQuery Validation based custom validation option.
 * Fixed problem with escaped characters ending up in Google spreadsheet.
 * Moved transport control out of debug module and into core code so it can be a permanent setting for some server environments.
+* Fixed PHP warning messages which happen with Logging Enabled when some of the server variables don't exist.
 
 = Version 0.53 =
 * Added CSS rule to hide Google's new Edit Link "feature".
