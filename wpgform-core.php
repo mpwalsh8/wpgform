@@ -156,6 +156,7 @@ function wpgform_get_default_plugin_options()
        ,'captcha_operator_plus' => 1
        ,'captcha_operator_minus' => 0
        ,'captcha_operator_mult' => 0
+       ,'captcha_description' => ''
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
        ,'http_api_timeout' => 5
        ,'form_submission_log' => 0
@@ -661,6 +662,8 @@ class wpGForm
 
             self::$wpgform_captcha = array('a' => $a, 'b' => $b, 'c' => $c, 'x' => $x) ;
 
+            //  Build the CAPTCHA HTML
+
             $captcha_html .= '<div class="wpgform-captcha">' ;
             $captcha_html .= sprintf('<div class="%sss-item %sss-item-required %sss-text">', $prefix, $prefix, $prefix) ;
             $captcha_html .= sprintf('<div class="%sss-form-entry">', $prefix) ;
@@ -671,7 +674,17 @@ class wpGForm
             $captcha_html .= sprintf('<span class="%sss-required-asterisk">*</span></label>', $prefix) ;
             $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-help"></label>', $prefix) ;
             $captcha_html .= sprintf('<input style="width: 100px;" type="text" id="wpgform-captcha" class="%sss-q-short" value="" name="wpgform-captcha">', $prefix) ;
-            $captcha_html .= '</div></div></div>' ;
+            $captcha_html .= '</div></div>' ;
+
+            //  Add in the optional CAPTCHA description if one has been set
+
+            if (!empty($wpgform_options['captcha_description']))
+            {
+                $captcha_html .= sprintf('<div class="wpgform-captcha-description">%s</div>', $wpgform_options['captcha_description']) ;
+                error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+            }
+
+            $captcha_html .= '</div>' ;
         }
 
         //  Use jQuery validation?  Force it on when CAPTCHA is on

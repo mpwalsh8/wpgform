@@ -205,6 +205,7 @@ function wpgform_options_page()
 function wpgform_settings_input()
 {
     $wpgform_options = wpgform_get_plugin_options() ;
+    error_log(print_r($wpgform_options, true)) ;
 ?>
     <table class="form-table">
         <tr valign="top">
@@ -246,7 +247,7 @@ function wpgform_settings_input()
             <br/>
             <input name="wpgform_options[captcha_terms]" type="radio" id="wpgform_captcha_terms" value="3" <?php checked(3, $wpgform_options['captcha_terms']) ; ?> />
             <?php _e('Use three  (3) terms for CAPTCHA:  e.g. A + B - C = D (when enabled).', WPGFORM_I18N_DOMAIN);?></label>
-            <br />
+            <br style="margin-bottom: 10px;"/>
             <label for="wpgform_captcha_operator_plus">
             <input name="wpgform_options[captcha_operator_plus]" type="checkbox" id="wpgform_captcha_operator_plus" value="1" <?php checked('1', $wpgform_options['captcha_operator_plus']) ; ?> />
             <?php _e('Addition:  +', WPGFORM_I18N_DOMAIN);?><br /></label>
@@ -257,6 +258,14 @@ function wpgform_settings_input()
             <input name="wpgform_options[captcha_operator_mult]" type="checkbox" id="wpgform_captcha_operator_mult" value="1" <?php checked('1', $wpgform_options['captcha_operator_mult']) ; ?> />
             <?php _e('Multiplication:  *', WPGFORM_I18N_DOMAIN);?><br /></label>
             <small><?php _e('Choose which operators can be used for CAPTCHA validation (when enabled)', WPGFORM_I18N_DOMAIN);?></small>
+
+            <br style="margin-bottom: 10px;"/>
+            <label for="wpgform_catcha_description">
+            <input style="width: 500px;" name="wpgform_options[captcha_description]" type="text" id="wpgform_captcha_description" value="<?php echo $wpgform_options['captcha_description'] ; ?>" /><br />
+           <small><?php _e('Optional description of what the CAPTCHA is and used for.', WPGFORM_I18N_DOMAIN);?></small></label>
+
+
+
             </fieldset></td>
         </tr>
         <tr valign="top">
@@ -310,7 +319,7 @@ function wpgform_settings_input()
     <input name="wpgform_options[http_request_timeout]" type="hidden" id="wpgform_http_request_timeout" value="<?php echo $wpgform_options['http_request_timeout'] ; ?>" />
     <input name="wpgform_options[http_request_timeout_value]" type="hidden" id="wpgform_http_request_timeout_value" value="<?php echo $wpgform_options['http_request_timeout_value'] ; ?>" />
     <input name="wpgform_options[browser_check]" type="hidden" id="wpgform_browser_check" value="<?php echo $wpgform_options['browser_check'] ; ?>" />
-    <input name="wpgform_options[submission_log]" type="hidden" id="wpgform_submission_log" value="<?php echo $wpgform_options['submission_log'] ; ?>" />
+    <input name="wpgform_options[form_submission_log]" type="hidden" id="wpgform_form_submission_log" value="<?php echo $wpgform_options['form_submission_log'] ; ?>" />
 <?php
 }
 
