@@ -323,6 +323,8 @@ No known upgrade issues.
 * Fixed problem with escaped characters ending up in Google spreadsheet.
 * Moved transport control out of debug module and into core code so it can be a permanent setting for some server environments.
 * Fixed PHP warning messages which happen with Logging Enabled when some of the server variables don't exist.
+* Fixed bug with Form Submission Log setting stickiness.
+* Added an optional CAPTCHA message which will appear below the CAPTCHA input when set.
 
 = Version 0.53 =
 * Added CSS rule to hide Google's new Edit Link "feature".
