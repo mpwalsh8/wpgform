@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 0.54
+Stable tag: 0.55
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -315,6 +315,9 @@ div.ss-form-container li {
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.55 =
+Incporated a patch version of jQuery Columnizer to fix problem which appears in WordPress 3.6 which includes jQuery 1.10.
 
 = Version 0.54 =
 * Added internationalization support for jQuery Validation messages.
