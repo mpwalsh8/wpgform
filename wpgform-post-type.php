@@ -130,7 +130,8 @@ function wpgform_primary_meta_box_content($fieldsonly = false)
                 'desc' => __('Send email upon form submission', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'email',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -149,6 +150,34 @@ function wpgform_primary_meta_box_content($fieldsonly = false)
                 'type' => 'textarea',
                 'std' => '',
                 'required' => false
+            ),
+            array(
+                'name' => __('Form Caching', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Enable Form Caching using Wordpress Transient API', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'use_transient',
+                'type' => 'radio',
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Form Caching Timeout', WPGFORM_I18N_DOMAIN),
+                'desc' => __('How often will the forms reloaded (in minutes)', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'transient_time',
+                'type' => 'smtext',
+                'std' => WPGFORM_FORM_TRANSIENT_EXPIRE,
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Reset Form Cache?', WPGFORM_I18N_DOMAIN),
+                'desc' => __('This will force reloading the form from Google Drive', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'transient_reset',
+                'type' => 'checkbox',
+                'label' => 'Flush the Transient to force reload of the form from Google Drive',
+                'required' => false,
+                'br' => false
             ),
         )
     ) ;
@@ -175,7 +204,8 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'desc' => __('CAPTCHA', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'captcha',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -193,7 +223,8 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'desc' => __('Send email to end user upon form submission', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'user_email',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -202,7 +233,8 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'desc' => __('Google Legal Disclaimer', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'legal',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -211,7 +243,8 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'desc' => __('Set the form Read Only', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'readonly',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -220,7 +253,8 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'desc' => __('Insert &lt;BR&gt; tags between labels and input box', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'br',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -245,7 +279,8 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'desc' => __('Show or Hide the Google Form\'s title', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'title',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -254,7 +289,8 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'desc' => __('Map H1 elements to H2 elements', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'maph1h2',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -263,7 +299,8 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'desc' => __('Unite Theme Hack', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'unitethemehack',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -292,7 +329,8 @@ function wpgform_validation_meta_box_content($fieldsonly = false)
                 'desc' => __('Enable default jQuery Validation on all required fields', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'validation',
                 'type' => 'radio',
-                'options' => array('On', 'Off'),
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
                 'required' => false,
                 'br' => false
             ),
@@ -448,13 +486,13 @@ function wpgform_build_meta_box($mb)
 
                 case 'radio':
                     foreach ($field['options'] as $option => $value) {
-                        echo '<input type="radio" name="', $field['id'], '" value="', strtolower($value), '"', $meta == strtolower($value) ? ' checked="checked"' : '', ' />&nbsp;', $value, $field['br'] === true ? '<br />' : '&nbsp;&nbsp;';
+                        echo '<input type="radio" name="', $field['id'], '" value="', strtolower($value), '"', $meta == strtolower($value) ? ' checked="checked"' : $field['std'] === $option ? ' checked="checked"' : '', ' />&nbsp;', $value, $field['br'] === true ? '<br />' : '&nbsp;&nbsp;';
                     }
                     echo '<br />', '<small>', $field['desc'], '</small>';
                     break;
 
                 case 'checkbox':
-                    echo '<input type="checkbox" name="', $field['id'], '" id="', $field['id'], '"', $meta ? ' checked="checked"' : '', ' />';
+                    echo '<span><input type="checkbox" name="', $field['id'], '" id="', $field['id'], '"', $meta ? ' checked="checked"' : '', ' />', '&nbsp;', $field['label'], '</span>';
                     break;
 
                 case 'validation':
@@ -616,6 +654,16 @@ function wpgform_save_meta_box_data($post_id)
                     }
                     else
                     {
+                         if( ($field['id'] == WPGFORM_PREFIX.'form') || ($field['id'] == WPGFORM_PREFIX . 'transient_reset') )
+                         {
+                             // If form cache reset was selected, or the URL was updated
+                             // let's delete the transient and uncheck the "reset" option
+                             delete_transient(WPGFORM_FORM_TRANSIENT.$post_id);
+                             if( ($field['id'] == WPGFORM_PREFIX . 'transient_reset') && ($new == 'on') )
+                             {
+                                 $new = '';
+                             }
+                         }
                         //wpgform_whereami(__FILE__, __LINE__);
                     }
                 }
