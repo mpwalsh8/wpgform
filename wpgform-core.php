@@ -26,6 +26,8 @@ define('WPGFORM_CONFIRM_LIGHTBOX', 'lightbox') ;
 define('WPGFORM_CONFIRM_REDIRECT', 'redirect') ;
 define('WPGFORM_CONFIRM_NONE', 'none') ;
 define('WPGFORM_LOG_ENTRY_META_KEY', '_wpgform_log_entry') ;
+define('WPGFORM_FORM_TRANSIENT', 'wpgform_form_response') ;
+define('WPGFORM_FORM_TRANSIENT_EXPIRE', 5) ;
 
 // i18n plugin domain
 define( 'WPGFORM_I18N_DOMAIN', 'wpgform' );
@@ -386,6 +388,8 @@ class wpGForm
         'validation'     => 'off',          // Use jQuery validation for required fields
         'unitethemehack' => 'off',          // Send an email confirmation to blog admin on submission
         'style'          => null,           // How to present the custom confirmation after submit
+        'use_transient'  => false,          // Toogles the use of WP Transient API for form caching
+        'transient_time' => WPGFORM_FORM_TRANSIENT_EXPIRE,  // Sets how long (in minutes) the forms will be cached using WP Transient
     ) ;
 
     /**
@@ -681,7 +685,7 @@ class wpGForm
             if (!empty($wpgform_options['captcha_description']))
             {
                 $captcha_html .= sprintf('<div class="wpgform-captcha-description">%s</div>', $wpgform_options['captcha_description']) ;
-                error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+                //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             }
 
             $captcha_html .= '</div>' ;
@@ -726,6 +730,10 @@ class wpGForm
         //  Show the custom confirmation via AJAX instead of redirect?
         $style = $o['style'] === 'none' ? null : $o['style'] ;
 
+        // Use WP Transient API Cache?
+        $use_transient = $o['use_transient'] === 'on';
+        $transient_time = $o['transient_time'];
+
         //  WordPress converts all of the ampersand characters to their
         //  appropriate HTML entity or some variety of it.  Need to undo
         //  that so the URL can be actually be used.
@@ -740,9 +748,21 @@ class wpGForm
 
         if (!self::$posted)
         {
-            //self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'cookies' => array($locale_cookie))) ;
-            self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
-            //error_log(print_r(self::$response, true)) ;
+            if ($use_transient)
+            {
+                if ( false === ( self::$response = get_transient( WPGFORM_FORM_TRANSIENT.$o['id'] ) ) ) 
+                {
+                    // There was no transient, so let's regenerate the data and save it
+                    self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+                    set_transient( WPGFORM_FORM_TRANSIENT.$o['id'], self::$response, $transient_time*MINUTE_IN_SECONDS );
+                }
+            }
+            else
+            {
+                //self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'cookies' => array($locale_cookie))) ;
+                self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+                //error_log(print_r(self::$response, true)) ;
+            }
         }
 
         //  Retrieve the HTML from the URL
@@ -760,6 +780,11 @@ class wpGForm
                 wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
                 wpgform_preprint_r(self::$response) ;
             }
+
+            //  Clean up the transient if an error is encountered
+
+            if ($use_transient)
+                delete_transient(WPGFORM_FORM_TRANSIENT . $o['id']);
 
             return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
                __('Unable to retrieve Google Form.  Please try reloading this page.', WPGFORM_I18N_DOMAIN)) ;
@@ -931,11 +956,10 @@ class wpGForm
         if (($wpgform_options['custom_css'] == 1) && !empty($o['form_css']))
             $css .= '<style>' . $o['form_css'] . '</style>' ;
 
-        //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
+        //  Tidy up CSS to ensure it isn't affected by 'the_content' filters
         $patterns = array('/[\r\n]+/', '/ +/') ;
         $replacements = array('', ' ') ;
         $css = preg_replace($patterns, $replacements, $css) . PHP_EOL ;
-
 
         //  Output Javscript for form validation, make sure any class prefix is included
         //  Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly.
@@ -1280,6 +1304,8 @@ jQuery(document).ready(function($) {
      */
     function ProcessGoogleForm()
     {
+        $tabFound = false ;
+
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
         if (!empty($_POST) && array_key_exists('wpgform-action', $_POST))
@@ -1330,6 +1356,7 @@ jQuery(document).ready(function($) {
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
 
+            //error_log(print_r($_POST, true)) ;
             foreach ($_POST as $key => $value)
             {
                 if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
@@ -1344,23 +1371,53 @@ jQuery(document).ready(function($) {
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
+                    {
+                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+                        //error_log(print_r($pv)) ;
                         $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
+                    }
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                 }
                 else if ($key === 'draftResponse')
                 {
+                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+                        //error_log(print_r($key, true)) ;
+                        //error_log(print_r($value, true)) ;
                     //  draftResponse is a special parameter for multi-page forms and needs
                     //  some special processing.  We need to remove the escapes on double quotes.
 
-                    $value = preg_replace('/\\\"/', '"', $value) ;
+                        $patterns = array('/\\\"/', '/\\\t/') ;
+                        $replacements = array('"', 't') ;
+
+                    //$value = preg_replace('/\\\"/', '"', $value) ;
+                    //$value = preg_replace('/\\\t/', 't', $value) ;
+
+                    $value = preg_replace($patterns, $replacements, $value) ;
+                        //error_log(print_r($value, true)) ;
 
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                 }
                 else
                 {
+                    //error_log(preg_match('/[\t]/', $value)) ;
+                    if (preg_match('/[\t]/', $value))
+                    {
+                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+                        //error_log('Found a tab!!!') ;
+                        //error_log(print_r($value, true)) ;
+                        //error_log(print_r(rawurlencode($value), true)) ;
+                        //$value = preg_replace('/\t/', '%09', $value) ;
+                        //error_log(print_r($value, true)) ;
+                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+                    }
+                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+                        //error_log(print_r($key, true)) ;
+                        //error_log(print_r($value, true)) ;
+                        //error_log(print_r(rawurlencode($value), true)) ;
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
+            //error_log(print_r($body, true)) ;
                 }
             }
 
@@ -1372,7 +1429,9 @@ jQuery(document).ready(function($) {
             //  appropriate HTML entity or some variety of it.  Need to undo
             //  that so the URL can be actually be used.
     
-            $body = stripslashes_deep(urldecode($body)) ;
+            
+            //$body = stripslashes_deep(urldecode($body)) ;
+            $body = stripslashes_deep($body) ;
             $action = str_replace(array('&#038;','&#38;','&amp;'), '&', $action) ;
 
             if (WPGFORM_DEBUG)
@@ -1380,6 +1439,7 @@ jQuery(document).ready(function($) {
                 wpgform_preprint_r($action) ;
                 wpgform_preprint_r($body) ;
             }
+            //error_log(print_r($body, true)) ;
         
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
