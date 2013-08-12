@@ -3,7 +3,7 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
-Tested up to: 3.5.1
+Tested up to: 3.6
 Stable tag: 0.55
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
@@ -315,6 +315,13 @@ div.ss-form-container li {
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.56 =
+* Incorporated es_ES language support from TBD.
+* Incpororated Transient support patch from TBD.
+* Added support for UTF-8 characters in Google Forms.
+* Resolved bug with embedded tabs in form response values.
+* Improved handling of default settings for new form creation.
 
 = Version 0.55 =
 Incporated a patch version of jQuery Columnizer to fix problem which appears in WordPress 3.6 which includes jQuery 1.10.
