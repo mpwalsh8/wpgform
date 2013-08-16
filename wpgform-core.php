@@ -748,9 +748,20 @@ class wpGForm
 
         if (!self::$posted)
         {
-            if ($use_transient)
+            if ($use_transient && is_multisite())
             {
-                if ( false === ( self::$response = get_transient( WPGFORM_FORM_TRANSIENT.$o['id'] ) ) ) 
+                error_log('transient - multi-site') ;
+                if (false === ( self::$response = get_site_transient( WPGFORM_FORM_TRANSIENT.$o['id'] ) ) ) 
+                {
+                    // There was no transient, so let's regenerate the data and save it
+                    self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+                    set_site_transient( WPGFORM_FORM_TRANSIENT.$o['id'], self::$response, $transient_time*MINUTE_IN_SECONDS );
+                }
+            }
+            elseif ($use_transient && !is_multisite())
+            {
+                error_log('transient - non-multi-site') ;
+                if (false === ( self::$response = get_transient( WPGFORM_FORM_TRANSIENT.$o['id'] ) ) ) 
                 {
                     // There was no transient, so let's regenerate the data and save it
                     self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
@@ -759,9 +770,7 @@ class wpGForm
             }
             else
             {
-                //self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'cookies' => array($locale_cookie))) ;
                 self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
-                //error_log(print_r(self::$response, true)) ;
             }
         }
 
@@ -783,7 +792,9 @@ class wpGForm
 
             //  Clean up the transient if an error is encountered
 
-            if ($use_transient)
+            if ($use_transient && is_multisite())
+                delete_site_transient(WPGFORM_FORM_TRANSIENT . $o['id']);
+            elseif ($use_transient)
                 delete_transient(WPGFORM_FORM_TRANSIENT . $o['id']);
 
             return sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
