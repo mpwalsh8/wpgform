@@ -323,6 +323,7 @@ No known upgrade issues.
 * Resolved bug with embedded tabs in form response values.
 * Improved handling of default settings for new form creation.
 * Added multi-site support for Transients.
+* Added support for the placeholder attribute on input tags.
 
 = Version 0.55 =
 Incporated a patch version of jQuery Columnizer to fix problem which appears in WordPress 3.6 which includes jQuery 1.10.
