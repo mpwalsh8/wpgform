@@ -416,7 +416,7 @@ function wpgform_placeholder_meta_box_content($fieldsonly = false)
                 'id' => WPGFORM_PREFIX . 'placeholder_field_value',
                 'type' => 'hidden',
                 'std' => '',
-                'required' => false
+                'required' => true
             ),
         )
     ) ;
@@ -573,7 +573,10 @@ function wpgform_build_meta_box($mb)
                             echo '</select>';
                             }
 
-						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
+                            if ('validation' === $field['type'])
+						        printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
+                            else
+						        printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
 						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="'.$meta_value[$key].'" size="15" />' ;
 						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
 
@@ -592,7 +595,10 @@ function wpgform_build_meta_box($mb)
                             echo '</select>';
                             }
 
-						    printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
+                            if ('validation' === $field['type'])
+						        printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
+                            else
+						        printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
 						    echo '<input type="text" name="'.$field['value_id'].'['.$i.']" id="'.$field['value_id'].'" value="" size="15" />' ;
 						    echo '<a class="repeatable-remove button" href="#">-</a></li>';
 	                }
