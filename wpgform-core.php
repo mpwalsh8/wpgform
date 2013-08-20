@@ -509,8 +509,12 @@ class wpGForm
 
         // get current form meta data fields
 
-        $fields = array_merge(wpgform_primary_meta_box_content(true),
-            wpgform_secondary_meta_box_content(true), wpgform_validation_meta_box_content(true)) ;
+        $fields = array_merge(
+            wpgform_primary_meta_box_content(true),
+            wpgform_secondary_meta_box_content(true),
+            wpgform_validation_meta_box_content(true),
+            wpgform_placeholder_meta_box_content(true)
+        ) ;
 
         foreach ($fields as $field)
         {
@@ -685,7 +689,6 @@ class wpGForm
             if (!empty($wpgform_options['captcha_description']))
             {
                 $captcha_html .= sprintf('<div class="wpgform-captcha-description">%s</div>', $wpgform_options['captcha_description']) ;
-                //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             }
 
             $captcha_html .= '</div>' ;
@@ -750,7 +753,6 @@ class wpGForm
         {
             if ($use_transient && is_multisite())
             {
-                error_log('transient - multi-site') ;
                 if (false === ( self::$response = get_site_transient( WPGFORM_FORM_TRANSIENT.$o['id'] ) ) ) 
                 {
                     // There was no transient, so let's regenerate the data and save it
@@ -760,7 +762,6 @@ class wpGForm
             }
             elseif ($use_transient && !is_multisite())
             {
-                error_log('transient - non-multi-site') ;
                 if (false === ( self::$response = get_transient( WPGFORM_FORM_TRANSIENT.$o['id'] ) ) ) 
                 {
                     // There was no transient, so let's regenerate the data and save it
@@ -940,6 +941,31 @@ class wpGForm
             $wgformid = self::$wpgform_form_id++ ;
         }
         
+        //  Handle and "placeholders"
+ 
+        $fields = wpgform_placeholder_meta_box_content(true) ;
+
+        foreach ($fields as $field)
+        {
+            if ('placeholder' == $field['type'])
+            {
+    	        $meta_field = get_post_meta($o['id'], $field['id'], true);
+                $meta_type = get_post_meta($o['id'], $field['type_id'], true);
+                $meta_value = get_post_meta($o['id'], $field['value_id'], true);
+
+                if (!empty($meta_field)) {
+                    foreach ($meta_field as $key => $value)
+                    {
+                        $pattern = sprintf('/name="%s"/', $meta_field[$key]) ;
+                        $replacement = sprintf('name="%s" placeholder="%s"',
+                            $meta_field[$key], $meta_value[$key]) ;
+                        $html = preg_replace($pattern, $replacement, $html) ;
+                    }
+                }
+            }
+        }
+
+
         //  The Unite theme from Paralleus mucks with the submit buttons
         //  which breaks the ability to submit the form to Google correctly.
         //  This hack will "unbreak" the submit buttons.
@@ -1367,7 +1393,6 @@ jQuery(document).ready(function($) {
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
 
-            //error_log(print_r($_POST, true)) ;
             foreach ($_POST as $key => $value)
             {
                 if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
@@ -1383,17 +1408,12 @@ jQuery(document).ready(function($) {
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
                     {
-                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-                        //error_log(print_r($pv)) ;
                         $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
                     }
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                 }
                 else if ($key === 'draftResponse')
                 {
-                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-                        //error_log(print_r($key, true)) ;
-                        //error_log(print_r($value, true)) ;
                     //  draftResponse is a special parameter for multi-page forms and needs
                     //  some special processing.  We need to remove the escapes on double quotes.
 
@@ -1404,31 +1424,14 @@ jQuery(document).ready(function($) {
                     //$value = preg_replace('/\\\t/', 't', $value) ;
 
                     $value = preg_replace($patterns, $replacements, $value) ;
-                        //error_log(print_r($value, true)) ;
 
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                 }
                 else
                 {
-                    //error_log(preg_match('/[\t]/', $value)) ;
-                    if (preg_match('/[\t]/', $value))
-                    {
-                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-                        //error_log('Found a tab!!!') ;
-                        //error_log(print_r($value, true)) ;
-                        //error_log(print_r(rawurlencode($value), true)) ;
-                        //$value = preg_replace('/\t/', '%09', $value) ;
-                        //error_log(print_r($value, true)) ;
-                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-                    }
-                        //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-                        //error_log(print_r($key, true)) ;
-                        //error_log(print_r($value, true)) ;
-                        //error_log(print_r(rawurlencode($value), true)) ;
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
-            //error_log(print_r($body, true)) ;
                 }
             }
 
@@ -1450,7 +1453,6 @@ jQuery(document).ready(function($) {
                 wpgform_preprint_r($action) ;
                 wpgform_preprint_r($body) ;
             }
-            //error_log(print_r($body, true)) ;
         
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
