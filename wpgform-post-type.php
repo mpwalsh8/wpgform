@@ -537,7 +537,7 @@ function wpgform_build_meta_box($mb)
 
                 case 'radio':
                     foreach ($field['options'] as $option => $value) {
-                        echo '<input type="radio" name="', $field['id'], '" value="', strtolower($value), '"', $meta == strtolower($value) ? ' checked="checked"' : $field['std'] === $option ? ' checked="checked"' : '', ' />&nbsp;', $value, $field['br'] === true ? '<br />' : '&nbsp;&nbsp;';
+                        echo '<input type="radio" name="', $field['id'], '" value="', strtolower($value), '"', $meta == strtolower($value) ? ' checked="checked"' : empty($meta) && $field['std'] === $option ? ' checked="checked"' : '', ' />&nbsp;', $value, $field['br'] === true ? '<br />' : '&nbsp;&nbsp;';
                     }
                     echo '<br />', '<small>', $field['desc'], '</small>';
                     break;
@@ -618,7 +618,6 @@ function wpgform_build_meta_box($mb)
 }
 
 add_action( 'quick_edit_custom_box', 'wpgform_add_quick_edit_nonce', 10, 2 );
-//add_action( 'quick_edit_custom_box', function() { error_log(__LINE__) ; }, 10, 2 );
 /**
  * Action to add a nonce to the quick edit form for the custom post types
  *
@@ -695,7 +694,6 @@ function wpgform_save_meta_box_data($post_id)
         //  updated and CPT fields are ignored in Quick Edit except for
         //  the Short URL field.
 
-        //wpgform_preprint_r($_POST) ;
         foreach ($fields as $field)
         {
             //  Only update other Post Meta fields when on the edit screen - ignore in quick edit mode
@@ -710,12 +708,10 @@ function wpgform_save_meta_box_data($post_id)
 
                     if ($new && $new != $old)
                     {
-                        //wpgform_whereami(__FILE__, __LINE__);
                         update_post_meta($post_id, $field['id'], $new) ;
                     }
                     elseif ('' == $new && $old)
                     {
-                        //wpgform_whereami(__FILE__, __LINE__);
                         delete_post_meta($post_id, $field['id'], $old) ;
                     }
                     else
