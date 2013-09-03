@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.56
+Stable tag: 0.57
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -315,6 +315,10 @@ div.ss-form-container li {
 No known upgrade issues.
 
 == Changelog ==
+
+= Version 0.57 =
+* Added ability to translate "What is" Captcha phrase.
+* Updated language translation files.
 
 = Version 0.56 =
 * Incorporated es_ES language support from TBD.
