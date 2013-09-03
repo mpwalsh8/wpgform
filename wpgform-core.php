@@ -676,9 +676,9 @@ class wpGForm
             $captcha_html .= sprintf('<div class="%sss-item %sss-item-required %sss-text">', $prefix, $prefix, $prefix) ;
             $captcha_html .= sprintf('<div class="%sss-form-entry">', $prefix) ;
             if ((int)$wpgform_options['captcha_terms'] === 2)
-                $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">What is %s %s %s ?', $prefix, $a, $op1, $b) ;
+                $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">%s %s %s %s ?', $prefix, __('What is', WPGFORM_I18N_DOMAIN), $a, $op1, $b) ;
             else
-                $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">What is %s %s %s %s %s?', $prefix, $a, $op1, $b, $op2, $c) ;
+                $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">%s %s %s %s %s %s?', $prefix, __('What is', WPGFORM_I18N_DOMAIN), $a, $op1, $b, $op2, $c) ;
             $captcha_html .= sprintf('<span class="%sss-required-asterisk">*</span></label>', $prefix) ;
             $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-help"></label>', $prefix) ;
             $captcha_html .= sprintf('<input style="width: 100px;" type="text" id="wpgform-captcha" class="%sss-q-short" value="" name="wpgform-captcha">', $prefix) ;
