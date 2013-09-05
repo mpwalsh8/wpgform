@@ -316,6 +316,9 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.58 =
+* Fixed bug when radio button and checkbox responses contained apostrophe characters.
+
 = Version 0.57 =
 * Added ability to translate "What is" Captcha phrase.
 * Updated language translation files.
