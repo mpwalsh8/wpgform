@@ -1446,6 +1446,12 @@ jQuery(document).ready(function($) {
             
             //$body = stripslashes_deep(urldecode($body)) ;
             $body = stripslashes_deep($body) ;
+
+            //  Clean up any single quotes which are escpaed
+            $patterns = array('/%5C%27/') ;
+            $replacements = array('%27') ;
+            $body = preg_replace($patterns, $replacements, $body) ;
+
             $action = str_replace(array('&#038;','&#38;','&amp;'), '&', $action) ;
 
             if (WPGFORM_DEBUG)
