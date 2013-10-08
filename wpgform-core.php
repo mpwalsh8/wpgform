@@ -299,7 +299,6 @@ function wpgform_entry_log_page()
  */
 function wpgform_admin_init()
 {
-    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     register_setting('wpgform_options', 'wpgform_options', 'wpgform_options_validate') ;
 }
 
