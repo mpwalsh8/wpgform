@@ -318,6 +318,9 @@ No known upgrade issues.
 
 = Version 0.58 =
 * Fixed bug when radio button and checkbox responses contained apostrophe characters.
+* Fixed bug when text entry box content contained an ampersand which ended up encoded in the Google sheet.
+* Fixed bug(s) with plugin settings which are controlled with checkboxes not being able to be unchecked.
+* Added Reset button to return plugin settings to their default state.
 
 = Version 0.57 =
 * Added ability to translate "What is" Captcha phrase.
