@@ -220,6 +220,40 @@ function wpgform_get_plugin_options()
 }
 
 /**
+ * Returns the options array for the wpGForm plugin.
+ *
+ * @param input mixed input to validate
+ * @return input mixed validated input
+ * @since wpGForm 0.58-beta-4
+ *
+ */
+function wpgform_options_validate($input)
+{
+    if ('update' === $_POST['action'])
+    {
+        // Get the options array defined for the form
+        $options = wpgform_get_default_plugin_options();
+
+        //  Loop through all of the default options
+        foreach ($options as $key => $value)
+        {
+            //  If the default option doesn't exist, which it
+            //  won't if it is a checkbox, default the value to 0
+            //  which means the checkbox is turned off.
+
+            if (!array_key_exists($key, $input))
+                $input[$key] = 0 ;
+        }
+    }
+
+    //  Was the Reset button pushed?
+    if (__('Reset', WPGFORM_I18_DOMAIN) === $_POST['Submit'])
+        $input = wpgform_get_default_plugin_options();
+
+    return $input ;
+}
+
+/**
  * wpgform_admin_menu()
  *
  * Adds admin menu page(s) to the Dashboard.
@@ -265,7 +299,8 @@ function wpgform_entry_log_page()
  */
 function wpgform_admin_init()
 {
-    register_setting('wpgform_options', 'wpgform_options') ;
+    error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+    register_setting('wpgform_options', 'wpgform_options', 'wpgform_options_validate') ;
 }
 
 /**
