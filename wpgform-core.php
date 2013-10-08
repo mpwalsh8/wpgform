@@ -1415,13 +1415,11 @@ jQuery(document).ready(function($) {
                 else if ($key === 'draftResponse')
                 {
                     //  draftResponse is a special parameter for multi-page forms and needs
-                    //  some special processing.  We need to remove the escapes on double quotes.
+                    //  some special processing.  We need to remove the escapes on double quotes,
+                    //  handled embedded tabs, and encoded ampersands.
 
-                        $patterns = array('/\\\"/', '/\\\t/') ;
-                        $replacements = array('"', 't') ;
-
-                    //$value = preg_replace('/\\\"/', '"', $value) ;
-                    //$value = preg_replace('/\\\t/', 't', $value) ;
+                    $patterns = array('/\\\"/', '/\\\t/', '/\\\u0026/') ;
+                    $replacements = array('"', 't', '&') ;
 
                     $value = preg_replace($patterns, $replacements, $value) ;
 
@@ -1435,7 +1433,6 @@ jQuery(document).ready(function($) {
                 }
             }
 
-            //$form = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $form) ;
             $form = str_replace($action, 'action=""', $form) ;
 
 
