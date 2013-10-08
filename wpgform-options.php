@@ -117,6 +117,7 @@ function wpgform_options_page()
                 <?php settings_fields('wpgform_options') ; ?>
                 <?php wpgform_settings_advanced_options() ; ?>
                 <input type="submit" name="Submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+                <input type="submit" name="Submit" class="button-primary" value="<?php _e('Reset') ?>" />
             </form>
         </div>
         <div id="wpgform-tabs-3">
@@ -167,12 +168,12 @@ function wpgform_options_page()
         <div id="wpgform-tabs-5">
         <h4><?php _e('About WordPress Google Form', WPGFORM_I18N_DOMAIN);?></h4>
 <div style="margin-left: 25px; text-align: center; float: right;" class="postbox">
-<h3 class="hndle"><span><?php _e('Make a Donation', MAILUSERS_I18N_DOMAIN);?></span></h3>
+<h3 class="hndle"><span><?php _e('Make a Donation', WPGFORM_I18N_DOMAIN);?></span></h3>
 <div class="inside">
 <div style="text-align: center; font-size: 0.75em;padding:0px 5px;margin:0px auto;"><!-- PayPal box wrapper -->
 <div><!-- PayPal box-->
 	<p style="margin: 0.25em 0"><b>WordPress Google Form v<?php echo WPGFORM_VERSION; ?></b></p>
-	<p style="margin: 0.25em 0"><a href="http://wordpress.org/extend/plugins/wpgform/" target="_blank"><?php _e('Plugin\'s Home Page', MAILUSERS_I18N_DOMAIN); ?></a></p>
+	<p style="margin: 0.25em 0"><a href="http://wordpress.org/extend/plugins/wpgform/" target="_blank"><?php _e('Plugin\'s Home Page', WPGFORM_I18N_DOMAIN); ?></a></p>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="DK4MS3AA983CC">
