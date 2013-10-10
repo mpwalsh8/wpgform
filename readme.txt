@@ -321,6 +321,7 @@ No known upgrade issues.
 * Fixed bug when text entry box content contained an ampersand which ended up encoded in the Google sheet.
 * Fixed bug(s) with plugin settings which are controlled with checkboxes not being able to be unchecked.
 * Added Reset button to return plugin settings to their default state.
+* Fixed problem handling newlines (carriage returns) in textarea entries.
 
 = Version 0.57 =
 * Added ability to translate "What is" Captcha phrase.
