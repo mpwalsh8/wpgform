@@ -1452,8 +1452,8 @@ jQuery(document).ready(function($) {
                     //  some special processing.  We need to remove the escapes on double quotes,
                     //  handled embedded tabs, and encoded ampersands.
 
-                    $patterns = array('/\\\"/', '/\\\t/', '/\\\u0026/') ;
-                    $replacements = array('"', 't', '&') ;
+                    $patterns = array('/\\\"/', '/\\\t/', '/\\\u0026/', '/\\\n/') ;
+                    $replacements = array('"', 't', '&', '\n') ;
 
                     $value = preg_replace($patterns, $replacements, $value) ;
 
@@ -1478,9 +1478,9 @@ jQuery(document).ready(function($) {
             //$body = stripslashes_deep(urldecode($body)) ;
             $body = stripslashes_deep($body) ;
 
-            //  Clean up any single quotes which are escpaed
-            $patterns = array('/%5C%27/') ;
-            $replacements = array('%27') ;
+            //  Clean up any single quotes and newlines which are escpaed
+            $patterns = array('/%5C%27/', '/%5Cn/') ;
+            $replacements = array('%27', 'n') ;
             $body = preg_replace($patterns, $replacements, $body) ;
 
             $action = str_replace(array('&#038;','&#38;','&amp;'), '&', $action) ;
@@ -1490,6 +1490,7 @@ jQuery(document).ready(function($) {
                 wpgform_preprint_r($action) ;
                 wpgform_preprint_r($body) ;
             }
+            error_log($body) ;
         
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
