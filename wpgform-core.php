@@ -592,6 +592,13 @@ class wpGForm
      */
     function ConstructGoogleForm()
     {
+        //  Any preset params?
+        $presets = $_GET ;
+
+        //  Eliminate the Google Form's query variable if it is set
+        if (!empty($presets) && array_key_exists(WPGFORM_CPT_QV_FORM, $presets))
+            unset($presets[WPGFORM_CPT_QV_FORM]) ;
+
         $locale_cookie = new WP_HTTP_Cookie(array('name' => 'locale', 'value' => get_locale())) ;
 
         //  Property short cut
@@ -779,9 +786,31 @@ class wpGForm
         if (!is_null($confirm))
             $confirm = str_replace(array('&#038;','&#38;','&amp;'), '&', $confirm) ;
         
+        //  If there were any preset values to pass into the form, add them to the URL
+
+        if (!empty($presets))
+        {
+            //  The name of the form fields are munged, they need
+            //  to be restored before the parameters can be posted
+            //  so they match what Google expects.
+
+            $patterns = array('/entry_([0-9]+)_(single|group)_/', '/entry_([0-9]+)_/', '/entry_([0-9]+)/') ;
+            $replacements = array('entry.\1.\2.', 'entry.\1.', 'entry.\1') ;
+
+            foreach ($presets as $key => $value)
+            {
+                unset($preset) ;
+                $presets[preg_replace($patterns, $replacements, $key)] = $value ;
+            }
+
+            $form = add_query_arg($presets, $form) ;
+            error_log($form) ;
+        }
+
         //  The initial rendering of the form content is done using this
         //  "remote get", all subsequent renderings will be the result of
         //  "post processing".
+
 
         if (!self::$posted)
         {
