@@ -316,6 +316,9 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.59 =
+* Added ability to preset values for Google form as part of WordPress URL.
+
 = Version 0.58 =
 * Fixed bug when radio button and checkbox responses contained apostrophe characters.
 * Fixed bug when text entry box content contained an ampersand which ended up encoded in the Google sheet.
