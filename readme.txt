@@ -318,6 +318,7 @@ No known upgrade issues.
 
 = Version 0.59 =
 * Added ability to preset values for Google form as part of WordPress URL.
+* Added new CSS declarations to default plugin CSS to account for recent changes by Google to Forms.
 
 = Version 0.58 =
 * Fixed bug when radio button and checkbox responses contained apostrophe characters.
