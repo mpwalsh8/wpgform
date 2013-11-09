@@ -424,6 +424,73 @@ function wpgform_placeholder_meta_box_content($fieldsonly = false)
     return $fieldsonly ? $content['fields'] : $content ;
 }
 
+/**
+ * Define the WordPress Google Form Hidden Fields Meta Box fields so they
+ * can be used to construct the form as well as validate and save it.
+ *
+ */
+function wpgform_hiddenfields_meta_box_content($fieldsonly = false)
+{
+    $content = array(
+        'id' => 'wpgform-hiddenfield-meta-box',
+        'title' => 'Google Form Hidden Fields',
+        'page' => WPGFORM_CPT_FORM,
+        'context' => 'normal',
+        'priority' => 'high',
+        'fields' => array(
+            array(
+                'name' => __('Hidden Fields', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Configure hidden fields', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'hiddenfield',
+                'type' => 'radio',
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
+                'required' => false,
+                'br' => false
+            ),
+            array(
+                'name' => __('Form Fields', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, etc.).  The optional value is only used for fields of type <b><i>value</i></b>, <b><i>url</i></b>, and <b><i>timestamp</i></b>.  For all other field types WordPress will set the hidden input to a system derived value.', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'hiddenfield_field_name',
+                'type' => 'hiddenfield',
+                'std' => '',
+                'required' => true,
+                'type_id' => WPGFORM_PREFIX . 'hiddenfield_field_type',
+                'value_id' => WPGFORM_PREFIX . 'hiddenfield_field_value',
+                'options' => array(
+                    'value',
+                    'url',
+                    'timestamp',
+                    'remote_addr',
+                    'remote_host',
+                    'http_referer',
+                    'http_user_agent',
+                    'user_email',
+                    'user_login',
+                ),
+            ),
+            array(
+                'name' => __('Type', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Type of hiddenfield', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'hiddenfield_field_type',
+                'type' => 'hidden',
+                'std' => '',
+                'required' => true
+            ),
+            array(
+                'name' => __('Value', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Optional value to use as a preset', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'hiddenfield_field_value',
+                'type' => 'hidden',
+                'std' => '',
+                'required' => false
+            ),
+        )
+    ) ;
+
+    return $fieldsonly ? $content['fields'] : $content ;
+}
+
 add_action('admin_menu', 'wpgform_add_primary_meta_box') ;
 //add_action('admin_menu', 'wpgform_add_player_profile_meta_box') ;
 
@@ -444,6 +511,11 @@ function wpgform_add_primary_meta_box()
 
     add_meta_box($mb['id'], $mb['title'],
         'wpgform_show_validation_meta_box', $mb['page'], $mb['context'], $mb['priority']);
+
+    $mb = wpgform_hiddenfields_meta_box_content() ;
+
+    add_meta_box($mb['id'], $mb['title'],
+        'wpgform_show_hiddenfields_meta_box', $mb['page'], $mb['context'], $mb['priority']);
 
     $mb = wpgform_placeholder_meta_box_content() ;
 
@@ -472,6 +544,12 @@ function wpgform_show_validation_meta_box()
     wpgform_build_meta_box($mb) ;
 }
 
+// Callback function to show hidden fields in meta box
+function wpgform_show_hiddenfields_meta_box()
+{
+    $mb = wpgform_hiddenfields_meta_box_content() ;
+    wpgform_build_meta_box($mb) ;
+}
 
 // Callback function to show placeholder in meta box
 function wpgform_show_placeholder_meta_box()
@@ -547,6 +625,7 @@ function wpgform_build_meta_box($mb)
                     break;
 
                 case 'validation':
+                case 'hiddenfield':
                 case 'placeholder':
 	                $meta_field = get_post_meta($post->ID, $field['id'], true);
                     $meta_type = get_post_meta($post->ID, $field['type_id'], true);
@@ -564,16 +643,16 @@ function wpgform_build_meta_box($mb)
 						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Name', WPGFORM_I18N_DOMAIN)) ;
 						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="'.$meta_field[$key].'" size="30" />' ;
 
-                            if ('validation' === $field['type']) {
-						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
-                            echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
-                            foreach ($field['options'] as $option) {
-                                echo '<option ', $meta_type[$key] == $option ? 'selected="selected" ' : '', 'value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
-                            }
-                            echo '</select>';
+                            if ('placeholder' !== $field['type']) {
+						        printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', ('hiddenfield' === $field['type']) ? __('Type', WPGFORM_I18N_DOMAIN) : __('Check', WPGFORM_I18N_DOMAIN)) ;
+                                echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
+                                foreach ($field['options'] as $option) {
+                                    echo '<option ', $meta_type[$key] == $option ? 'selected="selected" ' : '', 'value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
+                                }
+                                echo '</select>';
                             }
 
-                            if ('validation' === $field['type'])
+                            if ('placeholder' !== $field['type'])
 						        printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
                             else
 						        printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
@@ -586,16 +665,16 @@ function wpgform_build_meta_box($mb)
 			                echo '<li>' ;
 						    printf('<label for="%s">%s:&nbsp;</label>', $field['id'].'['.$i.']', __('Field', WPGFORM_I18N_DOMAIN)) ;
 						    echo '<input type="text" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'" value="" size="30" />' ;
-                            if ('validation' === $field['type']) {
-						    printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', __('Check', WPGFORM_I18N_DOMAIN)) ;
-                            echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
-                            foreach ($field['options'] as $option) {
-                                echo '<option value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
-                            }
-                            echo '</select>';
+                            if ('placeholder' !== $field['type']) {
+						        printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['type_id'].'['.$i.']', ('hiddenfield' === $field['type']) ? __('Type', WPGFORM_I18N_DOMAIN) : __('Check', WPGFORM_I18N_DOMAIN)) ;
+                                echo '<select name="', $field['type_id'].'['.$i.']', '" id="', $field['type_id'], '">';
+                                foreach ($field['options'] as $option) {
+                                    echo '<option value="', $option, '">', $option . '&nbsp;&nbsp;', '</option>';
+                                }
+                                echo '</select>';
                             }
 
-                            if ('validation' === $field['type'])
+                            if ('placeholder' !== $field['type'])
 						        printf('<i><label for="%s">&nbsp;%s:&nbsp;</label></i>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
                             else
 						        printf('<label for="%s">&nbsp;%s:&nbsp;</label>', $field['value_id'].'['.$i.']', __('Value', WPGFORM_I18N_DOMAIN)) ;
@@ -684,6 +763,7 @@ function wpgform_save_meta_box_data($post_id)
                 wpgform_primary_meta_box_content(true),
                 wpgform_secondary_meta_box_content(true),
                 wpgform_validation_meta_box_content(true),
+                wpgform_hiddenfields_meta_box_content(true),
                 wpgform_placeholder_meta_box_content(true)
             ) ;
         else
