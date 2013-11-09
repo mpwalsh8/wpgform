@@ -547,7 +547,8 @@ class wpGForm
             wpgform_primary_meta_box_content(true),
             wpgform_secondary_meta_box_content(true),
             wpgform_validation_meta_box_content(true),
-            wpgform_placeholder_meta_box_content(true)
+            wpgform_placeholder_meta_box_content(true),
+            wpgform_hiddenfields_meta_box_content(true)
         ) ;
 
         foreach ($fields as $field)
@@ -804,7 +805,6 @@ class wpGForm
             }
 
             $form = add_query_arg($presets, $form) ;
-            error_log($form) ;
         }
 
         //  The initial rendering of the form content is done using this
@@ -1028,7 +1028,6 @@ class wpGForm
             }
         }
 
-
         //  The Unite theme from Paralleus mucks with the submit buttons
         //  which breaks the ability to submit the form to Google correctly.
         //  This hack will "unbreak" the submit buttons.
@@ -1158,7 +1157,7 @@ jQuery(document).ready(function($) {
 
                 if (!empty($meta_field)) {
                     foreach ($meta_field as $key => $value)
-                        $extras[$value] = sprintf('{%s: %s}',
+                        $extras[$value][] = sprintf('%s: %s',
                             $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
                 }
             }
@@ -1177,14 +1176,19 @@ jQuery(document).ready(function($) {
         //  Now the tricky part - need to output rules and messages
         if ($validation)
         {
-            $js .= '
+            $js .= sprintf('
     $("#ss-form").validate({
         errorClass: "wpgform-error",
-        rules: {' ;
+        rules: {%s', PHP_EOL) ;
             if (!empty($extras))
             {
                 foreach ($extras as $key => $value)
-                    $js .= sprintf('"%s": %s%s', $key, $value, $value === end($extras) ? '        ,' : ',') ;
+                {
+                    $js .= sprintf('           "%s": {', $key) ;
+                    foreach ($value as $extra)
+                        $js .= sprintf('%s%s', $extra, $extra === end($value) ? '}' : ', ') ;
+                    $js .= sprintf('%s%s%s', $value === end($extras) ? '' : ',', PHP_EOL, $value === end($extras) ? '        ' : '') ;
+                }
             }
             if (empty($vRules_js))
                 $js .= '},' ;
@@ -1202,6 +1206,55 @@ jQuery(document).ready(function($) {
     }) ;' ;
         }
  
+        //  Handle hidden fields
+
+        $u = wp_get_current_user() ;
+        $unknown = __('Unknown', WPGFORM_I18N_DOMAIN) ;
+
+        $values = array(
+            'value' => $unknown
+           ,'url' => array_key_exists('URL', $_SERVER) ? $_SERVER['URL'] : $unknown
+           ,'timestamp' => date('Y-m-d H:i:s')
+           ,'remote_addr' => array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : $unknown
+           ,'remote_host' => array_key_exists('REMOTE_HOST', $_SERVER) ? $_SERVER['REMOTE_HOST'] : $unknown
+           ,'http_referer' => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : $unknown
+           ,'http_user_agent' => array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : $unknown
+           ,'user_email' => ($u instanceof WP_User) ? $u->user_email : $unknown
+           ,'user_login' => ($u instanceof WP_User) ? $u->user_login : $unknown
+        ) ;
+
+        //  We'll ignore the optional value for any field type except value, url, or timestamp
+        $ignore = array_slice(array_keys($values), 3) ;
+ 
+        //  Handle and "hiddenfields"
+        $fields = wpgform_hiddenfields_meta_box_content(true) ;
+
+        foreach ($fields as $field)
+        {
+            if ('hiddenfield' == $field['type'])
+            {
+    	        $meta_field = get_post_meta($o['id'], $field['id'], true);
+                $meta_type = get_post_meta($o['id'], $field['type_id'], true);
+                $meta_value = get_post_meta($o['id'], $field['value_id'], true);
+
+                $patterns = array('/^entry.([0-9]+).(single|group)./', '/^entry.([0-9]+)_/', '/^entry.([0-9]+)/') ;
+                $replacements = array('entry_\1_\2_', 'entry_\1_', 'entry_\1') ;
+
+                if (!empty($meta_field)) {
+                    foreach ($meta_field as $key => $value)
+                    {
+                        $mf = preg_replace($patterns, $replacements, $meta_field[$key]) ;
+    
+                        if (empty($meta_value[$key]) || in_array($meta_type[$key], $ignore))
+                            $meta_value[$key] = $values[$meta_type[$key]] ;
+    
+                        $js .= sprintf('    $("#%s").val("%s");%s', $mf, $meta_value[$key], PHP_EOL) ;
+                        $js .= sprintf('    $("#%s").parent().css("display", "none");%s', $mf, PHP_EOL) ;
+                    }
+                }
+            }
+        }
+
         //  Always include the jQuery to clean up the checkboxes
         $js .= sprintf('
     //  Fix checkboxes to work with Google Python
@@ -1519,7 +1572,6 @@ jQuery(document).ready(function($) {
                 wpgform_preprint_r($action) ;
                 wpgform_preprint_r($body) ;
             }
-            error_log($body) ;
         
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
