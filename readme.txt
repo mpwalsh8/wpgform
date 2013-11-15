@@ -321,6 +321,7 @@ No known upgrade issues.
 * Added new CSS declarations to default plugin CSS to account for recent changes by Google to Forms.
 * Added ability to define fields as "hidden" and preset with a user defined or system defined value.
 * Fixed validation limitation which only allowed one validation rule per input.
+* Added basic support (CSS, jQuery) to use WordPress Google Form to view a Google Spreadsheet within WordPress.
 
 = Version 0.58 =
 * Fixed bug when radio button and checkbox responses contained apostrophe characters.
