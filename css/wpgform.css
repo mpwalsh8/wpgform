@@ -154,3 +154,21 @@ div.error-message {
 input.ss-q-short, input.ss-q-long {
     width: auto;
 }
+
+/* 2013-11-15:  CSS to support using WordPress Google form to render spreadsheets */
+
+/**  Hide the gunk that Google adds to make the table work **/
+td.hd, td.headerEnd, tr.rShim, td.sortBar {
+    display: none;
+    width: 0px !important;
+    padding: 0px !important;
+}
+
+/**  Empty selector but could be used to select all of the table cells **/
+tr.rShim td, tr.rShim ~ tr td {
+}
+
+/**  Hide the "powered" and "listview" DIVs that Google adds **/
+div div span.powered, div.listview {
+    display: none;
+}
