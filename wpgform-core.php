@@ -1093,10 +1093,22 @@ jQuery(document).ready(function($) {
 ', $prefix, $prefix) ;
 
         //  Hide Google Legal Stuff?
-        if (!(bool)$legal) $js .= sprintf('
+        if (!(bool)$legal)
+        {
+            $js .= sprintf('
     //  Hide Google Legal content
     $("div.%sss-legal").hide();
 ', $prefix) ;
+
+            //  Somewhat unsupported but it works, a Google Spreadsheet can
+            //  be rendered by WordPress Google Form.  If the Legal is disabled,
+            //  the block of code that Google adds to the form is removed.
+
+            $js .= sprintf('
+    //  Remove Powered by Google content
+    $("div div span.powered").parent().empty();
+') ;
+        }
 
         //  Is Email User enabled?
         if ($user_email)
