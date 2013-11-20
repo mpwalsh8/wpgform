@@ -316,6 +316,9 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.60 =
+* Beta reference removed from version string.
+
 = Version 0.59 =
 * Added ability to preset values for Google form as part of WordPress URL.
 * Added new CSS declarations to default plugin CSS to account for recent changes by Google to Forms.
