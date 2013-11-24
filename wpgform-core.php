@@ -355,6 +355,16 @@ class wpGForm
     static $wpgform_js = false ;
 
     /**
+     * Property to hold global plugin Javascript output
+     */
+    static $wpgform_plugin_js = '' ;
+
+    /**
+     * Property to hold form specific Javascript output
+     */
+    static $wpgform_form_js = array() ;
+
+    /**
      * Property to store Javascript output in footer
      */
     static $wpgform_footer_js = '' ;
@@ -390,6 +400,16 @@ class wpGForm
     static $wpgform_user_sendto = null ;
 
     /**
+     * Property to store jQuery Validation messages
+     */
+    static $vMsgs_js = array() ;
+
+    /**
+     * Property to store jQuery Validation rules
+     */
+    static $vRules_js = array() ;
+
+    /**
      * Property to store the various options which control the
      * HTML manipulation and generation.  These array keys map
      * to the meta data stored with the wpGForm Custom Post Type.
@@ -401,6 +421,7 @@ class wpGForm
      */
     protected static $options = array(
         'form'           => false,          // Google Form URL
+        'uid'            => '',            // Unique identifier string to prepend to id and name attributes
         'confirm'        => null,           // Custom confirmation page URL to redirect to
         'alert'          => null,           // Optional Alert Message
         'class'          => 'wpgform',      // Container element's custom class value
@@ -541,6 +562,8 @@ class wpGForm
         else
             return false ;
 
+        if (array_key_exists('uid', $options)) $o['uid'] = $options['uid'] ;
+
         // get current form meta data fields
 
         $fields = array_merge(
@@ -634,6 +657,7 @@ class wpGForm
         else
         {
             $form = $o['form'] ;
+            $uid = $o['uid'] ;
             $prefix = $o['prefix'] ;
             $suffix = $o['suffix'] ;
             $confirm = $o['confirm'] ;
@@ -798,6 +822,12 @@ class wpGForm
             $patterns = array('/entry_([0-9]+)_(single|group)_/', '/entry_([0-9]+)_/', '/entry_([0-9]+)/') ;
             $replacements = array('entry.\1.\2.', 'entry.\1.', 'entry.\1') ;
 
+error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+error_log(print_r($replacements, true)) ;
+
+            foreach ($replacements as $key => $value)
+                $replacements[$key] = sprintf('%s%s', $uid, $value) ;
+
             foreach ($presets as $key => $value)
             {
                 unset($preset) ;
@@ -918,6 +948,37 @@ class wpGForm
         //  Process the HTML
 
         $html = wp_kses($html, $allowed_tags) ;
+
+        if (1):
+        $patterns = array(
+            '/entry\.([0-9]+)\.(single|group)\./',
+            '/entry\.([0-9]+)_/',
+            '/entry\.([0-9]+)/',
+            '/entry_([0-9]+)\.(single|group)\./',
+            '/entry_([0-9]+)_/',
+            '/entry_([0-9]+)/',
+        ) ;
+
+        $replacements = array(
+            'entry.\1_\2_',
+            'entry.\1_',
+            'entry.\1',
+            'entry_\1_\2_',
+            'entry_\1_',
+            'entry_\1',
+        ) ;
+
+        foreach ($replacements as $key => $value)
+            $replacements[$key] = sprintf('%s%s', $uid, $value) ;
+
+        $patterns[] = '/id="ss-form"/' ;
+        $replacements[] = sprintf('id="%sss-form"', $uid) ;
+
+error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+error_log(print_r($replacements, true)) ;
+        $html = preg_replace($patterns, $replacements, $html) ;
+//error_log(print_r($html, true)) ;
+endif;
 
         if (WPGFORM_DEBUG)
         {
@@ -1064,8 +1125,8 @@ class wpGForm
         //  Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly.
         //  This jQuery script reformats the checkboxes so that Googles Python script will read them.
 
-        $vMsgs_js = array() ;
-        $vRules_js = array() ;
+        $vMsgs_js = &self::$vMsgs_js ;
+        $vRules_js = &self::$vRules_js ;
 
         $js = sprintf('
 <script type="text/javascript">
@@ -1074,11 +1135,11 @@ jQuery(document).ready(function($) {
 ', WPGFORM_VERSION) ;
 
         //  Insert breaks between labels and input fields?
-        if ($br) $js .= '
+        if ($br) $js .= sprintf('
     //  Insert br elements before input and textarea boxes
-    $("#ss-form textarea").before("<br/>");
-    $("#ss-form input[type=text]").before("<br/>");
-' ;
+    $("#%sss-form textarea").before("<br/>");
+    $("#%sss-form input[type=text]").before("<br/>");
+', $uid, $uid) ;
 
         //  Did short code specify a CSS prefix?
         if (!is_null($prefix)) $js .= sprintf('
@@ -1115,14 +1176,14 @@ jQuery(document).ready(function($) {
         {
             $js .= sprintf('
     //  Construct Email User Validation
-    if ($("#ss-form input[type=submit][name=submit]").length) {
-        $("#ss-form input[type=submit][name=submit]").before(\'%s\');
+    if ($("#%sss-form input[type=submit][name=submit]").length) {
+        $("#%sss-form input[type=submit][name=submit]").before(\'%s\');
         $("div.wpgform-user-email").show();
         $.validator.addClassRules("wpgform-user-email", {
             required: true
         });
     }
-', $user_email_html) ;
+', $uid, $uid, $user_email_html) ;
             $vRules_js[] = '
 				"wpgform-user-email": {
 					email: true
@@ -1137,14 +1198,14 @@ jQuery(document).ready(function($) {
             $js .= sprintf('
     //  Construct CAPTCHA
     $.validator.methods.equal = function(value, element, param) { return value == param; };
-    if ($("#ss-form input[type=submit][name=submit]").length) {
-        $("#ss-form input[type=submit][name=submit]").before(\'%s\');
+    if ($("#%sss-form input[type=submit][name=submit]").length) {
+        $("#%sss-form input[type=submit][name=submit]").before(\'%s\');
         $("div.wpgform-captcha").show();
         $.validator.addClassRules("wpgform-captcha", {
             required: true,
         });
     }
-', $captcha_html, self::$wpgform_captcha['c']) ;
+', $uid, $uid, $captcha_html, self::$wpgform_captcha['c']) ;
             $vRules_js[] = sprintf('
 				"wpgform-captcha": {
 					equal: %s
@@ -1189,14 +1250,14 @@ jQuery(document).ready(function($) {
         if ($validation)
         {
             $js .= sprintf('
-    $("#ss-form").validate({
+    $("#%sss-form").validate({
         errorClass: "wpgform-error",
-        rules: {%s', PHP_EOL) ;
+        rules: {%s', $uid, PHP_EOL) ;
             if (!empty($extras))
             {
                 foreach ($extras as $key => $value)
                 {
-                    $js .= sprintf('           "%s": {', $key) ;
+                    $js .= sprintf('           "%s%s": {', $uid, $key) ;
                     foreach ($value as $extra)
                         $js .= sprintf('%s%s', $extra, $extra === end($value) ? '}' : ', ') ;
                     $js .= sprintf('%s%s%s', $value === end($extras) ? '' : ',', PHP_EOL, $value === end($extras) ? '        ' : '') ;
@@ -1215,7 +1276,7 @@ jQuery(document).ready(function($) {
                 foreach ($vMsgs_js as $m)
                     $js .= sprintf('%s%s', $m, $m === end($vMsgs_js) ? '        }' : ',') ;
             $js .= '
-    }) ;' ;
+    }) ;' . PHP_EOL ;
         }
  
         //  Handle hidden fields
@@ -1251,6 +1312,12 @@ jQuery(document).ready(function($) {
 
                 $patterns = array('/^entry.([0-9]+).(single|group)./', '/^entry.([0-9]+)_/', '/^entry.([0-9]+)/') ;
                 $replacements = array('entry_\1_\2_', 'entry_\1_', 'entry_\1') ;
+
+                foreach ($replacements as $key => $value)
+                    $replacements[$key] = sprintf('%s%s', $uid, $value) ;
+
+error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+error_log(print_r($replacements, true)) ;
 
                 if (!empty($meta_field)) {
                     foreach ($meta_field as $key => $value)
@@ -1412,8 +1479,8 @@ jQuery(document).ready(function($) {
             if (is_null(self::$wpgform_submitted_form_id) ||
                 self::$wpgform_submitted_form_id == self::$wpgform_form_id - 1)
             {
-                self::$wpgform_js = true ;
-                self::$wpgform_footer_js = $js ;
+                //self::$wpgform_js = true ;
+                self::$wpgform_footer_js .= $js ;
             }
         }
 
@@ -1509,14 +1576,21 @@ jQuery(document).ready(function($) {
 
             if (WPGFORM_DEBUG) wpgform_preprint_r($options) ;
             $form = $options['form'] ;
+            $uid = $options['uid'] ;
 
             $body = '' ;
 
             //  The name of the form fields are munged, they need
             //  to be restored before the parameters can be posted
 
-            $patterns = array('/^entry_([0-9]+)_(single|group)_/', '/^entry_([0-9]+)_/', '/^entry_([0-9]+)/') ;
+            $patterns = array('entry_([0-9]+)_(single|group)_', 'entry_([0-9]+)_', 'entry_([0-9]+)') ;
             $replacements = array('entry.\1.\2.', 'entry.\1.', 'entry.\1') ;
+
+            foreach ($patterns as $key => $value)
+                $patterns[$key] = sprintf('/^%s%s/', $uid, $value) ;
+
+error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+error_log(print_r($patterns, true)) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
