@@ -316,6 +316,10 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.61 =
+* Fixed some default CSS rules which were incorrect.
+* Added support for multiple instances of the same form on a single page.
+
 = Version 0.60 =
 * Beta reference removed from version string.
 
