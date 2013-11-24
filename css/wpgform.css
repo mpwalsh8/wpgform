@@ -123,7 +123,7 @@ div.ss-secondary-text {
 }
 
 /*  This hides the "Never submit passwords through Google Forms." warning. */
-div.ss-form-entry > div.ss-secondary-text {
+td.ss-form-entry > div.ss-secondary-text {
     display: none;
 }
 
@@ -151,7 +151,7 @@ div.error-message {
 }
 
 /* 2013-10-30:  Attempt to make text entry boxes a reasonable width */
-input.ss-q-short, input.ss-q-long {
+input.ss-q-short, textarea.ss-q-long {
     width: auto;
 }
 
