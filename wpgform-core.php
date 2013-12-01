@@ -402,12 +402,12 @@ class wpGForm
     /**
      * Property to store jQuery Validation messages
      */
-    static $vMsgs_js = array() ;
+    //static $vMsgs_js = array() ;
 
     /**
      * Property to store jQuery Validation rules
      */
-    static $vRules_js = array() ;
+    //static $vRules_js = array() ;
 
     /**
      * Property to store the various options which control the
@@ -742,12 +742,12 @@ class wpGForm
             $captcha_html .= sprintf('<div class="%sss-item %sss-item-required %sss-text">', $prefix, $prefix, $prefix) ;
             $captcha_html .= sprintf('<div class="%sss-form-entry">', $prefix) ;
             if ((int)$wpgform_options['captcha_terms'] === 2)
-                $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">%s %s %s %s ?', $prefix, __('What is', WPGFORM_I18N_DOMAIN), $a, $op1, $b) ;
+                $captcha_html .= sprintf('<label for="%swpgform-captcha" class="%sss-q-title">%s %s %s %s ?', $uid, $prefix, __('What is', WPGFORM_I18N_DOMAIN), $a, $op1, $b) ;
             else
-                $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-title">%s %s %s %s %s %s?', $prefix, __('What is', WPGFORM_I18N_DOMAIN), $a, $op1, $b, $op2, $c) ;
+                $captcha_html .= sprintf('<label for="%swpgform-captcha" class="%sss-q-title">%s %s %s %s %s %s?', $uid, $prefix, __('What is', WPGFORM_I18N_DOMAIN), $a, $op1, $b, $op2, $c) ;
             $captcha_html .= sprintf('<span class="%sss-required-asterisk">*</span></label>', $prefix) ;
-            $captcha_html .= sprintf('<label for="wpgform-captcha" class="%sss-q-help"></label>', $prefix) ;
-            $captcha_html .= sprintf('<input style="width: 100px;" type="text" id="wpgform-captcha" class="%sss-q-short" value="" name="wpgform-captcha">', $prefix) ;
+            $captcha_html .= sprintf('<label for="%swpgform-captcha" class="%sss-q-help"></label>', $uid, $prefix) ;
+            $captcha_html .= sprintf('<input style="width: 100px;" type="text" id="%swpgform-captcha" class="%sss-q-short" value="" name="%swpgform-captcha">', $uid, $prefix, $uid) ;
             $captcha_html .= '</div></div>' ;
 
             //  Add in the optional CAPTCHA description if one has been set
@@ -971,8 +971,13 @@ error_log(print_r($replacements, true)) ;
         foreach ($replacements as $key => $value)
             $replacements[$key] = sprintf('%s%s', $uid, $value) ;
 
+        //  Handle form id attribute
         $patterns[] = '/id="ss-form"/' ;
         $replacements[] = sprintf('id="%sss-form"', $uid) ;
+
+        //  Handle submit button id attribute
+        $patterns[] = '/id="ss-submit"/' ;
+        $replacements[] = sprintf('id="%sss-submit"', $uid) ;
 
 error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 error_log(print_r($replacements, true)) ;
@@ -1125,8 +1130,10 @@ endif;
         //  Need to fix the name arguments for checkboxes so PHP will pass them as an array correctly.
         //  This jQuery script reformats the checkboxes so that Googles Python script will read them.
 
-        $vMsgs_js = &self::$vMsgs_js ;
-        $vRules_js = &self::$vRules_js ;
+        //$vMsgs_js = &self::$vMsgs_js ;
+        //$vRules_js = &self::$vRules_js ;
+        $vMsgs_js = array() ;
+        $vRules_js = array() ;
 
         $js = sprintf('
 <script type="text/javascript">
@@ -1198,7 +1205,9 @@ jQuery(document).ready(function($) {
             $js .= sprintf('
     //  Construct CAPTCHA
     $.validator.methods.equal = function(value, element, param) { return value == param; };
+        //alert("ok");
     if ($("#%sss-form input[type=submit][name=submit]").length) {
+        //alert("ok");
         $("#%sss-form input[type=submit][name=submit]").before(\'%s\');
         $("div.wpgform-captcha").show();
         $.validator.addClassRules("wpgform-captcha", {
@@ -1206,14 +1215,9 @@ jQuery(document).ready(function($) {
         });
     }
 ', $uid, $uid, $captcha_html, self::$wpgform_captcha['c']) ;
-            $vRules_js[] = sprintf('
-				"wpgform-captcha": {
-					equal: %s
-				}
-', self::$wpgform_captcha['x']) ;
-            $vMsgs_js[] = sprintf('
-                "wpgform-captcha": "%s"
-', __('Incorrect answer.', WPGFORM_I18N_DOMAIN)) ;
+
+            $vRules_js[] = sprintf('    "wpgform-captcha": { equal: %s }', self::$wpgform_captcha['x']) ;
+            $vMsgs_js[] = sprintf('    "wpgform-captcha": "%s" ', __('Incorrect answer.', WPGFORM_I18N_DOMAIN)) ;
         }
 
         //  Build extra jQuery Validation rules
@@ -1263,18 +1267,27 @@ jQuery(document).ready(function($) {
                     $js .= sprintf('%s%s%s', $value === end($extras) ? '' : ',', PHP_EOL, $value === end($extras) ? '        ' : '') ;
                 }
             }
-            if (empty($vRules_js))
-                $js .= '},' ;
-            else
+            if (!empty($vRules_js))
+            {
+                //  Clean up JS if extras were already output
+                if (!empty($extras))
+                    $js = sprintf('%s,%s', substr($js, 0, strrpos($js, '}') + 1),  PHP_EOL) ;
+
                 foreach ($vRules_js as $r)
-                    $js .= sprintf('%s%s', $r, $r === end($vRules_js) ? '        },' : ',') ;
-            $js .= '
-        messages: {' ;
-            if (empty($vMsgs_js))
-                $js .= '}' ;
+                    $js .= sprintf('       %s%s', $r, $r === end($vRules_js) ? sprintf('%s        },', PHP_EOL) : ', ') ;
+            }
             else
+                $js .= '},' ;
+
+            $js .= sprintf('%s        messages: {%s', PHP_EOL, PHP_EOL) ;
+
+            if (!empty($vMsgs_js))
+            {
                 foreach ($vMsgs_js as $m)
-                    $js .= sprintf('%s%s', $m, $m === end($vMsgs_js) ? '        }' : ',') ;
+                    $js .= sprintf('       %s%s', $m, $m === end($vMsgs_js) ? sprintf('%s        },', PHP_EOL) : ', ') ;
+            }
+            else
+                $js .= '}' ;
             $js .= '
     }) ;' . PHP_EOL ;
         }
@@ -1386,7 +1399,7 @@ error_log(print_r($replacements, true)) ;
     //  Make sure we don\'t split labels and input fields
     $("div.%sss-item").addClass("wpgform-dontsplit");
     //  Wrap all of the form content in a DIV so it can be split
-    $("#ss-form").wrapInner("<div style=\"border: 0px dashed blue;\" class=\"wpgform-wrapper\"></div>");
+    $("#%sss-form").wrapInner("<div style=\"border: 0px dashed blue;\" class=\"wpgform-wrapper\"></div>");
     //  Columnize the form content.
     $(function(){
         $(".wpgform-wrapper").columnize({
@@ -1396,9 +1409,9 @@ error_log(print_r($replacements, true)) ;
         //  Wrap each column so it can styled easier
         $(".wpgform-column").wrapInner("<div style=\"border: 0px dashed green;\" class=\"wpgform-column-wrapper\"></div>");
     });
-    $("#ss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
+    $("#%sss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
     $("div.%sss-form-container").after("<div style=\"border: 0px dashed black; clear: both;\"></div>");
-        ', $prefix, $columns, $prefix) ;
+        ', $prefix, $uid, $columns, $uid, $prefix) ;
 
         //  Load the confirmation URL via AJAX?
         if (self::$posted && is_null($action) && !is_null($confirm) &&
