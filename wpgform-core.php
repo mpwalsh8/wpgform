@@ -1205,9 +1205,7 @@ jQuery(document).ready(function($) {
             $js .= sprintf('
     //  Construct CAPTCHA
     $.validator.methods.equal = function(value, element, param) { return value == param; };
-        //alert("ok");
     if ($("#%sss-form input[type=submit][name=submit]").length) {
-        //alert("ok");
         $("#%sss-form input[type=submit][name=submit]").before(\'%s\');
         $("div.wpgform-captcha").show();
         $.validator.addClassRules("wpgform-captcha", {
@@ -1216,8 +1214,8 @@ jQuery(document).ready(function($) {
     }
 ', $uid, $uid, $captcha_html, self::$wpgform_captcha['c']) ;
 
-            $vRules_js[] = sprintf('    "wpgform-captcha": { equal: %s }', self::$wpgform_captcha['x']) ;
-            $vMsgs_js[] = sprintf('    "wpgform-captcha": "%s" ', __('Incorrect answer.', WPGFORM_I18N_DOMAIN)) ;
+            $vRules_js[] = sprintf('    "%swpgform-captcha": { equal: %s }', $uid, self::$wpgform_captcha['x']) ;
+            $vMsgs_js[] = sprintf('    "%swpgform-captcha": "%s" ', $uid, __('Incorrect answer.', WPGFORM_I18N_DOMAIN)) ;
         }
 
         //  Build extra jQuery Validation rules
