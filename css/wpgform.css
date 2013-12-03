@@ -172,3 +172,8 @@ tr.rShim td, tr.rShim ~ tr td {
 div div span.powered, div.listview {
     display: none;
 }
+
+/** Hide the "This is a required question" message **/
+div.ss-form-container div.required-message {
+    display: none;
+}
