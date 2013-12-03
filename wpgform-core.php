@@ -1232,10 +1232,16 @@ jQuery(document).ready(function($) {
                 $meta_type = get_post_meta($o['id'], $field['type_id'], true);
                 $meta_value = get_post_meta($o['id'], $field['value_id'], true);
 
-                if (!empty($meta_field)) {
+                if (!empty($meta_field))
+                {
                     foreach ($meta_field as $key => $value)
-                        $extras[$value][] = sprintf('%s: %s',
-                            $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+                    {
+                        if (!empty($value))
+                        {
+                            $extras[$value][] = sprintf('%s: %s',
+                                $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+                        }
+                    }
                 }
             }
         }
@@ -1259,8 +1265,10 @@ jQuery(document).ready(function($) {
         rules: {%s', $uid, PHP_EOL) ;
             if (!empty($extras))
             {
+                error_log(sprintf('%s::%s -> %s', basename(__FILE__), __LINE__, print_r($extras, true))) ;
                 foreach ($extras as $key => $value)
                 {
+                    error_log(sprintf('%s::%s -> %s', basename(__FILE__), __LINE__, print_r($key, true))) ;
                     $js .= sprintf('           "%s%s": {', $uid, $key) ;
                     foreach ($value as $extra)
                         $js .= sprintf('%s%s', $extra, $extra === end($value) ? '}' : ', ') ;
@@ -1332,7 +1340,8 @@ jQuery(document).ready(function($) {
 error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
 error_log(print_r($replacements, true)) ;
 
-                if (!empty($meta_field)) {
+                if (!empty($meta_field))
+                {
                     foreach ($meta_field as $key => $value)
                     {
                         $mf = preg_replace($patterns, $replacements, $meta_field[$key]) ;
@@ -1340,8 +1349,11 @@ error_log(print_r($replacements, true)) ;
                         if (empty($meta_value[$key]) || in_array($meta_type[$key], $ignore))
                             $meta_value[$key] = $values[$meta_type[$key]] ;
     
-                        $js .= sprintf('    $("#%s").val("%s");%s', $mf, $meta_value[$key], PHP_EOL) ;
-                        $js .= sprintf('    $("#%s").parent().css("display", "none");%s', $mf, PHP_EOL) ;
+                        if (!empty($mf))
+                        {
+                            $js .= sprintf('    $("#%s").val("%s");%s', $mf, $meta_value[$key], PHP_EOL) ;
+                            $js .= sprintf('    $("#%s").parent().css("display", "none");%s', $mf, PHP_EOL) ;
+                        }
                     }
                 }
             }
