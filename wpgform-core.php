@@ -421,7 +421,7 @@ class wpGForm
      */
     protected static $options = array(
         'form'           => false,          // Google Form URL
-        'uid'            => 'A-',            // Unique identifier string to prepend to id and name attributes
+        'uid'            => '',            // Unique identifier string to prepend to id and name attributes
         'confirm'        => null,           // Custom confirmation page URL to redirect to
         'alert'          => null,           // Optional Alert Message
         'class'          => 'wpgform',      // Container element's custom class value
