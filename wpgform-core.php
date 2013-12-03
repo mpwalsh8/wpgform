@@ -421,7 +421,7 @@ class wpGForm
      */
     protected static $options = array(
         'form'           => false,          // Google Form URL
-        'uid'            => '',            // Unique identifier string to prepend to id and name attributes
+        'uid'            => 'A-',            // Unique identifier string to prepend to id and name attributes
         'confirm'        => null,           // Custom confirmation page URL to redirect to
         'alert'          => null,           // Optional Alert Message
         'class'          => 'wpgform',      // Container element's custom class value
@@ -627,6 +627,7 @@ class wpGForm
 
         //  Property short cut
         $o = &self::$options ;
+        //printf('<pre>%s</pre>', print_r($o, true)) ;
 
         $wpgform_options = wpgform_get_plugin_options() ;
 
@@ -680,6 +681,7 @@ class wpGForm
         $user_email_sendto = "" ;
 
         //  Generate the User Email HTML if requested
+        //printf('<h1>%s::%s -> %s</h1>', basename(__FILE__), __LINE__, $uid) ;
 
         if ($user_email)
         {
@@ -695,7 +697,7 @@ class wpGForm
                __('Email Address')) ;
             $user_email_html .= sprintf('<span class="%sss-required-asterisk">*</span></label>', $prefix) ;
             $user_email_html .= sprintf('<label for="wpgform-user-email" class="%sss-q-help"></label>', $prefix) ;
-            $user_email_html .= sprintf('<input style="width: 250px;" type="text" id="wpgform-user-email" class="%sss-q-short" value="%s" name="wpgform-user-email">', $prefix, $user_email_sendto) ;
+            $user_email_html .= sprintf('<input style="width: 250px;" type="text" id="%swpgform-user-email" class="%sss-q-short" value="%s" name="%swpgform-user-email">', $uid, $prefix, $user_email_sendto, $uid) ;
             $user_email_html .= '</div></div></div>' ;
         }
 
