@@ -5,6 +5,7 @@ Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.3
 Tested up to: 3.7.1
 Stable tag: 0.60
+License: GPL
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
@@ -36,11 +37,12 @@ As features have been added, usage of the `gform` shortcode has grown increasing
 
 The WordPress Google Form shortcode `wpgform` supports a single attribute.  The rest of the controls are derived from the information stored with the Custom Post Type.
 
-`[wpgform id='<Google Form CPT Id>']`
+`[wpgform id='<Google Form CPT Id>' uid='<unique text string>']`
 
 *NOTE:*  In the above syntax, values enclosed in angle brackets <>, indicate a string you need to replace with an appropriate value.  Do not include the angle brackets in your string!
 
 * __id__:  The numeric id of the Google Form Custom Post Type.
+* __uid__:  A unique string (e.g. 'A-') used to ensure form element ID attributes are unique when a form appears on a page multiple times. (optional)
 
 The WordPress Google Form shortcode `gform` supports a number of attributes that allow further control and customization of the Google Form.
 
@@ -68,6 +70,10 @@ The WordPress Google Form shortcode `gform` supports a number of attributes that
 * __columns__:  The number of columns the form should be split into.  By default the form appears in a single column the same way it is designed in Google Docs.
 
 `[gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0' confirm='http://www.example.com/thankyou/' style='ajax' class='mygform' legal='off' prefix='mygform-' br='on' title='on' maph1h2='on' email='on' spreadsheet='https://docs.google.com/spreadsheet/ccc?key=0AgBHWDGsX0PUdE56R1ZldXo4a0N3VTNMNEpSemdGV3c' unitethemehack='off' validation='on' captcha='on' columns='1']`
+
+== License ==
+
+This plugin is available under the GPL license, which means that it's free. If you use it for a commercial web site, if you appreciate my efforts or if you want to encourage me to develop and maintain it, please consider making a donation using Paypal, a secured payment solution. You just need to click the donate button on the the [plugin overview page](http://michaelwalsh.org/wordpress/wordpress-plugins/wpgform/) and follow the instructions.
 
 == Frequently Asked Questions ==
 
@@ -163,7 +169,7 @@ There are two ways to customize the Google Form CSS.
 
 = Default Google Form CSS =
 
-As of 2013-05-17, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.  Some of the classes are redundant to account for both the new and old style of Google Forms.
+As of 2013-12-04, the following is are the CSS classes which Google Forms make use of.  The CSS below represents the default CSS provided by WordPress Google Form.  These CSS definitions can be copied and pasted into your theme CSS or the WordPress Google Form custom CSS setting and changed as desired.  Some of the classes are redundant to account for both the new and old style of Google Forms.
 
 `
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
@@ -291,7 +297,7 @@ div.ss-secondary-text {
 }
 
 /*  This hides the "Never submit passwords through Google Forms." warning. */
-div.ss-form-entry > div.ss-secondary-text {
+td.ss-form-entry > div.ss-secondary-text {
     display: none;
 }
 
@@ -301,6 +307,49 @@ div.password-warning {
 
 div.ss-form-container li {
     list-style-type: none;
+}
+
+/*  2013-06-04:  Hide "Edit this Form" link */
+a.ss-edit-link {
+    display: none;
+}
+
+/*  2013-06-06:  Hide help text for scales */
+div.aria-only-help {
+    display: none;
+}
+
+/* 2013-10-30:  Hide default error messages */
+div.error-message {
+    display: none;
+}
+
+/* 2013-10-30:  Attempt to make text entry boxes a reasonable width */
+input.ss-q-short, textarea.ss-q-long {
+    width: auto;
+}
+
+/* 2013-11-15:  CSS to support using WordPress Google form to render spreadsheets */
+
+/**  Hide the gunk that Google adds to make the table work **/
+td.hd, td.headerEnd, tr.rShim, td.sortBar {
+    display: none;
+    width: 0px !important;
+    padding: 0px !important;
+}
+
+/**  Empty selector but could be used to select all of the table cells **/
+tr.rShim td, tr.rShim ~ tr td {
+}
+
+/**  Hide the "powered" and "listview" DIVs that Google adds **/
+div div span.powered, div.listview {
+    display: none;
+}
+
+/** Hide the "This is a required question" message **/
+div.ss-form-container div.required-message {
+    display: none;
 }
 `
 
