@@ -1603,7 +1603,8 @@ error_log(print_r($replacements, true)) ;
             $form = $options['form'] ;
             $uid = $options['uid'] ;
 
-            $body = '' ;
+            //$body = '' ;
+            $body = array() ;
 
             //  The name of the form fields are munged, they need
             //  to be restored before the parameters can be posted
@@ -1635,7 +1636,9 @@ error_log(print_r($patterns, true)) ;
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
                     {
-                        $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
+                        //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
+                        $formkey = preg_replace($patterns, $replacements, $key);
+                            $body[$formkey] = $pv;
                     }
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                 }
@@ -1651,12 +1654,16 @@ error_log(print_r($patterns, true)) ;
                     $value = preg_replace($patterns, $replacements, $value) ;
 
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
-                    $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
+                    //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
+                    $formkey = preg_replace($patterns, $replacements, $key);
+                    $body[$formkey] = $value;
                 }
                 else
                 {
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
-                    $body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
+                    //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
+                    $formkey = preg_replace($patterns, $replacements, $key);
+                    $body[$formkey] = $value;
                 }
             }
 
@@ -1667,14 +1674,14 @@ error_log(print_r($patterns, true)) ;
             //  appropriate HTML entity or some variety of it.  Need to undo
             //  that so the URL can be actually be used.
     
-            
             //$body = stripslashes_deep(urldecode($body)) ;
-            $body = stripslashes_deep($body) ;
-
-            //  Clean up any single quotes and newlines which are escpaed
+            //$body = stripslashes_deep($body) ;
+            //  Clean up any single quotes and newlines which are escaped
             $patterns = array('/%5C%27/', '/%5Cn/') ;
             $replacements = array('%27', 'n') ;
-            $body = preg_replace($patterns, $replacements, $body) ;
+
+            foreach ($body as $key => $value)
+                $body[$key] = preg_replace($patterns, $replacements, stripslashes_deep($value)) ;
 
             $action = str_replace(array('&#038;','&#38;','&amp;'), '&', $action) ;
 
