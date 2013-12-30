@@ -365,6 +365,9 @@ No known upgrade issues.
 
 == Changelog ==
 
+= Version 0.64 =
+* Fixed a number of strings which were missing translation wrapper functions.
+
 = Version 0.63 =
 * Refactored code to which assembles arguments for wp_remote_post() to construct the body argument as an array as opposed to a URL formatted string of concatenated parameters.  The long string was causing problems with newer versions of PHP.  The array of arguments is much cleaner (thanks to David Högborg for providing the basics of a patch).
 
