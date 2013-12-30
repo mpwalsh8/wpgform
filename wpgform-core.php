@@ -275,8 +275,8 @@ function wpgform_admin_menu()
 
     add_submenu_page(
         'edit.php?post_type=wpgform',
-        'WordPress Google Form Submission Log', /*page title*/
-        'Form Submission Log', /*menu title*/
+        __('WordPress Google Form Submission Log', WPGFORM_I18N_DOMAIN), /*page title*/
+        __('Form Submission Log', WPGFORM_I18N_DOMAIN), /*menu title*/
         'manage_options', /*roles and capabiliyt needed*/
         'wpgform-entry-log-page',
         'wpgform_entry_log_page' /*replace with your own function*/
