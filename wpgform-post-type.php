@@ -43,16 +43,16 @@ function wpgform_register_post_types()
             'excerpt'
         ),
         'labels' => array(
-            'name' => 'Google Forms',
-            'singular_name' => 'Google Form',
-            'add_new' => 'Add New Google Form',
-            'add_new_item' => 'Add New Google Form',
-            'edit_item' => 'Edit Google Form',
-            'new_item' => 'New Google Form',
-            'view_item' => 'View Google Form',
-            'search_items' => 'Search Google Forms',
-            'not_found' => 'No Google Forms Found',
-            'not_found_in_trash' => 'No Google Forms Found In Trash'
+            'name' => __('Google Forms', WPGFORM_I18N_DOMAIN),
+            'singular_name' => __('Google Form', WPGFORM_I18N_DOMAIN),
+            'add_new' => __('Add New Google Form', WPGFORM_I18N_DOMAIN),
+            'add_new_item' => __('Add New Google Form', WPGFORM_I18N_DOMAIN),
+            'edit_item' => __('Edit Google Form', WPGFORM_I18N_DOMAIN),
+            'new_item' => __('New Google Form', WPGFORM_I18N_DOMAIN),
+            'view_item' => __('View Google Form', WPGFORM_I18N_DOMAIN),
+            'search_items' => __('Search Google Forms', WPGFORM_I18N_DOMAIN),
+            'not_found' => __('No Google Forms Found', WPGFORM_I18N_DOMAIN),
+            'not_found_in_trash' => __('No Google Forms Found In Trash', WPGFORM_I18N_DOMAIN),
         ),
         'menu_icon' => plugins_url('/images/forms-16.png', __FILE__)
     );
@@ -79,7 +79,7 @@ function wpgform_primary_meta_box_content($fieldsonly = false)
 {
     $content = array(
         'id' => 'wpgform-primary-meta-box',
-        'title' => 'Google Form Details',
+        'title' => __('Google Form Details', WPGFORM_I18N_DOMAIN),
         'page' => WPGFORM_CPT_FORM,
         'context' => 'normal',
         'priority' => 'high',
@@ -194,7 +194,7 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
 {
     $content = array(
         'id' => 'wpgform-secondary-meta-box',
-        'title' => 'Google Form Options',
+        'title' => __('Google Form Options', WPGFORM_I18N_DOMAIN),
         'page' => WPGFORM_CPT_FORM,
         'context' => 'side',
         'priority' => 'high',
@@ -319,7 +319,7 @@ function wpgform_validation_meta_box_content($fieldsonly = false)
 {
     $content = array(
         'id' => 'wpgform-validation-meta-box',
-        'title' => 'Google Form Field Validation',
+        'title' => __('Google Form Field Validation', WPGFORM_I18N_DOMAIN),
         'page' => WPGFORM_CPT_FORM,
         'context' => 'normal',
         'priority' => 'high',
@@ -395,7 +395,7 @@ function wpgform_placeholder_meta_box_content($fieldsonly = false)
 {
     $content = array(
         'id' => 'wpgform-placeholder-meta-box',
-        'title' => 'Google Form Field Placeholder',
+        'title' => __('Google Form Field Placeholder', WPGFORM_I18N_DOMAIN),
         'page' => WPGFORM_CPT_FORM,
         'context' => 'normal',
         'priority' => 'high',
@@ -433,7 +433,7 @@ function wpgform_hiddenfields_meta_box_content($fieldsonly = false)
 {
     $content = array(
         'id' => 'wpgform-hiddenfield-meta-box',
-        'title' => 'Google Form Hidden Fields',
+        'title' => __('Google Form Hidden Fields', WPGFORM_I18N_DOMAIN),
         'page' => WPGFORM_CPT_FORM,
         'context' => 'normal',
         'priority' => 'high',
