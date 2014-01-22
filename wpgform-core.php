@@ -824,8 +824,8 @@ class wpGForm
             $patterns = array('/entry_([0-9]+)_(single|group)_/', '/entry_([0-9]+)_/', '/entry_([0-9]+)/') ;
             $replacements = array('entry.\1.\2.', 'entry.\1.', 'entry.\1') ;
 
-error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-error_log(print_r($replacements, true)) ;
+//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+//error_log(print_r($replacements, true)) ;
 
             foreach ($replacements as $key => $value)
                 $replacements[$key] = sprintf('%s%s', $uid, $value) ;
@@ -951,7 +951,7 @@ error_log(print_r($replacements, true)) ;
 
         $html = wp_kses($html, $allowed_tags) ;
 
-        if (1):
+//if (1):
         $patterns = array(
             '/entry\.([0-9]+)\.(single|group)\./',
             '/entry\.([0-9]+)_/',
@@ -981,11 +981,11 @@ error_log(print_r($replacements, true)) ;
         $patterns[] = '/id="ss-submit"/' ;
         $replacements[] = sprintf('id="%sss-submit"', $uid) ;
 
-error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-error_log(print_r($replacements, true)) ;
+//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+//error_log(print_r($replacements, true)) ;
         $html = preg_replace($patterns, $replacements, $html) ;
 //error_log(print_r($html, true)) ;
-endif;
+//endif;
 
         if (WPGFORM_DEBUG)
         {
@@ -1265,10 +1265,10 @@ jQuery(document).ready(function($) {
         rules: {%s', $uid, PHP_EOL) ;
             if (!empty($extras))
             {
-                error_log(sprintf('%s::%s -> %s', basename(__FILE__), __LINE__, print_r($extras, true))) ;
+                //error_log(sprintf('%s::%s -> %s', basename(__FILE__), __LINE__, print_r($extras, true))) ;
                 foreach ($extras as $key => $value)
                 {
-                    error_log(sprintf('%s::%s -> %s', basename(__FILE__), __LINE__, print_r($key, true))) ;
+                    //error_log(sprintf('%s::%s -> %s', basename(__FILE__), __LINE__, print_r($key, true))) ;
                     $js .= sprintf('           "%s%s": {', $uid, $key) ;
                     foreach ($value as $extra)
                         $js .= sprintf('%s%s', $extra, $extra === end($value) ? '}' : ', ') ;
@@ -1337,8 +1337,8 @@ jQuery(document).ready(function($) {
                 foreach ($replacements as $key => $value)
                     $replacements[$key] = sprintf('%s%s', $uid, $value) ;
 
-error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-error_log(print_r($replacements, true)) ;
+//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+//error_log(print_r($replacements, true)) ;
 
                 if (!empty($meta_field))
                 {
@@ -1431,7 +1431,13 @@ error_log(print_r($replacements, true)) ;
             ($style === WPGFORM_CONFIRM_AJAX) && !self::$post_error)
         {
             $js .= PHP_EOL . '    //  Confirmation page by AJAX page load' ;
-            $js .= PHP_EOL . '    $("body").load("' . $confirm . '") ;' ;
+            $js .= PHP_EOL . 'alert("here");' ;
+            //$js .= PHP_EOL . '    $("body").load("' . $confirm . ' body") ;' ;
+            $js .= PHP_EOL . '    $.get( "' . $confirm . '", function( data ) {
+        $( ".result" ).html( data );
+        alert( "Load was performed." );
+    });' ;
+            
         }
 
         //  Load the confirmation URL via Redirect?
@@ -1615,8 +1621,8 @@ error_log(print_r($replacements, true)) ;
             foreach ($patterns as $key => $value)
                 $patterns[$key] = sprintf('/^%s%s/', $uid, $value) ;
 
-error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-error_log(print_r($patterns, true)) ;
+//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+//error_log(print_r($patterns, true)) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
@@ -1632,18 +1638,22 @@ error_log(print_r($patterns, true)) ;
 
                 if (is_array($_POST[$key]))
                 {
+                    //error_log('-- 1 --') ;
+                    //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__, print_r($_POST[$key], true))) ;
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
                     {
+                    //error_log('-- 4 --') ;
                         //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
                         $formkey = preg_replace($patterns, $replacements, $key);
-                            $body[$formkey] = $pv;
+                            $body[$formkey][] = $pv;
                     }
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                 }
                 else if ($key === 'draftResponse')
                 {
+                    //error_log('-- 2 --') ;
                     //  draftResponse is a special parameter for multi-page forms and needs
                     //  some special processing.  We need to remove the escapes on double quotes,
                     //  handled embedded tabs, and encoded ampersands.
@@ -1660,6 +1670,7 @@ error_log(print_r($patterns, true)) ;
                 }
                 else
                 {
+                    //error_log('-- 3 --') ;
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                     $formkey = preg_replace($patterns, $replacements, $key);
@@ -1668,7 +1679,6 @@ error_log(print_r($patterns, true)) ;
             }
 
             $form = str_replace($action, 'action=""', $form) ;
-
 
             //  WordPress converts all of the ampersand characters to their
             //  appropriate HTML entity or some variety of it.  Need to undo
@@ -1691,6 +1701,31 @@ error_log(print_r($patterns, true)) ;
                 wpgform_preprint_r($body) ;
             }
         
+            //  Special processing for checkboxes!
+
+            foreach($body as $key => $value)
+            {
+                if (is_array($body[$key]))
+                {
+                    $cb = '' ;
+                    reset($body[$key]) ;
+                    $fpk = key($body[$key]) ;
+
+                    foreach ($body[$key] as $pk => $pv)
+                        $cb .= sprintf('%s%s=%s', $pk === $fpk ? '' : '&', $key, $pv) ;
+                    $body[] = $cb ;
+                    unset($body[$key]) ;
+                }
+                else
+                {
+                    $body[] = sprintf('%s=%s', $key, $value) ;
+                    unset($body[$key]) ;
+                }
+            }
+            
+            $body = join('&', $body) ;
+            //error_log(print_r($_POST, true)) ;
+            //error_log(print_r($body, true)) ;
             self::$response = wp_remote_post($action,
                 array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
 
