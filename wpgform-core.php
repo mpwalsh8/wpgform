@@ -1730,28 +1730,24 @@ if (0):
             
             $body = join('&', $body) ;
 
-endif;
-            //$body = http_build_query(array($body)) ;
-            //$body = $body[0] ;
-
+else:
+error_log('') ;
+error_log('') ;
 error_log('================= 11111') ;
-            error_log(print_r($_POST, true)) ;
+            $q = http_build_query($body) ;
+            error_log(print_r($q, true)) ;
+            $q = preg_replace('/%5B[0-9]+%5D/', '', $q);
+            error_log(print_r($q, true)) ;
 error_log('================= 22222') ;
-            error_log(print_r($body, true)) ;
-error_log('================= 33333') ;
-            error_log(print_r(http_build_query($body), true)) ;
+error_log('') ;
+error_log('') ;
+endif;
+
             self::$response = wp_remote_post($action,
-            //self::$response = wp_remote_post('http://requestb.in/127u5kc1',
-                array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
-
-//$result = file_get_contents('http://requestb.in/127u5kc1');
-//error_log(print_r($result, true)) ;
-            
-
-            //error_log(print_r(self::$response, true)) ;
+                //array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
+                array('sslverify' => false, 'body' => $q, 'timeout' => $timeout)) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
-            //if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
 
             //  Double check response from wp_remote_post()
 
@@ -2023,4 +2019,13 @@ function wpgform_footer()
 
     print wpGForm::$wpgform_footer_js ;
 }
+
+    function wpgform_pre_http_request($args)
+    {
+        error_log(sprintf('%s::%s -->  %s', basename(__FILE__), __LINE__, print_r($args, true))) ;
+        return $args ;
+    }
+
+    add_filter('pre_http_request', 'wpgform_pre_http_request') ;
+
 ?>
