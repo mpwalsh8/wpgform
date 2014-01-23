@@ -1740,6 +1740,7 @@ error_log('================= 11111') ;
             error_log(print_r($q, true)) ;
 error_log('================= 22222') ;
 error_log('') ;
+error_log(sprintf('fsockopen():  %s', print_r(function_exists('fsockopen'), true))) ;
 error_log('') ;
 endif;
 
@@ -2027,5 +2028,15 @@ function wpgform_footer()
     }
 
     add_filter('pre_http_request', 'wpgform_pre_http_request') ;
+
+
+    function wpgform_http_api_transports($args)
+    {
+        $args = array('fsockopen') ;
+        error_log(sprintf('%s::%s -->  %s', basename(__FILE__), __LINE__, print_r($args, true))) ;
+        return $args ;
+    }
+
+    add_filter('http_api_transports', 'wpgform_http_api_transports') ;
 
 ?>
