@@ -542,7 +542,7 @@ class wpGForm
      * @see RenderGoogleForm
      * @return boolean - abort processing when false
      */
-    function ProcessWpGFormCPT($options)
+    static function ProcessWpGFormCPT($options)
     {
         //  Property short cut
         $o = &self::$options ;
@@ -1700,6 +1700,10 @@ jQuery(document).ready(function($) {
                 wpgform_preprint_r($action) ;
                 wpgform_preprint_r($body) ;
             }
+
+
+            error_log(print_r($body, true)) ;
+            error_log(print_r(http_build_query($body), true)) ;
         
             //  Special processing for checkboxes!
 
@@ -1724,10 +1728,21 @@ jQuery(document).ready(function($) {
             }
             
             $body = join('&', $body) ;
-            //error_log(print_r($_POST, true)) ;
-            //error_log(print_r($body, true)) ;
+
+            //$body = http_build_query(array($body)) ;
+            //$body = $body[0] ;
+
+            error_log(print_r($_POST, true)) ;
+            error_log(print_r($body, true)) ;
             self::$response = wp_remote_post($action,
+            //self::$response = wp_remote_post('http://requestb.in/127u5kc1',
                 array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
+
+//$result = file_get_contents('http://requestb.in/127u5kc1');
+//error_log(print_r($result, true)) ;
+            
+
+            error_log(print_r(self::$response, true)) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             //if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
