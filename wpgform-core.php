@@ -461,7 +461,7 @@ class wpGForm
      * @since 0.1
      * @deprecated
      */
-    function gform_sc($options)
+    static function gform_sc($options)
     {
         if (self::ProcessShortCodeOptions($options))
             return self::ConstructGoogleForm() ;
@@ -475,7 +475,7 @@ class wpGForm
      *
      * @since 1.0
      */
-    function wpgform_sc($options)
+    static function wpgform_sc($options)
     {
         if (self::ProcessWpGFormCPT($options))
             return self::ConstructGoogleForm() ;
@@ -614,7 +614,7 @@ class wpGForm
      * @return An HTML string if successful, false otherwise.
      * @see RenderGoogleForm
      */
-    function ConstructGoogleForm()
+    static function ConstructGoogleForm()
     {
         //  Any preset params?
         $presets = $_GET ;
@@ -1565,7 +1565,7 @@ jQuery(document).ready(function($) {
      * @return An HTML string if successful, false otherwise.
      * @see RenderGoogleForm
      */
-    function ProcessGoogleForm()
+    static function ProcessGoogleForm()
     {
         $tabFound = false ;
 
@@ -1702,11 +1702,12 @@ jQuery(document).ready(function($) {
             }
 
 
-            error_log(print_r($body, true)) ;
-            error_log(print_r(http_build_query($body), true)) ;
+            //error_log(print_r($body, true)) ;
+            //error_log(print_r(http_build_query($body), true)) ;
         
             //  Special processing for checkboxes!
 
+if (0):
             foreach($body as $key => $value)
             {
                 if (is_array($body[$key]))
@@ -1729,11 +1730,16 @@ jQuery(document).ready(function($) {
             
             $body = join('&', $body) ;
 
+endif;
             //$body = http_build_query(array($body)) ;
             //$body = $body[0] ;
 
+error_log('================= 11111') ;
             error_log(print_r($_POST, true)) ;
+error_log('================= 22222') ;
             error_log(print_r($body, true)) ;
+error_log('================= 33333') ;
+            error_log(print_r(http_build_query($body), true)) ;
             self::$response = wp_remote_post($action,
             //self::$response = wp_remote_post('http://requestb.in/127u5kc1',
                 array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
@@ -1742,7 +1748,7 @@ jQuery(document).ready(function($) {
 //error_log(print_r($result, true)) ;
             
 
-            error_log(print_r(self::$response, true)) ;
+            //error_log(print_r(self::$response, true)) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             //if (WPGFORM_DEBUG) wpgform_preprint_r(self::$response) ;
