@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Google Form\n"
-"POT-Creation-Date: 2014-01-22 14:27-0000\n"
-"PO-Revision-Date: 2014-01-22 14:27-0000\n"
+"POT-Creation-Date: 2014-02-02 04:08-0000\n"
+"PO-Revision-Date: 2014-02-02 04:09-0000\n"
 "Last-Translator: Mike Walsh <mpwalsh8@gmail.com>\n"
 "Language-Team: Mike Walsh (@mpwalsh8) <mpwalsh8@gmail.com>\n"
 "Language: es_ES\n"
@@ -14,232 +14,240 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../wpgform-core.php:177
+#: ../wpgform-core.php:178
 msgid "Required"
 msgstr "Obligatorio"
 
-#: ../wpgform-core.php:178
+#: ../wpgform-core.php:179
 msgid "Submit"
 msgstr "Enviar"
 
-#: ../wpgform-core.php:179
+#: ../wpgform-core.php:180
 msgid "Back"
 msgstr "Volver"
 
-#: ../wpgform-core.php:180
+#: ../wpgform-core.php:181
 msgid "Continue"
 msgstr "Continuar"
 
-#: ../wpgform-core.php:181
+#: ../wpgform-core.php:182
 msgid "Mark only one oval."
 msgstr "Selecciona sólo una marca."
 
-#: ../wpgform-core.php:182
+#: ../wpgform-core.php:183
 msgid "Other:"
 msgstr "Otros:"
 
-#: ../wpgform-core.php:183
+#: ../wpgform-core.php:184
 msgid "Check all that apply."
 msgstr "Selecciona todos los que apliquen."
 
-#: ../wpgform-core.php:250
+#: ../wpgform-core.php:251
 msgid "Reset"
 msgstr ""
 
-#: ../wpgform-core.php:269 ../wpgform-core.php:270 ../wpgform-post-type.php:46
+#: ../wpgform-core.php:270 ../wpgform-core.php:271 ../wpgform-post-type.php:46
 msgid "Google Forms"
 msgstr "Formularios de Google"
 
-#: ../wpgform-core.php:278
-#, fuzzy
-msgid "WordPress Google Form Submission Log"
-msgstr "Ingresa el nombre para el formulario en Wordpress"
-
 #: ../wpgform-core.php:279
-msgid "Form Submission Log"
-msgstr ""
+#, fuzzy
+msgid "Google Forms Submission Log"
+msgstr "Formularios de Google"
 
-#: ../wpgform-core.php:470 ../wpgform-core.php:484
+#: ../wpgform-core.php:280
+#, fuzzy
+msgid "Form Submission Log"
+msgstr "No tienes permiso para ver el log de respuestas."
+
+#: ../wpgform-core.php:471 ../wpgform-core.php:485
 msgid "Unable to process Google Form short code."
 msgstr "Error al procesar el shortcode del Formulario de Google."
 
-#: ../wpgform-core.php:649
+#: ../wpgform-core.php:650
 msgid "Unable to process Google Form."
 msgstr "Error al procesar el Formulario de Google"
 
-#: ../wpgform-core.php:650
+#: ../wpgform-core.php:651
 msgid "Server is responding with"
 msgstr "El servidor responde con"
 
-#: ../wpgform-core.php:651
+#: ../wpgform-core.php:652
 msgid "403 Permission Denied"
 msgstr "403 Acceso denegado"
 
-#: ../wpgform-core.php:651
+#: ../wpgform-core.php:652
 msgid "error"
 msgstr "error"
 
-#: ../wpgform-core.php:697
+#: ../wpgform-core.php:698
 msgid "Email Address"
 msgstr "Dirección de correo"
 
-#: ../wpgform-core.php:747 ../wpgform-core.php:749
+#: ../wpgform-core.php:748 ../wpgform-core.php:750
 msgid "What is"
 msgstr ""
 
-#: ../wpgform-core.php:897
+#: ../wpgform-core.php:895
 msgid "Unable to retrieve Google Form.  Please try reloading this page."
 msgstr ""
 "Error al cargar el Formulario de Google. Por favor inténtalo nuevamente "
 "recargando la página."
 
-#: ../wpgform-core.php:1013
+#: ../wpgform-core.php:1006
 msgid "Unexpected content encountered, unable to retrieve Google Form."
 msgstr ""
 "Error al cargar el Formulario de Google: se encontró contenido no esperado."
 
-#: ../wpgform-core.php:1201
+#: ../wpgform-core.php:1194
 msgid "A valid email address is required."
 msgstr "Se requiere una dirección de correo válida."
 
-#: ../wpgform-core.php:1220
+#: ../wpgform-core.php:1213
 msgid "Incorrect answer."
 msgstr "Respuesta incorrecta."
 
-#: ../wpgform-core.php:1306 ../wpgform-core.php:1535
+#: ../wpgform-core.php:1299 ../wpgform-core.php:1528
 msgid "Unknown"
 msgstr ""
 
-#: ../wpgform-core.php:1481
+#: ../wpgform-core.php:1474
 msgid "Warning:  You are using an insecure browser!"
 msgstr "Advertencia: Estás ocupando un navegador no seguro!"
 
-#: ../wpgform-core.php:1484
+#: ../wpgform-core.php:1477
 msgid "Warning:  Your browser is out of date!  Please update now."
 msgstr "Advertencia: Tu navegador está obsoleto. Por favor actualízalo ahora."
 
-#: ../wpgform-core.php:1500
+#: ../wpgform-core.php:1493
 msgid "Form Id:"
 msgstr "Id del Formulario:"
 
-#: ../wpgform-core.php:1502
+#: ../wpgform-core.php:1495
 msgid "Submitted Form Id"
 msgstr "Id de la respuesta al Formulario"
 
-#: ../wpgform-core.php:1505
+#: ../wpgform-core.php:1498
 msgid "No Submitted Form Id"
 msgstr "No se envió un ID de Formulario"
 
-#: ../wpgform-core.php:1754
+#: ../wpgform-core.php:1765
 msgid "Unable to submit Google Form.  Please try reloading this page."
 msgstr ""
 "Error al enviar la información del Formulario Google. Por favor inténtalo "
 "nuevamente recargando esta página."
 
-#: ../wpgform-core.php:1836
+#: ../wpgform-core.php:1847
 msgid "View Form Results"
 msgstr "Ver los resultados a los formularios"
 
-#: ../wpgform-core.php:1890
+#: ../wpgform-core.php:1901
 msgid "A form was submitted on your web site."
 msgstr "Han respondido un formulario en tu sitio web."
 
-#: ../wpgform-core.php:1891 ../wpgform-core.php:1903
+#: ../wpgform-core.php:1902 ../wpgform-core.php:1914
 msgid "Form"
 msgstr "Formulario"
 
-#: ../wpgform-core.php:1892 ../wpgform-core.php:1904
+#: ../wpgform-core.php:1903 ../wpgform-core.php:1915
 #: ../wpgform-logging.php:182
 msgid "URL"
 msgstr "URL"
 
-#: ../wpgform-core.php:1893 ../wpgform-core.php:1905
+#: ../wpgform-core.php:1904 ../wpgform-core.php:1916
 msgid "Responses"
 msgstr "Respuestas"
 
-#: ../wpgform-core.php:1894 ../wpgform-core.php:1906
+#: ../wpgform-core.php:1905 ../wpgform-core.php:1917
 msgid "Date"
 msgstr "Fecha"
 
-#: ../wpgform-core.php:1895 ../wpgform-core.php:1907
+#: ../wpgform-core.php:1906 ../wpgform-core.php:1918
 msgid "Time"
 msgstr "Hora"
 
-#: ../wpgform-core.php:1896 ../wpgform-core.php:1909
+#: ../wpgform-core.php:1907 ../wpgform-core.php:1920
 msgid "Thank you"
 msgstr "Gracias"
 
-#: ../wpgform-core.php:1902
+#: ../wpgform-core.php:1913
 msgid "A form was submitted on your web site"
 msgstr "Han respondido un formulario en tu sitio web"
 
-#: ../wpgform-core.php:1973
+#: ../wpgform-core.php:1984
 msgid "This field is required."
 msgstr "Este campo es obligatorio."
 
-#: ../wpgform-core.php:1974
+#: ../wpgform-core.php:1985
 msgid "Please fix this field."
 msgstr "Por favor arregla este campo."
 
-#: ../wpgform-core.php:1975
+#: ../wpgform-core.php:1986
 msgid "Please enter a valid email address."
 msgstr "Por favor ingresa una dirección de correo válida."
 
-#: ../wpgform-core.php:1976
+#: ../wpgform-core.php:1987
 msgid "Please enter a valid URL."
 msgstr "Por favor ingresa una URL válida."
 
-#: ../wpgform-core.php:1977
+#: ../wpgform-core.php:1988
 msgid "Please enter a valid date."
 msgstr "Por favor ingresa una fecha válida."
 
-#: ../wpgform-core.php:1978
+#: ../wpgform-core.php:1989
 msgid "Please enter a valid date (ISO)."
 msgstr "Por favor ingresa una fecha válida (ISO)."
 
-#: ../wpgform-core.php:1979
+#: ../wpgform-core.php:1990
 msgid "Please enter a valid number."
 msgstr "Por favor ingresa un número válido."
 
-#: ../wpgform-core.php:1980
+#: ../wpgform-core.php:1991
 msgid "Please enter only digits."
 msgstr "Por favor ingresa sólo números."
 
-#: ../wpgform-core.php:1981
+#: ../wpgform-core.php:1992
 msgid "Please enter a valid credit card number."
 msgstr "Por favor ingresa un número de tarjeta de crédito válido."
 
-#: ../wpgform-core.php:1982
+#: ../wpgform-core.php:1993
 msgid "Please enter the same value again.,"
 msgstr "Por favor ingresa el mismo valor nuevamente."
 
-#: ../wpgform-core.php:1983
+#: ../wpgform-core.php:1994
 msgid "Please enter a value with a valid extension."
 msgstr "Por favor ingresa un valor con una extensión válida."
 
-#: ../wpgform-core.php:1984
+#: ../wpgform-core.php:1995
 msgid "Please enter no more than {0} characters."
 msgstr "Por favor ingresa no mas de {0} caracteres."
 
-#: ../wpgform-core.php:1985
+#: ../wpgform-core.php:1996
 msgid "Please enter at least {0} characters."
 msgstr "Por favor ingresa al menos {0} caracteres."
 
-#: ../wpgform-core.php:1986
+#: ../wpgform-core.php:1997
 msgid "Please enter a value between {0} and {1} characters long."
 msgstr "Por favor ingresa al menos entre {0} y {1} caracteres."
 
-#: ../wpgform-core.php:1987
+#: ../wpgform-core.php:1998
 msgid "Please enter a value between {0} and {1}."
 msgstr "Por favor ingresa un número entre {0} y {1}."
 
-#: ../wpgform-core.php:1988
+#: ../wpgform-core.php:1999
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Por favor ingresa un valor menor o igual a {0}."
 
-#: ../wpgform-core.php:1989
+#: ../wpgform-core.php:2000
 msgid "Please enter a value greater than or equal to {0}."
 msgstr "Por favor ingresa un valor mayor o igual a {0}."
+
+#: ../wpgform-core.php:2054
+#, fuzzy, php-format
+msgid ""
+"This notification may be hidden via a setting on the <a href=\"%s\">Google "
+"Forms settings page</a>."
+msgstr "Formularios de Google"
 
 #: ../wpgform-logging.php:30
 msgid "You are not allowed to view the submission log."
@@ -287,8 +295,8 @@ msgstr ""
 msgid "Custom %s CSS"
 msgstr "CSS personalizado %s"
 
-#: ../wpgform-options.php:468
-#, php-format
+#: ../wpgform-options.php:485
+#, fuzzy, php-format
 msgid ""
 "Enabling debug will collect data during the form rendering and processing "
 "process.<p>The data is added to the page footer but hidden with a link "
@@ -303,31 +311,33 @@ msgid ""
 "recommended for advanced debugging of <a href=\"%s\">WordPress HTTP API "
 "issues.</a></p>"
 msgstr ""
+"Por favor considera hacer una <a href=\"%s\" target=\"_blank\">donación por "
+"PayPal</a> si te ha servido este plugin."
 
 #: ../wpgform-post-type.php:47
 #, fuzzy
 msgid "Google Form"
-msgstr "Formularios de Google"
+msgstr "Error al procesar el Formulario de Google"
 
 #: ../wpgform-post-type.php:48 ../wpgform-post-type.php:49
 #, fuzzy
 msgid "Add New Google Form"
-msgstr "Formularios de Google"
+msgstr "Error al procesar el Formulario de Google"
 
 #: ../wpgform-post-type.php:50
 #, fuzzy
 msgid "Edit Google Form"
-msgstr "Formularios de Google"
+msgstr "Error al procesar el Formulario de Google"
 
 #: ../wpgform-post-type.php:51
 #, fuzzy
 msgid "New Google Form"
-msgstr "Formularios de Google"
+msgstr "Error al procesar el Formulario de Google"
 
 #: ../wpgform-post-type.php:52
 #, fuzzy
 msgid "View Google Form"
-msgstr "Formularios de Google"
+msgstr "Ver los resultados a los formularios"
 
 #: ../wpgform-post-type.php:53
 #, fuzzy
@@ -340,13 +350,14 @@ msgid "No Google Forms Found"
 msgstr "Formularios de Google"
 
 #: ../wpgform-post-type.php:55
+#, fuzzy
 msgid "No Google Forms Found In Trash"
-msgstr ""
+msgstr "Formularios de Google"
 
 #: ../wpgform-post-type.php:82
 #, fuzzy
 msgid "Google Form Details"
-msgstr "Formularios de Google"
+msgstr "Error al procesar el Formulario de Google"
 
 #: ../wpgform-post-type.php:88
 msgid "Form URL"
@@ -435,32 +446,39 @@ msgstr "Reglas CSS específicas para el formulario"
 #: ../wpgform-post-type.php:155
 #, fuzzy
 msgid "Form Caching"
-msgstr "CSS del formulario"
+msgstr "Formulario"
 
 #: ../wpgform-post-type.php:156
+#, fuzzy
 msgid "Enable Form Caching using Wordpress Transient API"
-msgstr ""
+msgstr "Ingresa el nombre para el formulario en Wordpress"
 
 #: ../wpgform-post-type.php:165
+#, fuzzy
 msgid "Form Caching Timeout"
-msgstr ""
+msgstr "Formulario"
 
 #: ../wpgform-post-type.php:166
+#, fuzzy
 msgid "How often will the forms reloaded (in minutes)"
-msgstr ""
+msgstr "Formularios de Google"
 
 #: ../wpgform-post-type.php:174
+#, fuzzy
 msgid "Reset Form Cache?"
-msgstr ""
+msgstr "Formulario"
 
 #: ../wpgform-post-type.php:175
+#, fuzzy
 msgid "This will force reloading the form from Google Drive"
 msgstr ""
+"Error al cargar el Formulario de Google. Por favor inténtalo nuevamente "
+"recargando la página."
 
 #: ../wpgform-post-type.php:197
 #, fuzzy
 msgid "Google Form Options"
-msgstr "Formularios de Google"
+msgstr "Error al procesar el Formulario de Google"
 
 #: ../wpgform-post-type.php:203 ../wpgform-post-type.php:204
 msgid "CAPTCHA"
@@ -543,8 +561,9 @@ msgid "Unite Theme Hack"
 msgstr "Hack para tema Unite"
 
 #: ../wpgform-post-type.php:322
+#, fuzzy
 msgid "Google Form Field Validation"
-msgstr ""
+msgstr "Error al procesar el Formulario de Google"
 
 #: ../wpgform-post-type.php:328
 msgid "Validation"
@@ -561,11 +580,12 @@ msgid "Form Fields"
 msgstr "Campos del formulario"
 
 #: ../wpgform-post-type.php:339
+#, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.) - <a href=\"http://jqueryvalidation.org/rules\">Additional details on "
 "jQuery Rules</a>"
-msgstr ""
+msgstr "Reglas CSS específicas para el formulario"
 
 #: ../wpgform-post-type.php:367 ../wpgform-post-type.php:473
 #: ../wpgform-post-type.php:647 ../wpgform-post-type.php:669
@@ -588,52 +608,60 @@ msgid "Value to validate against"
 msgstr "Valor contra el cual validar"
 
 #: ../wpgform-post-type.php:398
+#, fuzzy
 msgid "Google Form Field Placeholder"
-msgstr ""
+msgstr "Error al procesar el Formulario de Google"
 
 #: ../wpgform-post-type.php:405
+#, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.) - <a href=\"http://www.w3schools.com/tags/att_input_placeholder.asp"
 "\">Additional details on Placeholders</a>"
-msgstr ""
+msgstr "Agregar etiquetas &lt;BR&gt; entre las etiquetas y los campos de datos"
 
 #: ../wpgform-post-type.php:436
 #, fuzzy
 msgid "Google Form Hidden Fields"
-msgstr "Formularios de Google"
+msgstr "Campos del formulario"
 
 #: ../wpgform-post-type.php:442
+#, fuzzy
 msgid "Hidden Fields"
-msgstr ""
+msgstr "Campos del formulario"
 
 #: ../wpgform-post-type.php:443
+#, fuzzy
 msgid "Configure hidden fields"
-msgstr ""
+msgstr "Campos del formulario"
 
 #: ../wpgform-post-type.php:453
+#, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.).  The optional value is only used for fields of type <b><i>value</i></"
 "b>, <b><i>url</i></b>, and <b><i>timestamp</i></b>.  For all other field "
 "types WordPress will set the hidden input to a system derived value."
-msgstr ""
+msgstr "Valor"
 
 #: ../wpgform-post-type.php:474
+#, fuzzy
 msgid "Type of hiddenfield"
-msgstr ""
+msgstr "Tipo"
 
 #: ../wpgform-post-type.php:482
+#, fuzzy
 msgid "Optional value to use as a preset"
-msgstr ""
+msgstr "Valor"
 
 #: ../wpgform-post-type.php:643
 msgid "Name"
 msgstr "Nombre"
 
 #: ../wpgform-post-type.php:647 ../wpgform-post-type.php:669
+#, fuzzy
 msgid "Check"
-msgstr ""
+msgstr "Selecciona todos los que apliquen."
 
 #: ../wpgform-post-type.php:666
 msgid "Field"
