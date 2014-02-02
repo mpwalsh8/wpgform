@@ -154,6 +154,7 @@ function wpgform_get_default_plugin_options()
        ,'custom_css' => 0
        ,'custom_css_styles' => ''
        ,'donation_message' => 0
+       ,'curl_transport_missing_message' => 0
        ,'captcha_terms' => 2
        ,'captcha_operator_plus' => 1
        ,'captcha_operator_minus' => 0
@@ -275,7 +276,7 @@ function wpgform_admin_menu()
 
     add_submenu_page(
         'edit.php?post_type=wpgform',
-        __('WordPress Google Form Submission Log', WPGFORM_I18N_DOMAIN), /*page title*/
+        __('Google Forms Submission Log', WPGFORM_I18N_DOMAIN), /*page title*/
         __('Form Submission Log', WPGFORM_I18N_DOMAIN), /*menu title*/
         'manage_options', /*roles and capabiliyt needed*/
         'wpgform-entry-log-page',
@@ -824,9 +825,6 @@ class wpGForm
             $patterns = array('/entry_([0-9]+)_(single|group)_/', '/entry_([0-9]+)_/', '/entry_([0-9]+)/') ;
             $replacements = array('entry.\1.\2.', 'entry.\1.', 'entry.\1') ;
 
-//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-//error_log(print_r($replacements, true)) ;
-
             foreach ($replacements as $key => $value)
                 $replacements[$key] = sprintf('%s%s', $uid, $value) ;
 
@@ -951,7 +949,6 @@ class wpGForm
 
         $html = wp_kses($html, $allowed_tags) ;
 
-//if (1):
         $patterns = array(
             '/entry\.([0-9]+)\.(single|group)\./',
             '/entry\.([0-9]+)_/',
@@ -981,11 +978,7 @@ class wpGForm
         $patterns[] = '/id="ss-submit"/' ;
         $replacements[] = sprintf('id="%sss-submit"', $uid) ;
 
-//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-//error_log(print_r($replacements, true)) ;
         $html = preg_replace($patterns, $replacements, $html) ;
-//error_log(print_r($html, true)) ;
-//endif;
 
         if (WPGFORM_DEBUG)
         {
@@ -1139,7 +1132,7 @@ class wpGForm
 
         $js = sprintf('
 <script type="text/javascript">
-//  WordPress Google Form v%s jQuery script
+//  Google Forms v%s jQuery script
 jQuery(document).ready(function($) {
 ', WPGFORM_VERSION) ;
 
@@ -1171,7 +1164,7 @@ jQuery(document).ready(function($) {
 ', $prefix) ;
 
             //  Somewhat unsupported but it works, a Google Spreadsheet can
-            //  be rendered by WordPress Google Form.  If the Legal is disabled,
+            //  be rendered by Google Forms.  If the Legal is disabled,
             //  the block of code that Google adds to the form is removed.
 
             $js .= sprintf('
@@ -1982,7 +1975,7 @@ function wpgform_head()
         array('jquery'), false, true) ;
     wp_enqueue_script('jquery-columnizer') ;
 
-    //  Load the WordPress Google Form jQuery Validate script from the plugin
+    //  Load the Google Forms jQuery Validate script from the plugin
     wp_register_script('wpgform-jquery-validate',
             plugins_url(plugin_basename(dirname(__FILE__) . '/js/wpgform.js')),
         array('jquery', 'jquery-validate'), false, true) ;
@@ -2021,22 +2014,51 @@ function wpgform_footer()
     print wpGForm::$wpgform_footer_js ;
 }
 
-    function wpgform_pre_http_request($args)
+function wpgform_pre_http_request($args)
+{
+    error_log(sprintf('%s::%s -->  %s', basename(__FILE__), __LINE__, print_r($args, true))) ;
+    return $args ;
+}
+
+//add_filter('pre_http_request', 'wpgform_pre_http_request') ;
+
+
+function wpgform_http_api_transports($args)
+{
+    $args = array('fsockopen') ;
+    error_log(sprintf('%s::%s -->  %s', basename(__FILE__), __LINE__, print_r($args, true))) ;
+    return $args ;
+}
+
+//add_filter('http_api_transports', 'wpgform_http_api_transports') ;
+
+function wpgform_curl_transport_missing_notice()
+{
+    $wpgform_options = wpgform_get_plugin_options() ;
+
+    //  Skip check if disabled in settings
+    if ($wpgform_options['curl_transport_missing_message']) return ;
+
+    //  Test for cURL transport
+
+    if (strtolower(WP_Http::_get_first_available_transport('')) != 'wp_http_curl')
     {
-        error_log(sprintf('%s::%s -->  %s', basename(__FILE__), __LINE__, print_r($args, true))) ;
-        return $args ;
+?>
+<div class="update-nag">
+<?php
+        _e('The <a href="http://codex.wordpress.org/HTTP_API">WordPress HTTP API</a> cURL transport was not detected.  The Google Forms plugin may not operate correctly.', WPGFORM_I18N_DOMAIN) ;
+?>
+<br />
+<small>
+<?php
+        printf(__('This notification may be hidden via a setting on the <a href="%s">Google Forms settings page</a>.',
+            WPGFORM_I18N_DOMAIN), admin_url('options-general.php?page=wpgform-options.php')) ;
+?>
+</small>
+</div>
+<?php
     }
+}
 
-    add_filter('pre_http_request', 'wpgform_pre_http_request') ;
-
-
-    function wpgform_http_api_transports($args)
-    {
-        $args = array('fsockopen') ;
-        error_log(sprintf('%s::%s -->  %s', basename(__FILE__), __LINE__, print_r($args, true))) ;
-        return $args ;
-    }
-
-    add_filter('http_api_transports', 'wpgform_http_api_transports') ;
-
+add_action( 'admin_notices', 'wpgform_curl_transport_missing_notice' );
 ?>
