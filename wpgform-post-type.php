@@ -57,8 +57,22 @@ function wpgform_register_post_types()
         'menu_icon' => plugins_url('/images/forms-16.png', __FILE__)
     );
 
-    // Register the WordPress Google Form post type
+    //  Register the WordPress Google Form post type
     register_post_type(WPGFORM_CPT_FORM, $wpgform_args) ;
+
+    //  Post type is registered, do some hygiene on any that exist in the database.
+    //  Insert the "wpgform" shortcode for that post into the post content. This
+    //  ensures the form will be displayed properly when viewed through the CPT URL.
+
+    $args = array('post_type' => WPGFORM_CPT_FORM, 'posts_per_page' => -1) ;
+
+    $loop = new WP_Query($args);
+
+    while ($loop->have_posts()) :
+        $loop->the_post() ;
+        wp_update_post(array('ID' => get_the_ID(),
+            'post_content' => sprintf('[wpgform id=\'%d\']', get_the_ID()))) ;
+    endwhile ;
 }
 
 //  Build custom meta box support
@@ -718,8 +732,7 @@ function wpgform_add_quick_edit_nonce($column_name, $post_type)
 
 add_action('save_post', 'wpgform_save_meta_box_data');
 /**
- * Action to save WordPress Google Form meta box data for both
- * team and player Custom Post Types.
+ * Action to save WordPress Google Form meta box data for CPT.
  *
  */
 function wpgform_save_meta_box_data($post_id)
@@ -815,6 +828,21 @@ function wpgform_save_meta_box_data($post_id)
                 }
             }
         }
+
+        //  Set the post content to the shortcode for the form for renderin the CPT URL slug
+
+        if (!wp_is_post_revision($post_id))
+        {
+		    // unhook this function so it doesn't loop infinitely
+		    remove_action('save_post', 'wpgform_save_meta_box_data');
+	
+		    // update the post, which calls save_post again
+            wp_update_post(array('ID' => $post_id,
+                'post_content' => sprintf('[wpgform id=\'%d\']', $post_id))) ;
+
+		    // re-hook this function
+		    add_action('save_post', 'wpgform_save_meta_box_data');
+	    }
     }
     else
     {
