@@ -117,8 +117,8 @@ function wpgform_init()
     if ($wpgform_options['sc_widgets'] == 1)
         add_filter('widget_text', 'do_shortcode') ;
 
-    add_filter('the_content', 'wpautop');
-    add_filter('the_content', 'wpgform_the_content');
+    //add_filter('the_content', 'wpautop');
+    //add_filter('the_content', 'wpgform_the_content');
     add_action('template_redirect', 'wpgform_head') ;
     add_action('wp_footer', 'wpgform_footer') ;
 }
@@ -369,6 +369,11 @@ class wpGForm
      * Property to store Javascript output in footer
      */
     static $wpgform_footer_js = '' ;
+
+    /**
+     * Property to store state of Javascript output in footer
+     */
+    static $wpgform_footer_js_printed = false ;
 
     /**
      * Property to indicate CSS output state
@@ -2011,7 +2016,11 @@ function wpgform_footer()
 {
     //  Output the generated jQuery script as part of the footer
 
-    print wpGForm::$wpgform_footer_js ;
+    if (!wpGForm::$wpgform_footer_js_printed)
+    {
+        print wpGForm::$wpgform_footer_js ;
+        wpGForm::$wpgform_footer_js_printed = true ;
+    }
 }
 
 function wpgform_pre_http_request($args)
