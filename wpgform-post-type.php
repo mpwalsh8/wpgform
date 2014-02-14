@@ -39,7 +39,7 @@ function wpgform_register_post_types()
         'supports' => array(
             'title',
             //'thumbnail',
-            //'editor',
+            'editor',
             'excerpt'
         ),
         'labels' => array(
@@ -66,6 +66,9 @@ function wpgform_register_post_types()
 
     $args = array('post_type' => WPGFORM_CPT_FORM, 'posts_per_page' => -1) ;
 
+    // unhook this function so it doesn't update the meta data incorrectly
+    remove_action('save_post', 'wpgform_save_meta_box_data');
+	
     $loop = new WP_Query($args);
 
     while ($loop->have_posts()) :
@@ -73,6 +76,9 @@ function wpgform_register_post_types()
         wp_update_post(array('ID' => get_the_ID(),
             'post_content' => sprintf('[wpgform id=\'%d\']', get_the_ID()))) ;
     endwhile ;
+
+    // re-hook this function
+    add_action('save_post', 'wpgform_save_meta_box_data');
 }
 
 //  Build custom meta box support
@@ -829,7 +835,7 @@ function wpgform_save_meta_box_data($post_id)
             }
         }
 
-        //  Set the post content to the shortcode for the form for renderin the CPT URL slug
+        //  Set the post content to the shortcode for the form for rendering the CPT URL slug
 
         if (!wp_is_post_revision($post_id))
         {
