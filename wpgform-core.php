@@ -1263,10 +1263,8 @@ jQuery(document).ready(function($) {
         rules: {%s', $uid, PHP_EOL) ;
             if (!empty($extras))
             {
-                //error_log(sprintf('%s::%s -> %s', basename(__FILE__), __LINE__, print_r($extras, true))) ;
                 foreach ($extras as $key => $value)
                 {
-                    //error_log(sprintf('%s::%s -> %s', basename(__FILE__), __LINE__, print_r($key, true))) ;
                     $js .= sprintf('           "%s%s": {', $uid, $key) ;
                     foreach ($value as $extra)
                         $js .= sprintf('%s%s', $extra, $extra === end($value) ? '}' : ', ') ;
@@ -1334,9 +1332,6 @@ jQuery(document).ready(function($) {
 
                 foreach ($replacements as $key => $value)
                     $replacements[$key] = sprintf('%s%s', $uid, $value) ;
-
-//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-//error_log(print_r($replacements, true)) ;
 
                 if (!empty($meta_field))
                 {
@@ -1619,9 +1614,6 @@ jQuery(document).ready(function($) {
             foreach ($patterns as $key => $value)
                 $patterns[$key] = sprintf('/^%s%s/', $uid, $value) ;
 
-//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
-//error_log(print_r($patterns, true)) ;
-
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
 
@@ -1636,13 +1628,10 @@ jQuery(document).ready(function($) {
 
                 if (is_array($_POST[$key]))
                 {
-                    //error_log('-- 1 --') ;
-                    //error_log(sprintf('%s::%s', basename(__FILE__), __LINE__, print_r($_POST[$key], true))) ;
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     $pa = &$_POST[$key] ;
                     foreach ($pa as $pv)
                     {
-                    //error_log('-- 4 --') ;
                         //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($pv) . '&' ;
                         $formkey = preg_replace($patterns, $replacements, $key);
                             $body[$formkey][] = $pv;
@@ -1651,7 +1640,6 @@ jQuery(document).ready(function($) {
                 }
                 else if ($key === 'draftResponse')
                 {
-                    //error_log('-- 2 --') ;
                     //  draftResponse is a special parameter for multi-page forms and needs
                     //  some special processing.  We need to remove the escapes on double quotes,
                     //  handled embedded tabs, and encoded ampersands.
@@ -1668,7 +1656,6 @@ jQuery(document).ready(function($) {
                 }
                 else
                 {
-                    //error_log('-- 3 --') ;
                     if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     //$body .= preg_replace($patterns, $replacements, $key) . '=' . rawurlencode($value) . '&' ;
                     $formkey = preg_replace($patterns, $replacements, $key);
@@ -1700,47 +1687,10 @@ jQuery(document).ready(function($) {
             }
 
 
-            //error_log(print_r($body, true)) ;
-            //error_log(print_r(http_build_query($body), true)) ;
-        
             //  Special processing for checkboxes!
 
-if (0):
-            foreach($body as $key => $value)
-            {
-                if (is_array($body[$key]))
-                {
-                    $cb = '' ;
-                    reset($body[$key]) ;
-                    $fpk = key($body[$key]) ;
-
-                    foreach ($body[$key] as $pk => $pv)
-                        $cb .= sprintf('%s%s=%s', $pk === $fpk ? '' : '&', $key, $pv) ;
-                    $body[] = $cb ;
-                    unset($body[$key]) ;
-                }
-                else
-                {
-                    $body[] = sprintf('%s=%s', $key, $value) ;
-                    unset($body[$key]) ;
-                }
-            }
-            
-            $body = join('&', $body) ;
-
-else:
-error_log('') ;
-error_log('') ;
-error_log('================= 11111') ;
             $q = http_build_query($body) ;
-            error_log(print_r($q, true)) ;
             $q = preg_replace('/%5B[0-9]+%5D/', '', $q);
-            error_log(print_r($q, true)) ;
-error_log('================= 22222') ;
-error_log('') ;
-error_log(sprintf('fsockopen():  %s', print_r(function_exists('fsockopen'), true))) ;
-error_log('') ;
-endif;
 
             self::$response = wp_remote_post($action,
                 //array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
@@ -2050,7 +2000,9 @@ function wpgform_curl_transport_missing_notice()
 
     //  Test for cURL transport
 
-    if (strtolower(WP_Http::_get_first_available_transport('')) != 'wp_http_curl')
+    $t = new WP_Http() ;
+
+    if (strtolower($t->_get_first_available_transport('')) != 'wp_http_curl')
     {
 ?>
 <div class="update-nag">
@@ -2067,6 +2019,8 @@ function wpgform_curl_transport_missing_notice()
 </div>
 <?php
     }
+
+    unset ($t) ;
 }
 
 add_action( 'admin_notices', 'wpgform_curl_transport_missing_notice' );
