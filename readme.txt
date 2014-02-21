@@ -375,7 +375,7 @@ div.ss-form-container div.required-message {
 
 No known upgrade issues.
 
-== Changelog ==
+== Change log ==
 
 = Version 0.64 =
 * Fixed a number of strings which were missing translation wrapper functions.
@@ -385,6 +385,7 @@ No known upgrade issues.
 * Added a setting to allow hiding the cURL transport missing message on the Dashboard.
 * Added a check to ensure jQuery script isn't output more than once.
 * Remove hook into "the_content" to reduce potential conflicts with other plugins (e.g. Wordpress SEO plugin by Yoast).
+* Added placeholders for some of the form fields when defining a Form within the UI.
 
 = Version 0.63 =
 * Refactored code to which assembles arguments for wp_remote_post() to construct the body argument as an array as opposed to a URL formatted string of concatenated parameters.  The long string was causing problems with newer versions of PHP.  The array of arguments is much cleaner (thanks to David Högborg for providing the basics of a patch).
