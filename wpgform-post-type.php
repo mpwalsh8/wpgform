@@ -39,7 +39,7 @@ function wpgform_register_post_types()
         'supports' => array(
             'title',
             //'thumbnail',
-            'editor',
+            //'editor',
             'excerpt'
         ),
         'labels' => array(
@@ -110,6 +110,7 @@ function wpgform_primary_meta_box_content($fieldsonly = false)
                 'id' => WPGFORM_PREFIX . 'form',
                 'type' => 'lgtext',
                 'std' => '',
+                'placeholder' => __('Google Form URL', WPGFORM_I18N_DOMAIN),
                 'required' => true
             ),
             array(
@@ -118,6 +119,7 @@ function wpgform_primary_meta_box_content($fieldsonly = false)
                 'id' => WPGFORM_PREFIX . 'confirm',
                 'type' => 'lgtext',
                 'std' => '',
+                'placeholder' => __('Confirmation Page URL', WPGFORM_I18N_DOMAIN),
                 'required' => false
             ),
             array(
@@ -135,6 +137,7 @@ function wpgform_primary_meta_box_content($fieldsonly = false)
                 'id' => WPGFORM_PREFIX . 'alert',
                 'type' => 'lgtext',
                 'std' => '',
+                'placeholder' => __('Alert Message', WPGFORM_I18N_DOMAIN),
                 'required' => false
             ),
             array(
@@ -169,6 +172,7 @@ function wpgform_primary_meta_box_content($fieldsonly = false)
                 'id' => WPGFORM_PREFIX . 'form_css',
                 'type' => 'textarea',
                 'std' => '',
+                'placeholder' => 'Define form specific CSS rules',
                 'required' => false
             ),
             array(
@@ -609,19 +613,29 @@ function wpgform_build_meta_box($mb)
             switch ($field['type']) {
                 case 'text':
                 case 'lgtext':
-                    echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" size="30" style="width:97%" />', '<br />', '<small>', $field['desc'], '</small>';
+                    printf('<input type="text" name="%s" id="%s" style="width: 97%%;" value="%s" placeholder="%s" /><br /><small>%s</small>',
+                        $field['id'], $field['id'], $meta ? $meta : $field['std'],
+                        array_key_exists('placeholder', $field) ? $field['placeholder'] : '', $field['desc']) ;
                     break;
 
                 case 'medtext':
-                    echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" size="30" style="width:47%" />', '<br />', '<small>', $field['desc'], '</small>';
+                    printf('<input type="text" name="%s" id="%s" size="30" style="width: 47%%;" value="%s" placeholder="%s" /><br /><small>%s</small>',
+                        $field['id'], $field['id'], $meta ? $meta : $field['std'],
+                        array_key_exists('placeholder', $field) ? $field['placeholder'] : '', $field['desc']) ;
                     break;
 
                 case 'smtext':
-                    echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" size="30" style="width:27%" />', '<br />', '<small>', $field['desc'], '</small>';
+                    printf('<input type="text" name="%s" id="%s" size="30" style="width: 27%%;" value="%s" placeholder="%s" /><br /><small>%s</small>',
+                        $field['id'], $field['id'], $meta ? $meta : $field['std'],
+                        array_key_exists('placeholder', $field) ? $field['placeholder'] : '', $field['desc']) ;
                     break;
 
                 case 'textarea':
-                    echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="4" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>', '<br />', '<small>', $field['desc'], '</small>';
+                    printf('<textarea name="%s" id="%s" cols="%s" rows="%s" style="width: 97%%;" placeholder="%s">%s</textarea><br /><small>%s</small>',
+                        $field['id'], $field['id'], array_key_exists('cols', $field) ? $field['cols'] : 60,
+                        array_key_exists('rows', $field) ? $field['rows'] : 4,
+                        array_key_exists('placeholder', $field) ? $field['placeholder'] : '', 
+                        $meta ? $meta : $field['std'], $field['desc']) ;
                     break;
 
                 case 'select':
