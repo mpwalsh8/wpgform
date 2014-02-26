@@ -2,22 +2,26 @@
 Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
-Requires at least: 3.6.1
+Requires at least: 3.7.1
 Tested up to: 3.8.1
 Stable tag: 0.63
-License: GPL
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
 
 Embeds a published, public Google Form in a WordPress post, page, or widget.
 
 == Description ==
 
-Fetches a published Google Form using a WordPress custom post or shortcode, removes the Gooogle wrapper HTML and then renders it as an HTML form embedded in your blog post or page. When using Google Form post type, the *wpgform* shortcode accepts one parameter, *id*, which is the post id of the form.  When using the deprecated *gform* shortcode, the only required parameter is `form` which is set to the URL to the Google Form URL.  Recommended but optional, you can also provide a custom URL for a confirmation page if you don't care for the default Google text.  The confirmation page will override the default Google `Thank You` page and offers better integration with your WordPress site.  There are a number of other options, refer to the documentation for further details.
+Fetches a published Google Form using a WordPress custom post or shortcode, removes the Gooogle wrapper HTML and then renders it as an HTML form embedded in your blog post or page. When using Google Form post type, the *wpgform* shortcode accepts one parameter, *id*, which is the post id of the form.  When using the __deprecated__ *gform* shortcode, the only required parameter is `form` which is set to the URL to the Google Form URL.  Recommended but optional, you can also provide a custom URL for a confirmation page if you don't care for the default Google text.  The confirmation page will override the default Google `Thank You` page and offers better integration with your WordPress site.  There are a number of other options, refer to the documentation for further details.
 
 For example, suppose you want to integrate the form at `https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0`, (not a real URL) use the following shortcode in your WordPress post or page:
 
     [wpgform id='861']
 
     [gform form='https://docs.google.com/spreadsheet/viewform?hl=en_US&pli=1&formkey=ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#gid=0']
+
+__Deprecated:__ use of the *gform* shortcode is __deprecated__ - please use the *wpgform* shortcode.
 
 Currently, this plugin only supports Google Forms that are "Published as a web page" and therefore public. Private Google Forms are not supported.
 
@@ -33,7 +37,7 @@ Currently, this plugin only supports Google Forms that are "Published as a web p
 
 == Usage ==
 
-As features have been added, usage of the `gform` shortcode has grown increasing complex.  Begining with v0.46, a second shortcode, `wpgform` has been introduced in conjunction with a Custom Post Type to define forms deprecating usage of the `gformn` shortcode. Usage of the new shortcode and Custom Post Type is much, much easier than the complexities of the original `gform` shortcode.  Users are strong encouraged to migrate usage to the new shortcode and Custom Post Type.  New features will only be added to the Custom Post Type usage model.
+As features have been added, usage of the `gform` shortcode has grown increasing complex (the `gform` shortcode is now *deprecated*).  Begining with v0.46, a second shortcode, `wpgform` has been introduced in conjunction with a Custom Post Type to define forms deprecating usage of the `gformn` shortcode. Usage of the new shortcode and Custom Post Type is much, much easier than the complexities of the original `gform` shortcode.  Users are strong encouraged to migrate usage to the new shortcode and Custom Post Type.  New features will only be added to the Custom Post Type usage model.
 
 The WordPress Google Form shortcode `wpgform` supports a single attribute.  The rest of the controls are derived from the information stored with the Custom Post Type.
 
@@ -44,7 +48,7 @@ The WordPress Google Form shortcode `wpgform` supports a single attribute.  The 
 * __id__:  The numeric id of the Google Form Custom Post Type.
 * __uid__:  A unique string (e.g. 'A-') used to ensure form element ID attributes are unique when a form appears on a page multiple times. (optional)
 
-The WordPress Google Form shortcode `gform` supports a number of attributes that allow further control and customization of the Google Form.
+The Google Form *deprecated* shortcode `gform` supports a number of attributes that allow further control and customization of the Google Form.
 
 `[gform form='<full_url_to_Google_Form>' confirm='<full_url_to_confirmation_page>' class='<value>' legal='on|off' br='on|off' prefix='<value>' suffix='<value>' email='on|off' sendto='<email address>' style='redirect|ajax' spreadsheet='<full_url_to_Google_Spreadsheet>' unitethemehack='on|off']`
 
@@ -376,6 +380,10 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.65 =
+* Implemented "save_post" for custom post type eliminating general purpose "save_post" (only option prior to WordPress 3.7) action which could potentially, if not handled correctly by another plugin, corrupt post data.
+* Formally __deprecated__ the `gform` shortcode by updating README file.
 
 = Version 0.64 =
 * Fixed a number of strings which were missing translation wrapper functions.
