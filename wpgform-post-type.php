@@ -67,7 +67,7 @@ function wpgform_register_post_types()
     $args = array('post_type' => WPGFORM_CPT_FORM, 'posts_per_page' => -1) ;
 
     // unhook this function so it doesn't update the meta data incorrectly
-    remove_action('save_post', 'wpgform_save_meta_box_data');
+    remove_action('save_post_' . WPGFORM_CPT_FORM, 'wpgform_save_meta_box_data');
 	
     $loop = new WP_Query($args);
 
@@ -78,7 +78,7 @@ function wpgform_register_post_types()
     endwhile ;
 
     // re-hook this function
-    add_action('save_post', 'wpgform_save_meta_box_data');
+    add_action('save_post_' . WPGFORM_CPT_FORM, 'wpgform_save_meta_box_data');
 }
 
 //  Build custom meta box support
@@ -750,7 +750,7 @@ function wpgform_add_quick_edit_nonce($column_name, $post_type)
     }
 }
 
-add_action('save_post', 'wpgform_save_meta_box_data');
+add_action('save_post_' . WPGFORM_CPT_FORM, 'wpgform_save_meta_box_data');
 /**
  * Action to save WordPress Google Form meta box data for CPT.
  *
@@ -854,14 +854,14 @@ function wpgform_save_meta_box_data($post_id)
         if (!wp_is_post_revision($post_id))
         {
 		    // unhook this function so it doesn't loop infinitely
-		    remove_action('save_post', 'wpgform_save_meta_box_data');
+		    remove_action('save_post_' . WPGFORM_CPT_FORM, 'wpgform_save_meta_box_data');
 	
 		    // update the post, which calls save_post again
             wp_update_post(array('ID' => $post_id,
                 'post_content' => sprintf('[wpgform id=\'%d\']', $post_id))) ;
 
 		    // re-hook this function
-		    add_action('save_post', 'wpgform_save_meta_box_data');
+		    add_action('save_post_' . WPGFORM_CPT_FORM, 'wpgform_save_meta_box_data');
 	    }
     }
     else
