@@ -304,18 +304,32 @@ function wpgform_admin_init()
 }
 
 /**
- * wpgform_register_activation_hook()
+ * wpgform_activate()
  *
  * Adds the default options so WordPress options are
  * configured to a default state upon plugin activation.
  *
  * @return null
  */
-function wpgform_register_activation_hook()
+function wpgform_activate()
 {
     wpgform_init_i18n() ;
     add_option('wpgform_options', wpgform_get_default_plugin_options()) ;
     add_filter('widget_text', 'do_shortcode') ;
+    flush_rewrite_rules() ;
+}
+
+/**
+ * wpgform_deactivate()
+ *
+ * Adds the default options so WordPress options are
+ * configured to a default state upon plugin activation.
+ *
+ * @return null
+ */
+function wpgform_deactivate()
+{
+    flush_rewrite_rules() ;
 }
 
 /**
@@ -1915,11 +1929,11 @@ function wpgform_head()
 
     if (defined('SCRIPT_DEBUG')) {
         wp_register_script('jquery-validate',
-            'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js',
+            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js',
             array('jquery'), false, true) ;
     } else {
         wp_register_script('jquery-validate',
-            'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js',
+            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js',
             array('jquery'), false, true) ;
     }
     wp_enqueue_script('jquery-validate') ;
