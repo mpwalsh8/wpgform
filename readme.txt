@@ -384,6 +384,8 @@ No known upgrade issues.
 = Version 0.65 =
 * Implemented "save_post" for custom post type eliminating general purpose "save_post" (only option prior to WordPress 3.7) action which could potentially, if not handled correctly by another plugin, corrupt post data.
 * Formally __deprecated__ the `gform` shortcode by updating README file.
+* Added flush of rewrite rules upon plugin activation and deactivation.
+* Implemented protocol relative URLs for loading jQuery script from Microsoft CDN to avoid mixed-content warnings when serving over https.
 
 = Version 0.64 =
 * Fixed a number of strings which were missing translation wrapper functions.
