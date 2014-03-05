@@ -251,13 +251,13 @@ function wpgform_settings_input()
             <br style="margin-bottom: 10px;"/>
             <label for="wpgform_captcha_operator_plus">
             <input name="wpgform_options[captcha_operator_plus]" type="checkbox" id="wpgform_captcha_operator_plus" value="1" <?php checked('1', $wpgform_options['captcha_operator_plus']) ; ?> />
-            <?php _e('Addition:  +', WPGFORM_I18N_DOMAIN);?><br /></label>
+            <?php _e('Addition:  +', WPGFORM_I18N_DOMAIN);?></label><br />
             <label for="wpgform_captcha_operator_minus">
             <input name="wpgform_options[captcha_operator_minus]" type="checkbox" id="wpgform_captcha_operator_minus" value="1" <?php checked('1', $wpgform_options['captcha_operator_minus']) ; ?> />
-            <?php _e('Subtraction:  -', WPGFORM_I18N_DOMAIN);?><br /></label>
+            <?php _e('Subtraction:  -', WPGFORM_I18N_DOMAIN);?></label><br />
             <label for="wpgform_captcha_operator_mult">
             <input name="wpgform_options[captcha_operator_mult]" type="checkbox" id="wpgform_captcha_operator_mult" value="1" <?php checked('1', $wpgform_options['captcha_operator_mult']) ; ?> />
-            <?php _e('Multiplication:  *', WPGFORM_I18N_DOMAIN);?><br /></label>
+            <?php _e('Multiplication:  *', WPGFORM_I18N_DOMAIN);?></label><br />
             <small><?php _e('Choose which operators can be used for CAPTCHA validation (when enabled)', WPGFORM_I18N_DOMAIN);?></small>
 
             <br style="margin-bottom: 10px;"/>
