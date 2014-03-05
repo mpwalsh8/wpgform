@@ -849,8 +849,15 @@ class wpGForm
 
             foreach ($presets as $key => $value)
             {
-                unset($preset) ;
-                $presets[preg_replace($patterns, $replacements, $key)] = $value ;
+                $presets[preg_replace($patterns, $replacements, $key)] = urlencode($value) ;
+
+                //  Really shouldn't need both forms of the field but to
+                //  handle old and new Google Forms we keep both.  This may
+                //  go away once Google completely converts to the new version
+                //  of Google Forms.
+ 
+                $presets[$key] = urlencode($value) ;
+                //unset($presets[$key]) ;
             }
 
             $form = add_query_arg($presets, $form) ;
