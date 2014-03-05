@@ -386,6 +386,8 @@ No known upgrade issues.
 * Formally __deprecated__ the `gform` shortcode by updating README file.
 * Added flush of rewrite rules upon plugin activation and deactivation.
 * Implemented protocol relative URLs for loading jQuery script from Microsoft CDN to avoid mixed-content warnings when serving over https.
+* Fixed layout of CAPTCHA options on settings page.
+* Fixed bug with preset values as part of the URL which contain spaces.
 
 = Version 0.64 =
 * Fixed a number of strings which were missing translation wrapper functions.
