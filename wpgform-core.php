@@ -963,10 +963,10 @@ class wpGForm
            ,'script' => array('type' => array())
            ,'span' => array('class' => array(), 'style' => array())
            ,'style' => array()
-           ,'table' => array()
-           ,'tbody' => array()
+           ,'table' => array('class' => array(), 'style' => array())
+           ,'tbody' => array('class' => array(), 'style' => array())
            ,'textarea' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'rows' => array(), 'cols' => array())
-           ,'thead' => array()
+           ,'thead' => array('class' => array(), 'style' => array())
            ,'tr' => array('class' => array())
            ,'td' => array('class' => array(), 'style' => array())
         ) ;
@@ -1468,10 +1468,14 @@ jQuery(document).ready(function($) {
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
         //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
+        //error_log(sprintf('%s::%s --> %s', basename(__FILE__), __LINE__, self::$wpgform_user_sendto)) ;
+        //error_log(sprintf('%s::%s --> %s', basename(__FILE__), __LINE__,
+        //print_r(array(self::$posted, $action, $email, self::$wpgform_user_sendto), true))) ;
         //  Send email?
-        if (self::$posted && is_null($action) && $email)
+        if (self::$posted && is_null($action) && ($email || $user_email))
         {
-            wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto, $results) ;
+            if ($email && is_email($sendto))
+                wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto, $results) ;
 
             if ($user_email && is_email(self::$wpgform_user_sendto))
                 wpGForm::SendConfirmationEmail($wpgform_options['email_format'], self::$wpgform_user_sendto) ;
@@ -1812,6 +1816,7 @@ jQuery(document).ready(function($) {
      */
     function SendConfirmationEmail($format = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false, $results = null)
     {
+        $headers = array() ;
         $wpgform_options = wpgform_get_plugin_options() ;
 
         if ($sendto === false || $sendto === null) $sendto = get_bloginfo('admin_email') ;
@@ -1824,25 +1829,21 @@ jQuery(document).ready(function($) {
 
         if ($format == WPGFORM_EMAIL_FORMAT_HTML)
         {
-            $headers  = 'MIME-Version: 1.0' . PHP_EOL ;
-            $headers .= 'Content-type: text/html; charset=iso-8859-1' . PHP_EOL ;
-        }
-        else
-        {
-            $headers = '' ;
+            $headers[] = 'MIME-Version: 1.0' . PHP_EOL ;
+            $headers[] = 'Content-type: text/html; charset=iso-8859-1' . PHP_EOL ;
         }
 
-        $headers .= sprintf("From: %s <%s>",
+        $headers[] = sprintf("From: %s <%s>",
             get_bloginfo('name'), $sendto) . PHP_EOL ;
 
-        $headers .= sprintf("Cc: %s", $sendto) . PHP_EOL ;
+        $headers[] = sprintf("Cc: %s", $sendto) . PHP_EOL ;
 
         //  Bcc Blog Admin?
         if ($wpgform_options['bcc_blog_admin'])
-            $headers .= sprintf("Bcc: %s", get_bloginfo('admin_email')) . PHP_EOL ;
+            $headers[] = sprintf("Bcc: %s", get_bloginfo('admin_email')) . PHP_EOL ;
 
-        $headers .= sprintf("Reply-To: %s", $sendto) . PHP_EOL ;
-        $headers .= sprintf("X-Mailer: PHP/%s", phpversion()) ;
+        $headers[] = sprintf("Reply-To: %s", $sendto) . PHP_EOL ;
+        $headers[] = sprintf("X-Mailer: PHP/%s", phpversion()) ;
 
         if ($format == WPGFORM_EMAIL_FORMAT_HTML)
         {
