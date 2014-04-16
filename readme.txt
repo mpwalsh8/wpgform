@@ -3,8 +3,8 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
-Tested up to: 3.8.1
-Stable tag: 0.63
+Tested up to: 3.8.3
+Stable tag: 0.65
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -388,6 +388,8 @@ No known upgrade issues.
 * Implemented protocol relative URLs for loading jQuery script from Microsoft CDN to avoid mixed-content warnings when serving over https.
 * Fixed layout of CAPTCHA options on settings page.
 * Fixed bug with preset values as part of the URL which contain spaces.
+* Fixed bug sending End User email upon form submission.
+* Refactored construction of email headers based on experience with Email Users plugin.
 
 = Version 0.64 =
 * Fixed a number of strings which were missing translation wrapper functions.
