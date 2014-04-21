@@ -381,6 +381,9 @@ No known upgrade issues.
 
 == Change log ==
 
+= Version 0.66 =
+* Temp code to help resove conflict with WordPress SEO
+
 = Version 0.65 =
 * Implemented "save_post" for custom post type eliminating general purpose "save_post" (only option prior to WordPress 3.7) action which could potentially, if not handled correctly by another plugin, corrupt post data.
 * Formally __deprecated__ the `gform` shortcode by updating README file.
