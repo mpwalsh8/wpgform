@@ -301,6 +301,7 @@ function wpgform_entry_log_page()
 function wpgform_admin_init()
 {
     register_setting('wpgform_options', 'wpgform_options', 'wpgform_options_validate') ;
+    wpgform_routine_maintenance() ;
 }
 
 /**
