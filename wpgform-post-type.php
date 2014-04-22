@@ -59,9 +59,12 @@ function wpgform_register_post_types()
 
     //  Register the WordPress Google Form post type
     register_post_type(WPGFORM_CPT_FORM, $wpgform_args) ;
+}
 
+/** Perform routine maintenance */
+function wpgform_routine_maintenance()
+{
     error_log(sprintf('%s::%s (init)', basename(__FILE__), __LINE__)) ;
-    if (1):
     //  Post type is registered, do some hygiene on any that exist in the database.
     //  Insert the "wpgform" shortcode for that post into the post content. This
     //  ensures the form will be displayed properly when viewed through the CPT URL.
@@ -75,13 +78,14 @@ function wpgform_register_post_types()
 
     while ($loop->have_posts()) :
         $loop->the_post() ;
-        wp_update_post(array('ID' => get_the_ID(),
-            'post_content' => sprintf('[wpgform id=\'%d\']', get_the_ID()))) ;
+        $content = sprintf('[wpgform id=\'%d\']', get_the_ID()) ;
+
+        if ($content !== get_the_content())
+            wp_update_post(array('ID' => get_the_ID(), $content)) ;
     endwhile ;
 
     // re-hook this function
     add_action('save_post_' . WPGFORM_CPT_FORM, 'wpgform_save_meta_box_data');
-    endif;
 }
 
 //  Build custom meta box support
