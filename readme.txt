@@ -384,6 +384,7 @@ No known upgrade issues.
 = Version 0.66 =
 * Moved hygiene out of init hook into admin_init hook so it won't run on every page load.  Resolves conflict with WordPress SEO.
 * Fixed hygiene to only update post content when it isn't what is expected.
+* Fixed bug which caused all form submissions to be logged regardless of plugin setting.
 
 = Version 0.65 =
 * Implemented "save_post" for custom post type eliminating general purpose "save_post" (only option prior to WordPress 3.7) action which could potentially, if not handled correctly by another plugin, corrupt post data.
