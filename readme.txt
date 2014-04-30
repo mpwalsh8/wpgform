@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
 Tested up to: 3.8.3
-Stable tag: 0.66
+Stable tag: 0.67
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -380,6 +380,10 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.67 =
+* Fixed typo in internationalization mapping for one of the form buttons.
+* Removed leftover debug code.
 
 = Version 0.66 =
 * Moved hygiene out of init hook into admin_init hook so it won't run on every page load.  Resolves conflict with WordPress SEO.
