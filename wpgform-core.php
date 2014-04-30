@@ -248,7 +248,7 @@ function wpgform_options_validate($input)
     }
 
     //  Was the Reset button pushed?
-    if (__('Reset', WPGFORM_I18_DOMAIN) === $_POST['Submit'])
+    if (__('Reset', WPGFORM_I18N_DOMAIN) === $_POST['Submit'])
         $input = wpgform_get_default_plugin_options();
 
     return $input ;
