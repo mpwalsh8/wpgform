@@ -64,7 +64,7 @@ function wpgform_register_post_types()
 /** Perform routine maintenance */
 function wpgform_routine_maintenance()
 {
-    error_log(sprintf('%s::%s (init)', basename(__FILE__), __LINE__)) ;
+    //error_log(sprintf('%s::%s (init)', basename(__FILE__), __LINE__)) ;
     //  Post type is registered, do some hygiene on any that exist in the database.
     //  Insert the "wpgform" shortcode for that post into the post content. This
     //  ensures the form will be displayed properly when viewed through the CPT URL.
