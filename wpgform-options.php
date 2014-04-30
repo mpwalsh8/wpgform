@@ -206,7 +206,7 @@ function wpgform_options_page()
 function wpgform_settings_input()
 {
     $wpgform_options = wpgform_get_plugin_options() ;
-    error_log(print_r($wpgform_options, true)) ;
+    //error_log(print_r($wpgform_options, true)) ;
 ?>
     <table class="form-table">
         <tr valign="top">
