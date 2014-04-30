@@ -1446,7 +1446,6 @@ jQuery(document).ready(function($) {
             ($style === WPGFORM_CONFIRM_AJAX) && !self::$post_error)
         {
             $js .= PHP_EOL . '    //  Confirmation page by AJAX page load' ;
-            $js .= PHP_EOL . 'alert("here");' ;
             //$js .= PHP_EOL . '    $("body").load("' . $confirm . ' body") ;' ;
             $js .= PHP_EOL . '    $.get( "' . $confirm . '", function( data ) {
         $( ".result" ).html( data );
@@ -1549,7 +1548,7 @@ jQuery(document).ready(function($) {
         $html = $onetime_html . $html ;
 
         //  Log form submission?
-        if (self::$posted && is_null($action))
+        if (self::$posted && is_null($action) && $wpgform_options['form_submission_log'] == 1)
         {
             $unknown = __('Unknown', WPGFORM_I18N_DOMAIN) ;
 
