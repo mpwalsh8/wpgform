@@ -3,8 +3,8 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
-Tested up to: 3.8.3
-Stable tag: 0.68
+Tested up to: 3.9
+Stable tag: 0.69
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -380,6 +380,10 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.69 =
+* Fixed bug in generated jQuery for Validation which caused syntax errors which could then interfere with redirect.
+* Added support for embedded images in Google Forms.
 
 = Version 0.68 =
 * Fixed a bug due to missing named parameter passed to wp_update_post() which  manifested itself in a call to array_map() as part of core WordPress function.
