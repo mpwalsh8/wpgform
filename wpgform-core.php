@@ -956,6 +956,7 @@ class wpGForm
            ,'h5' => array('class' => array())
            ,'h6' => array('class' => array())
            ,'i' => array()
+           ,'img' => array('class' => array(), 'alt' => array(), 'title' => array(), 'src' => array())
            ,'label' => array('class' => array(), 'for' => array())
            ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'checked' => array())
            ,'select' => array('name' => array(), 'for' => array(), 'checked' => array())
@@ -1213,12 +1214,8 @@ jQuery(document).ready(function($) {
         });
     }
 ', $uid, $uid, $user_email_html) ;
-            $vRules_js[] = '
-				"wpgform-user-email": {
-					email: true
-				}' ;
-            $vMsgs_js[] = sprintf('
-				"wpgform-user-email": "%s"', __('A valid email address is required.', WPGFORM_I18N_DOMAIN)) ;
+            $vRules_js[] = '    "wpgform-user-email": { email: true }' ;
+            $vMsgs_js[] = sprintf('    "wpgform-user-email": "%s"', __('A valid email address is required.', WPGFORM_I18N_DOMAIN)) ;
         }
 
         //  Is CAPTCHA enabled?
@@ -1288,19 +1285,20 @@ jQuery(document).ready(function($) {
                 foreach ($extras as $key => $value)
                 {
                     $js .= sprintf('           "%s%s": {', $uid, $key) ;
-                    foreach ($value as $extra)
-                        $js .= sprintf('%s%s', $extra, $extra === end($value) ? '}' : ', ') ;
-                    $js .= sprintf('%s%s%s', $value === end($extras) ? '' : ',', PHP_EOL, $value === end($extras) ? '        ' : '') ;
+                    foreach ($value as $vk => $extra)
+                        $js .= sprintf('%s%s', $extra, end(array_keys($value)) === $vk ? '}' : ', ') ;
+                    $js .= sprintf('%s%s%s', end(array_keys($extras)) === $key ? '' : ',', PHP_EOL, end(array_keys($extras)) === $key ? '        ' : '') ;
                 }
             }
+
             if (!empty($vRules_js))
             {
                 //  Clean up JS if extras were already output
                 if (!empty($extras))
                     $js = sprintf('%s,%s', substr($js, 0, strrpos($js, '}') + 1),  PHP_EOL) ;
 
-                foreach ($vRules_js as $r)
-                    $js .= sprintf('       %s%s', $r, $r === end($vRules_js) ? sprintf('%s        },', PHP_EOL) : ', ') ;
+                foreach ($vRules_js as $rk => $r)
+                    $js .= sprintf('       %s%s', $r, end(array_keys($vRules_js)) === $rk ? sprintf('%s        },', PHP_EOL) : sprintf(',%s', PHP_EOL)) ;
             }
             else
                 $js .= '},' ;
@@ -1309,11 +1307,12 @@ jQuery(document).ready(function($) {
 
             if (!empty($vMsgs_js))
             {
-                foreach ($vMsgs_js as $m)
-                    $js .= sprintf('       %s%s', $m, $m === end($vMsgs_js) ? sprintf('%s        },', PHP_EOL) : ', ') ;
+                foreach ($vMsgs_js as $mk => $m)
+                    //$js .= sprintf('       %s%s', $m, end(array_keys($vMsgs_js)) === $mk ? sprintf('%s        },', PHP_EOL) : ', ') ;
+                    $js .= sprintf('       %s%s', $m, end(array_keys($vMsgs_js)) === $mk ? sprintf('%s        },', PHP_EOL) : sprintf(',%s', PHP_EOL)) ;
             }
             else
-                $js .= '}' ;
+                $js .= '        }' ;
             $js .= '
     }) ;' . PHP_EOL ;
         }
