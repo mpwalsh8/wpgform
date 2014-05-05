@@ -381,6 +381,9 @@ No known upgrade issues.
 
 == Change log ==
 
+= Version 0.68 =
+* Fixed a bug due to missing named parameter passed to wp_update_post() which  manifested itself in a call to array_map() as part of core WordPress function.
+
 = Version 0.67 =
 * Fixed typo in internationalization mapping for one of the form buttons.
 * Removed leftover debug code.
