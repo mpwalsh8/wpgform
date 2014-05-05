@@ -81,7 +81,7 @@ function wpgform_routine_maintenance()
         $content = sprintf('[wpgform id=\'%d\']', get_the_ID()) ;
 
         if ($content !== get_the_content())
-            wp_update_post(array('ID' => get_the_ID(), $content)) ;
+            wp_update_post(array('ID' => get_the_ID(), 'post_content' => $content)) ;
     endwhile ;
 
     // re-hook this function
