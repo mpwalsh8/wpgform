@@ -1241,6 +1241,9 @@ jQuery(document).ready(function($) {
 
         $fields = wpgform_validation_meta_box_content(true) ;
 
+        $patterns = array('/^entry.([0-9]+).(single|group)./', '/^entry.([0-9]+)_/', '/^entry.([0-9]+)/') ;
+        $replacements = array('entry_\1_\2_', 'entry_\1_', 'entry_\1') ;
+
         foreach ($fields as $field)
         {
             if ('validation' == $field['type'])
@@ -1253,10 +1256,20 @@ jQuery(document).ready(function($) {
                 {
                     foreach ($meta_field as $key => $value)
                     {
+                        $mf = preg_replace($patterns, $replacements, $meta_field[$key]) ;
+
                         if (!empty($value))
                         {
-                            $extras[$value][] = sprintf('%s: %s',
-                                $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+                            if ($meta_type[$key] == 'regex') 
+                            {
+                                $extras[$value][] = sprintf('%s: "%s"',
+                                    $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+                            }
+                            else
+                            {
+                                $extras[$value][] = sprintf('%s: %s',
+                                    $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+                            }
                         }
                     }
                 }
@@ -1271,7 +1284,9 @@ jQuery(document).ready(function($) {
     $("div > .%sss-item-required textarea").addClass("wpgform-required");
     $("div > .%sss-item-required input:not(.%sss-q-other)").addClass("wpgform-required");
     $.validator.addClassRules("wpgform-required", { required: true });
-', $prefix, $prefix, $prefix, '', '') ;
+    $.validator.addMethod("regex", function(value, element, regexp) { var re = new RegExp(regexp); return this.optional(element) || re.test(value); }, "Please check your input.");
+', $prefix, $prefix, $prefix, '', '', __('Please check your input.', WPGFORM_I18N_DOMAIN)) ;
+
 
         //  Now the tricky part - need to output rules and messages
         if ($validation)
@@ -1340,6 +1355,9 @@ jQuery(document).ready(function($) {
         //  Handle and "hiddenfields"
         $fields = wpgform_hiddenfields_meta_box_content(true) ;
 
+        $patterns = array('/^entry.([0-9]+).(single|group)./', '/^entry.([0-9]+)_/', '/^entry.([0-9]+)/') ;
+        $replacements = array('entry_\1_\2_', 'entry_\1_', 'entry_\1') ;
+
         foreach ($fields as $field)
         {
             if ('hiddenfield' == $field['type'])
@@ -1347,9 +1365,6 @@ jQuery(document).ready(function($) {
     	        $meta_field = get_post_meta($o['id'], $field['id'], true);
                 $meta_type = get_post_meta($o['id'], $field['type_id'], true);
                 $meta_value = get_post_meta($o['id'], $field['value_id'], true);
-
-                $patterns = array('/^entry.([0-9]+).(single|group)./', '/^entry.([0-9]+)_/', '/^entry.([0-9]+)/') ;
-                $replacements = array('entry_\1_\2_', 'entry_\1_', 'entry_\1') ;
 
                 foreach ($replacements as $key => $value)
                     $replacements[$key] = sprintf('%s%s', $uid, $value) ;
@@ -1448,7 +1463,7 @@ jQuery(document).ready(function($) {
             //$js .= PHP_EOL . '    $("body").load("' . $confirm . ' body") ;' ;
             $js .= PHP_EOL . '    $.get( "' . $confirm . '", function( data ) {
         $( ".result" ).html( data );
-        alert( "Load was performed." );
+        //alert( "Load was performed." );
     });' ;
             
         }
@@ -1973,7 +1988,8 @@ function wpgform_head()
         'rangelength' => __('Please enter a value between {0} and {1} characters long.', WPGFORM_I18N_DOMAIN),
         'range' => __('Please enter a value between {0} and {1}.', WPGFORM_I18N_DOMAIN),
         'max' => __('Please enter a value less than or equal to {0}.', WPGFORM_I18N_DOMAIN),
-        'min' => __('Please enter a value greater than or equal to {0}.', WPGFORM_I18N_DOMAIN)
+        'min' => __('Please enter a value greater than or equal to {0}.', WPGFORM_I18N_DOMAIN),
+        'regex' => __('Please enter a value which matches {0}.', WPGFORM_I18N_DOMAIN)
     )) ;
 }
 
