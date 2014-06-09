@@ -392,6 +392,7 @@ function wpgform_validation_meta_box_content($fieldsonly = false)
                     'range',
                     'max',
                     'min',
+                    'regex',
                 ),
             ),
             array(
