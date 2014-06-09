@@ -5,107 +5,104 @@ msgstr ""
 "PO-Revision-Date: 2014-06-09 14:51-0000\n"
 "Last-Translator: Mike Walsh <mpwalsh8@gmail.com>\n"
 "Language-Team: Mike Walsh (@mpwalsh8) <mpwalsh8@gmail.com>\n"
-"Language: fr_FR\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.6.5\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__\n"
 "X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
 #: ../wpgform-core.php:178
 msgid "Required"
-msgstr "Nécessaire"
+msgstr "Potrebno"
 
 #: ../wpgform-core.php:179
 msgid "Submit"
-msgstr "Enregistrer"
+msgstr "Podnesi"
 
 #: ../wpgform-core.php:180
 msgid "Back"
-msgstr "Retour"
+msgstr "Nazad"
 
 #: ../wpgform-core.php:181
 msgid "Continue"
-msgstr "Continuer"
+msgstr "Nastavi"
 
 #: ../wpgform-core.php:182
 msgid "Mark only one oval."
-msgstr "Choisissez une option"
+msgstr "Označiti samo jedan oval."
 
 #: ../wpgform-core.php:183
 msgid "Other:"
-msgstr "Autre:"
+msgstr "Ostalo:"
 
 #: ../wpgform-core.php:184
 msgid "Check all that apply."
-msgstr "Cochez les cases correspondantes"
+msgstr "Proveriti sve iznad."
 
 #: ../wpgform-core.php:251
 msgid "Reset"
-msgstr "Réinitialiser"
+msgstr "Resetuj"
 
 #: ../wpgform-core.php:270 ../wpgform-core.php:271 ../wpgform-post-type.php:46
 msgid "Google Forms"
-msgstr "Formulaires Google"
+msgstr "Google Forms"
 
 #: ../wpgform-core.php:279
-#, fuzzy
 msgid "Google Forms Submission Log"
-msgstr "Formulaires Google"
+msgstr "Google Forms podneti Log"
 
 #: ../wpgform-core.php:280
-#, fuzzy
 msgid "Form Submission Log"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr " Forma podnetog loga"
 
 #: ../wpgform-core.php:491 ../wpgform-core.php:505
 msgid "Unable to process Google Form short code."
-msgstr "Impossible d'éxecuter le shortcode du Formulaire Google."
+msgstr "Nemoguće je  procesovati  Google Form short code."
 
 #: ../wpgform-core.php:670
 msgid "Unable to process Google Form."
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Nemoguće je  procesovati Google Form."
 
 #: ../wpgform-core.php:671
 msgid "Server is responding with"
-msgstr "Le serveur a répondu"
+msgstr "Server odgovara sa"
 
 #: ../wpgform-core.php:672
 msgid "403 Permission Denied"
-msgstr "403 - Accès réservé"
+msgstr "403 dozvola odbijena"
 
 #: ../wpgform-core.php:672
 msgid "error"
-msgstr "erreur"
+msgstr "greška"
 
 #: ../wpgform-core.php:718
 msgid "Email Address"
-msgstr "Adresse e-mail"
+msgstr "Email Adresa"
 
 #: ../wpgform-core.php:768 ../wpgform-core.php:770
 msgid "What is"
-msgstr "Que font"
+msgstr "Šta je"
 
 #: ../wpgform-core.php:922
 msgid "Unable to retrieve Google Form.  Please try reloading this page."
-msgstr ""
-"Impossible de récupérer le Fromulaire Google. Essayez de recharger la page."
+msgstr "Nemoguće je povratiti Google Form. Reloadujte ovu stranicu"
 
 #: ../wpgform-core.php:1034
 msgid "Unexpected content encountered, unable to retrieve Google Form."
-msgstr ""
-"Un contenu inattendu a été rencontré, il est impossible de récupérer le "
-"Formulaire Google."
+msgstr "Neščekivani sadržaj se pojavio, nemoguće je  povratiti Google Form."
 
 #: ../wpgform-core.php:1218
 msgid "A valid email address is required."
-msgstr "Une adresse e-mail valide est nécessaire."
+msgstr "Validna email adresa je neophodna."
 
 #: ../wpgform-core.php:1237
 msgid "Incorrect answer."
-msgstr "Réponse incorrect."
+msgstr "Netačan odgovor."
 
 #: ../wpgform-core.php:1288
 msgid "Please check your input."
@@ -113,248 +110,199 @@ msgstr ""
 
 #: ../wpgform-core.php:1338 ../wpgform-core.php:1567
 msgid "Unknown"
-msgstr "Inconnu"
+msgstr "Nepoznato"
 
 #: ../wpgform-core.php:1513
 msgid "Warning:  You are using an insecure browser!"
-msgstr "Avertissement : Vous utilisez un navigateur non sécurisé !"
+msgstr "Upozorenje: Koristite nesiguran pretraživač!"
 
 #: ../wpgform-core.php:1516
 msgid "Warning:  Your browser is out of date!  Please update now."
-msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
+msgstr "Upozorenje: Vaš pretraživač je istekao! Updateujte ga sada."
 
 #: ../wpgform-core.php:1532
-#, fuzzy
 msgid "Form Id:"
-msgstr ""
-"En train d'essayer d'envoyer un courriel de notification d'un %s sans "
-"fournir l'ID %s !"
+msgstr "Form Id:"
 
 #: ../wpgform-core.php:1534
-#, fuzzy
 msgid "Submitted Form Id"
-msgstr ""
-"En train d'essayer d'envoyer un courriel de notification d'un %s sans "
-"fournir l'ID %s !"
+msgstr "Podneta Form Id"
 
 #: ../wpgform-core.php:1537
-#, fuzzy
 msgid "No Submitted Form Id"
-msgstr ""
-"En train d'essayer d'envoyer un courriel de notification d'un %s sans "
-"fournir l'ID %s !"
+msgstr "Nema podnete Form Id"
 
 #: ../wpgform-core.php:1759
-#, fuzzy
 msgid "Unable to submit Google Form.  Please try reloading this page."
-msgstr ""
-"Impossible de récupérer le Fromulaire Google. Essayez de recharger la page."
+msgstr "Niste u stanju da podnesete Google Form. Reloadujte stranicu."
 
 #: ../wpgform-core.php:1842
-#, fuzzy
 msgid "View Form Results"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Pregledaj rezultate formi"
 
 #: ../wpgform-core.php:1892
-#, fuzzy
 msgid "A form was submitted on your web site."
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Forma je podneta na vašem sajtu.   "
 
 #: ../wpgform-core.php:1893 ../wpgform-core.php:1905
-#, fuzzy
 msgid "Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Forma"
 
 #: ../wpgform-core.php:1894 ../wpgform-core.php:1906
 #: ../wpgform-logging.php:182
-#, fuzzy
 msgid "URL"
-msgstr ""
-"<p>Bonjour, </p><p>J'aimerais attirer votre attention sur un nouvel article "
-"publi&eacute; sur le blog (voir infos ci-dessous). J'esp&egrave;re que vous "
-"le trouverez int&eacute;ressant.</p><p>Cordialement,</p><p>%FROM_NAME%</"
-"p><hr><p><strong>%POST_TITLE%</strong></p><p>%POST_EXCERPT%</p><ul><li>Lien "
-"vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
-"%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
+msgstr "URL"
 
 #: ../wpgform-core.php:1895 ../wpgform-core.php:1907
 msgid "Responses"
-msgstr "Réponses"
+msgstr "Odgovori"
 
 #: ../wpgform-core.php:1896 ../wpgform-core.php:1908
-#, fuzzy
 msgid "Date"
-msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
+msgstr "Podaci"
 
 #: ../wpgform-core.php:1897 ../wpgform-core.php:1909
-#, fuzzy
 msgid "Time"
-msgstr "Vous ne pouvez sélectionner qu'un utilisateur à la fois."
+msgstr "Vreme"
 
 #: ../wpgform-core.php:1898 ../wpgform-core.php:1911
 msgid "Thank you"
-msgstr "Merci"
+msgstr "Hvala vam"
 
 #: ../wpgform-core.php:1904
-#, fuzzy
 msgid "A form was submitted on your web site"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Forma je podneta na vašem sajtu"
 
 #: ../wpgform-core.php:1975
-#, fuzzy
 msgid "This field is required."
-msgstr "Nécessaire"
+msgstr "Ovo polje je obavezno.."
 
 #: ../wpgform-core.php:1976
-#, fuzzy
 msgid "Please fix this field."
-msgstr ""
-"Essayer 30 si vous avez des problèmes lors de l'envoi de courriels à un "
-"grand nombre d'utilisateurs (certains fournisseurs d'accès interdissent un "
-"trop grand nombre d'adèles dans le champ BCC)."
+msgstr "Podesite ovo polje."
 
 #: ../wpgform-core.php:1977
-#, fuzzy
 msgid "Please enter a valid email address."
-msgstr "Une adresse e-mail valide est nécessaire."
+msgstr "Unesite validnu email adresu."
 
 #: ../wpgform-core.php:1978
-#, fuzzy
 msgid "Please enter a valid URL."
-msgstr "Une adresse e-mail valide est nécessaire."
+msgstr "Unesite validan URL."
 
 #: ../wpgform-core.php:1979
-#, fuzzy
 msgid "Please enter a valid date."
-msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
+msgstr "Unesite validan datum."
 
 #: ../wpgform-core.php:1980
-#, fuzzy
 msgid "Please enter a valid date (ISO)."
-msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
+msgstr "Unesite validan datum (ISO)."
 
 #: ../wpgform-core.php:1981
-#, fuzzy
 msgid "Please enter a valid number."
-msgstr "Une adresse e-mail valide est nécessaire."
+msgstr "Unesite validan broj."
 
 #: ../wpgform-core.php:1982
-#, fuzzy
 msgid "Please enter only digits."
-msgstr "Administrateurs seulement."
+msgstr "Samo unesite cifre."
 
 #: ../wpgform-core.php:1983
-#, fuzzy
 msgid "Please enter a valid credit card number."
-msgstr "Une adresse e-mail valide est nécessaire."
+msgstr "Unesite validan broj kreditne kartice"
 
 #: ../wpgform-core.php:1984
-#, fuzzy
 msgid "Please enter the same value again.,"
-msgstr ""
-"Veuillez corriger les erreurs affichées ci-dessus et essayer de nouveau."
+msgstr "Unesite istu vrednost opet.,"
 
 #: ../wpgform-core.php:1985
-#, fuzzy
 msgid "Please enter a value with a valid extension."
-msgstr "Une adresse e-mail valide est nécessaire."
+msgstr "Unesite vrednost sa validnim produžetkom."
 
 #: ../wpgform-core.php:1986
-#, fuzzy
 msgid "Please enter no more than {0} characters."
-msgstr ""
-"ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
+msgstr "Please enter no more than {0} characters."
 
 #: ../wpgform-core.php:1987
-#, fuzzy
 msgid "Please enter at least {0} characters."
-msgstr "Veuillez définir au moins un destinataire."
+msgstr "Unesite najmanje {0} karaktera"
 
 #: ../wpgform-core.php:1988
-#, fuzzy
 msgid "Please enter a value between {0} and {1} characters long."
-msgstr "Veuillez définir un sujet."
+msgstr "Unesite vrednost izmedju {0} i {1} karaktera"
 
 #: ../wpgform-core.php:1989
-#, fuzzy
 msgid "Please enter a value between {0} and {1}."
-msgstr "Veuillez définir un sujet."
+msgstr "Uneti vrednost izmedju  {0} i {1}."
 
 #: ../wpgform-core.php:1990
-#, fuzzy
 msgid "Please enter a value less than or equal to {0}."
-msgstr ""
-"ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
+msgstr "Unesite vrednost manju od ili jednaku {0}."
 
 #: ../wpgform-core.php:1991
-#, fuzzy
 msgid "Please enter a value greater than or equal to {0}."
-msgstr ""
-"ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
+msgstr "Unesite vrednost veću od ili jednaku {0}."
 
 #: ../wpgform-core.php:1992
 #, fuzzy
 msgid "Please enter a value which matches {0}."
-msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
+msgstr "Unesite validan datum."
 
 #: ../wpgform-core.php:2052
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "This notification may be hidden via a setting on the <a href=\"%s\">Google "
 "Forms settings page</a>."
-msgstr "Formulaires Google"
+msgstr ""
+"Ova notifikacija može da bude skrivena via postavkama na <a href=\"%s"
+"\">Google Forms stranica postavki</a>."
 
 #: ../wpgform-logging.php:30
-#, fuzzy
 msgid "You are not allowed to view the submission log."
-msgstr "Vous ne pouvez sélectionner qu'un utilisateur à la fois."
+msgstr "Nije vam dozvoljeno da pregledate podneti log."
 
 #: ../wpgform-logging.php:181
 msgid "Timestamp"
-msgstr ""
+msgstr "Timestamp"
 
 #: ../wpgform-logging.php:183
 msgid "Remote Addr"
-msgstr ""
+msgstr "Upravni Addr"
 
 #: ../wpgform-logging.php:184
 msgid "Remote Host"
-msgstr ""
+msgstr "Upravni Host"
 
 #: ../wpgform-logging.php:185
 msgid "HTTP Refer"
-msgstr ""
+msgstr "HTTP Refer"
 
 #: ../wpgform-logging.php:186
-#, fuzzy
 msgid "HTTP User Agent"
-msgstr "Utilisateur"
+msgstr "HTTP User Agent"
 
 #: ../wpgform-logging.php:238
 msgid "Delete"
-msgstr ""
+msgstr "Obrisati"
 
 #: ../wpgform-logging.php:298
-#, fuzzy
 msgid "No log entries selected"
-msgstr "Aucun utilisateur sélectionné"
+msgstr "Nijedan log nije unešen"
 
 #: ../wpgform-options.php:94
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "Please consider making a <a href=\"%s\" target=\"_blank\">PayPal donation</"
 "a> if you find this plugin useful."
 msgstr ""
-"Veuillez sélectionner le %s au sujet duquel vous souhaitez envoyer un "
-"courriel de notification."
+"Razmislite o davanju <a href=\"%s\" target=\"_blank\">PayPal donacije </a> "
+"ako vam se dopada plugin."
 
 #: ../wpgform-options.php:237
-#, fuzzy, php-format
+#, php-format
 msgid "Custom %s CSS"
-msgstr "Sélectionner %s"
+msgstr "Custom %s CSS"
 
 #: ../wpgform-options.php:485
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "Enabling debug will collect data during the form rendering and processing "
 "process.<p>The data is added to the page footer but hidden with a link "
@@ -369,135 +317,114 @@ msgid ""
 "recommended for advanced debugging of <a href=\"%s\">WordPress HTTP API "
 "issues.</a></p>"
 msgstr ""
-"<p>Bonjour, </p><p>J'aimerais attirer votre attention sur un nouvel article "
-"publi&eacute; sur le blog (voir infos ci-dessous). J'esp&egrave;re que vous "
-"le trouverez int&eacute;ressant.</p><p>Cordialement,</p><p>%FROM_NAME%</"
-"p><hr><p><strong>%POST_TITLE%</strong></p><p>%POST_EXCERPT%</p><ul><li>Lien "
-"vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
-"%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
+"Omogućavanje debuga će prikupljati podatke tokom formata renderovanje i "
+"procesa prerade . <p>Podaci se dodaju u footer ali sakriven sa linkom koji "
+"se pojavljuje iznad forme koja može da isključi prikaz podataka debuga . "
+"Ovaj podatak je koristan kada pokušavate da shvatite zašto plugin ne radi "
+"kako bi trebalo . < / P> Kada je omogućeno otklanjanje grešaka , specifični "
+"transporti su zaposleni <a href=\"%s\"> WordPress HTTP API < /> opcionalno "
+"može biti onemogućen . Dok retko potrebno , onemogućavanje transporta može "
+"biti korisno kada plugin ne komunicira pravilno sa Google API dokumenatima. "
+"<i> Dodatno treba voditi računa kada onemogućavanje transporta kao i ostale "
+"aspekte WordPress možda neće ispravno funkcionisati . < / i ><a href=\"%s\"> "
+"Joomla core Kontrola < / a> dodatak se preporučuje za napredno otklanjanje "
+"grešaka od <a href=\"%s\"> WordPress HTTP API pitanja . < / a> < / p >"
 
 #: ../wpgform-post-type.php:47
-#, fuzzy
 msgid "Google Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Google Form"
 
 #: ../wpgform-post-type.php:48 ../wpgform-post-type.php:49
-#, fuzzy
 msgid "Add New Google Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Dodati novu Google Form"
 
 #: ../wpgform-post-type.php:50
-#, fuzzy
 msgid "Edit Google Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Edituj Google Form"
 
 #: ../wpgform-post-type.php:51
-#, fuzzy
 msgid "New Google Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Nova Google Form"
 
 #: ../wpgform-post-type.php:52
-#, fuzzy
 msgid "View Google Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Pregledati Google Form"
 
 #: ../wpgform-post-type.php:53
-#, fuzzy
 msgid "Search Google Forms"
-msgstr "Formulaires Google"
+msgstr "Pretraga Google Forms"
 
 #: ../wpgform-post-type.php:54
-#, fuzzy
 msgid "No Google Forms Found"
-msgstr "Formulaires Google"
+msgstr "Nijedna Google Forms nije pronadjena "
 
 #: ../wpgform-post-type.php:55
-#, fuzzy
 msgid "No Google Forms Found In Trash"
-msgstr "Formulaires Google"
+msgstr "Nijedna Google Forms nije pronadjena u Trash"
 
 #: ../wpgform-post-type.php:109
-#, fuzzy
 msgid "Google Form Details"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Google Form detalji"
 
 #: ../wpgform-post-type.php:115
-#, fuzzy
 msgid "Form URL"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Form URL"
 
 #: ../wpgform-post-type.php:116
-#, fuzzy
 msgid "The full URL to the published Google Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Ceo URLda objasni Google Form"
 
 #: ../wpgform-post-type.php:120
-#, fuzzy
 msgid "Google Form URL"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Google Form URL"
 
 #: ../wpgform-post-type.php:124
-#, fuzzy
 msgid "Confirm URL"
-msgstr ""
-"<p>Bonjour, </p><p>J'aimerais attirer votre attention sur un nouvel article "
-"publi&eacute; sur le blog (voir infos ci-dessous). J'esp&egrave;re que vous "
-"le trouverez int&eacute;ressant.</p><p>Cordialement,</p><p>%FROM_NAME%</"
-"p><hr><p><strong>%POST_TITLE%</strong></p><p>%POST_EXCERPT%</p><ul><li>Lien "
-"vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
-"%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
+msgstr "Potvrdi URL"
 
 #: ../wpgform-post-type.php:125
-#, fuzzy
 msgid "The full URL to the optional Confirmation Page"
-msgstr "Envoyer un courriel de notification"
+msgstr "Ceo URL za opcionalnu potvrdu stranice  "
 
 #: ../wpgform-post-type.php:129
-#, fuzzy
 msgid "Confirmation Page URL"
-msgstr "Envoyer un courriel de notification"
+msgstr " URL potvrda stranice  "
 
 #: ../wpgform-post-type.php:133
 msgid "Style"
-msgstr ""
+msgstr "Stil"
 
 #: ../wpgform-post-type.php:134
-#, fuzzy
 msgid "Custom Confirmation Page Style"
-msgstr "Envoyer un courriel de notification"
+msgstr "Custom stil potvrda stranice"
 
 #: ../wpgform-post-type.php:142
 msgid "Alert"
-msgstr ""
+msgstr "Opomena"
 
 #: ../wpgform-post-type.php:143
-#, fuzzy
 msgid "Javascript Alert Box message displayed upon submission"
-msgstr "Message"
+msgstr "Javascript Alert Box poruka prikazana na postavki"
 
 #: ../wpgform-post-type.php:147
-#, fuzzy
 msgid "Alert Message"
-msgstr "Message"
+msgstr "Poruka opomene "
 
 #: ../wpgform-post-type.php:151
 msgid "Class"
-msgstr ""
+msgstr "Klasa"
 
 #: ../wpgform-post-type.php:152
-#, fuzzy
 msgid "CSS class(es) to add to the form's containing DIV"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "CSS klas(e) za dodavanje formi koje sadrže DIV"
 
 #: ../wpgform-post-type.php:159
-#, fuzzy
 msgid "Email"
-msgstr "Adresse e-mail"
+msgstr "Email"
 
 #: ../wpgform-post-type.php:160
-#, fuzzy
 msgid "Send email upon form submission"
-msgstr "Envoyer"
+msgstr "Poswlati email nad podnetom formom"
 
 #: ../wpgform-post-type.php:163 ../wpgform-post-type.php:190
 #: ../wpgform-post-type.php:238 ../wpgform-post-type.php:257
@@ -506,7 +433,7 @@ msgstr "Envoyer"
 #: ../wpgform-post-type.php:323 ../wpgform-post-type.php:333
 #: ../wpgform-post-type.php:363 ../wpgform-post-type.php:478
 msgid "On"
-msgstr ""
+msgstr "Upaljeno"
 
 #: ../wpgform-post-type.php:163 ../wpgform-post-type.php:190
 #: ../wpgform-post-type.php:238 ../wpgform-post-type.php:257
@@ -514,302 +441,249 @@ msgstr ""
 #: ../wpgform-post-type.php:287 ../wpgform-post-type.php:313
 #: ../wpgform-post-type.php:323 ../wpgform-post-type.php:333
 #: ../wpgform-post-type.php:363 ../wpgform-post-type.php:478
-#, fuzzy
 msgid "Off"
-msgstr "Désactivé"
+msgstr "Ugašeno"
 
 #: ../wpgform-post-type.php:169
-#, fuzzy
 msgid "Send To"
-msgstr "Envoyer"
+msgstr "Poslato na"
 
 #: ../wpgform-post-type.php:170
-#, fuzzy
 msgid "Email address send submission email to"
-msgstr "Adresse e-mail"
+msgstr "Email adresa slanja podnetog emaila na"
 
 #: ../wpgform-post-type.php:177
-#, fuzzy
 msgid "Form CSS"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Forma CSS"
 
 #: ../wpgform-post-type.php:178
-#, fuzzy
 msgid "Form specific CSS rules"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Forma odredjuje CSS pravila"
 
 #: ../wpgform-post-type.php:186
-#, fuzzy
 msgid "Form Caching"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Form Caching"
 
 #: ../wpgform-post-type.php:187
-#, fuzzy
 msgid "Enable Form Caching using Wordpress Transient API"
-msgstr "Avertissement : Vous utilisez un navigateur non sécurisé !"
+msgstr "Omogućiti Form Caching korišćenje Wordpress Transient API"
 
 #: ../wpgform-post-type.php:196
-#, fuzzy
 msgid "Form Caching Timeout"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Form Caching Timeout"
 
 #: ../wpgform-post-type.php:197
-#, fuzzy
 msgid "How often will the forms reloaded (in minutes)"
-msgstr "Formulaires Google"
+msgstr "Koliko često će se forme reloadovati  (u minutama)"
 
 #: ../wpgform-post-type.php:205
-#, fuzzy
 msgid "Reset Form Cache?"
-msgstr "Réinitialiser"
+msgstr "Resetuj Form Cache?"
 
 #: ../wpgform-post-type.php:206
-#, fuzzy
 msgid "This will force reloading the form from Google Drive"
-msgstr ""
-"Impossible de récupérer le Fromulaire Google. Essayez de recharger la page."
+msgstr "Ovo će prisiliti reloading forme sa Google Drive"
 
 #: ../wpgform-post-type.php:228
-#, fuzzy
 msgid "Google Form Options"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Google Form Opcije"
 
 #: ../wpgform-post-type.php:234 ../wpgform-post-type.php:235
 msgid "CAPTCHA"
-msgstr ""
+msgstr "CAPTCHA"
 
 #: ../wpgform-post-type.php:244
 msgid "Columns"
-msgstr ""
+msgstr "Kolone"
 
 #: ../wpgform-post-type.php:245
-#, fuzzy
 msgid "Split form into columns"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Podeli formu na kolone"
 
 #: ../wpgform-post-type.php:253
-#, fuzzy
 msgid "Email End User"
-msgstr "Envoyer un courriel à un seul utilisateur."
+msgstr "Email krajnji korisnik"
 
 #: ../wpgform-post-type.php:254
-#, fuzzy
 msgid "Send email to end user upon form submission"
-msgstr "Envoyer un courriel à un seul utilisateur."
+msgstr "Pošalji mail da biste popunili podnetog korisnika"
 
 #: ../wpgform-post-type.php:263
 msgid "Legal"
-msgstr ""
+msgstr "Legalno"
 
 #: ../wpgform-post-type.php:264
-#, fuzzy
 msgid "Google Legal Disclaimer"
-msgstr "Formulaires Google"
+msgstr "Google Legal Disclaimer"
 
 #: ../wpgform-post-type.php:273
-#, fuzzy
 msgid "Read Only"
-msgstr "Administrateurs seulement."
+msgstr "Pročitati samo"
 
 #: ../wpgform-post-type.php:274
-#, fuzzy
 msgid "Set the form Read Only"
-msgstr "Administrateurs seulement."
+msgstr "Namestiti formu na Pročitati samo"
 
 #: ../wpgform-post-type.php:283
-#, fuzzy
 msgid "BR"
-msgstr "Sujet du courriel<br /><em>Valeur par défaut</em>"
+msgstr "BR"
 
 #: ../wpgform-post-type.php:284
 msgid "Insert &lt;BR&gt; tags between labels and input box"
-msgstr ""
+msgstr "Uneti &lt;BR&gt; tagove izmedju oznaka i input box"
 
 #: ../wpgform-post-type.php:293
 msgid "CSS Prefix"
-msgstr ""
+msgstr "CSS Prefix"
 
 #: ../wpgform-post-type.php:294
-#, fuzzy
 msgid "Prefix to add to all Google CSS classes"
-msgstr "Cochez les cases correspondantes"
+msgstr "Prefix da doda sve Google CSS klase"
 
 #: ../wpgform-post-type.php:301
 msgid "CSS Suffix"
-msgstr ""
+msgstr "CSS Suffix"
 
 #: ../wpgform-post-type.php:302
-#, fuzzy
 msgid "Suffix to add to all Google CSS classes"
-msgstr "Cochez les cases correspondantes"
+msgstr "Suffix da doda sve Google CSS klase"
 
 #: ../wpgform-post-type.php:309
-#, fuzzy
 msgid "Title"
-msgstr "Le titre de l'article à communiquer"
+msgstr "Naslov"
 
 #: ../wpgform-post-type.php:310
-#, fuzzy
 msgid "Show or Hide the Google Form's title"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Prikazati ili sakriti naslov Google Formi"
 
 #: ../wpgform-post-type.php:319
 msgid "Map H1 to H2"
-msgstr ""
+msgstr "Mapirati  H1 za H2"
 
 #: ../wpgform-post-type.php:320
 msgid "Map H1 elements to H2 elements"
-msgstr ""
+msgstr "Mapirati H1 elementi za H2 elemente"
 
 #: ../wpgform-post-type.php:329 ../wpgform-post-type.php:330
 msgid "Unite Theme Hack"
-msgstr ""
+msgstr "Jedinica Hack teme"
 
 #: ../wpgform-post-type.php:353
-#, fuzzy
 msgid "Google Form Field Validation"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Google Form polje validacije"
 
 #: ../wpgform-post-type.php:359
 msgid "Validation"
-msgstr ""
+msgstr "Validacija"
 
 #: ../wpgform-post-type.php:360
-#, fuzzy
 msgid "Enable default jQuery Validation on all required fields"
-msgstr "Nécessaire"
+msgstr "Omogući default jQuery validaciju na zahtevanim poljima"
 
 #: ../wpgform-post-type.php:369 ../wpgform-post-type.php:436
 #: ../wpgform-post-type.php:484
-#, fuzzy
 msgid "Form Fields"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Forme polja"
 
 #: ../wpgform-post-type.php:370
-#, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.) - <a href=\"http://jqueryvalidation.org/rules\">Additional details on "
 "jQuery Rules</a>"
 msgstr ""
-"<p>Bonjour, </p><p>J'aimerais attirer votre attention sur un nouvel article "
-"publi&eacute; sur le blog (voir infos ci-dessous). J'esp&egrave;re que vous "
-"le trouverez int&eacute;ressant.</p><p>Cordialement,</p><p>%FROM_NAME%</"
-"p><hr><p><strong>%POST_TITLE%</strong></p><p>%POST_EXCERPT%</p><ul><li>Lien "
-"vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
-"%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
+"Ime na polju na Google Form  (npr. unos.1.jedan, unos.12345678, itd.) - <a "
+"href=\"http://jqueryvalidation.org/rules\">Dodatni detalji jQuery Rules</a>"
 
 #: ../wpgform-post-type.php:399 ../wpgform-post-type.php:505
 #: ../wpgform-post-type.php:689 ../wpgform-post-type.php:711
 msgid "Type"
-msgstr ""
+msgstr "Tip"
 
 #: ../wpgform-post-type.php:400
 msgid "Type of validation"
-msgstr ""
+msgstr "Tip validacije"
 
 #: ../wpgform-post-type.php:407 ../wpgform-post-type.php:446
 #: ../wpgform-post-type.php:513 ../wpgform-post-type.php:698
 #: ../wpgform-post-type.php:700 ../wpgform-post-type.php:720
 #: ../wpgform-post-type.php:722
 msgid "Value"
-msgstr ""
+msgstr "Vrednost"
 
 #: ../wpgform-post-type.php:408 ../wpgform-post-type.php:447
 msgid "Value to validate against"
-msgstr ""
+msgstr "Vrednost za validaciju protiv"
 
 #: ../wpgform-post-type.php:430
-#, fuzzy
 msgid "Google Form Field Placeholder"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Google Form Field Placeholder"
 
 #: ../wpgform-post-type.php:437
-#, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.) - <a href=\"http://www.w3schools.com/tags/att_input_placeholder.asp"
 "\">Additional details on Placeholders</a>"
 msgstr ""
-"<p>Bonjour, </p><p>J'aimerais attirer votre attention sur un nouvel article "
-"publi&eacute; sur le blog (voir infos ci-dessous). J'esp&egrave;re que vous "
-"le trouverez int&eacute;ressant.</p><p>Cordialement,</p><p>%FROM_NAME%</"
-"p><hr><p><strong>%POST_TITLE%</strong></p><p>%POST_EXCERPT%</p><ul><li>Lien "
-"vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
-"%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
+"Ime polja na Google Form  (npr. unos.1.jedan, unos.12345678, itd.) - <a href="
+"\"http://www.w3schools.com/tags/att_input_placeholder.asp\">Dodatni detalji "
+"Placeholders</a>"
 
 #: ../wpgform-post-type.php:468
-#, fuzzy
 msgid "Google Form Hidden Fields"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Google Form skrivena polja"
 
 #: ../wpgform-post-type.php:474
 msgid "Hidden Fields"
-msgstr ""
+msgstr "Skrivena polja"
 
 #: ../wpgform-post-type.php:475
 msgid "Configure hidden fields"
-msgstr ""
+msgstr "Konfigurisati skriveno polje"
 
 #: ../wpgform-post-type.php:485
-#, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.).  The optional value is only used for fields of type <b><i>value</i></"
 "b>, <b><i>url</i></b>, and <b><i>timestamp</i></b>.  For all other field "
 "types WordPress will set the hidden input to a system derived value."
 msgstr ""
-"<p>Bonjour, </p><p>J'aimerais attirer votre attention sur un nouvel article "
-"publi&eacute; sur le blog (voir infos ci-dessous). J'esp&egrave;re que vous "
-"le trouverez int&eacute;ressant.</p><p>Cordialement,</p><p>%FROM_NAME%</"
-"p><hr><p><strong>%POST_TITLE%</strong></p><p>%POST_EXCERPT%</p><ul><li>Lien "
-"vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
-"%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
+"Ime polja u Google Form (npr. unos.1.jedan, unos.12345678, itd.). Ova "
+"opcionalna vrednost se koristi samo za tipove polja <b><i>vrednost</i></b>, "
+"<b><i>url</i></b>, and <b><i>timestamp</i></b>.Za sve druge tipove polja "
+"WordPress će namestiti skriveni input za odredjenu vrednost."
 
 #: ../wpgform-post-type.php:506
 msgid "Type of hiddenfield"
-msgstr ""
+msgstr "Tip skrivenog polja"
 
 #: ../wpgform-post-type.php:514
-#, fuzzy
 msgid "Optional value to use as a preset"
-msgstr ""
-"Sélectionnez/désélectionner plusieurs éléments en utilisant la touche CTRL"
+msgstr "Opcionalna vrednost da se koristi kao preset"
 
 #: ../wpgform-post-type.php:685
-#, fuzzy
 msgid "Name"
-msgstr "Prénom nom"
+msgstr "Ime"
 
 #: ../wpgform-post-type.php:689 ../wpgform-post-type.php:711
-#, fuzzy
 msgid "Check"
-msgstr "Cochez les cases correspondantes"
+msgstr "Proveri"
 
 #: ../wpgform-post-type.php:708
-#, fuzzy
 msgid "Field"
-msgstr ""
-"Essayer 30 si vous avez des problèmes lors de l'envoi de courriels à un "
-"grand nombre d'utilisateurs (certains fournisseurs d'accès interdissent un "
-"trop grand nombre d'adèles dans le champ BCC)."
+msgstr "Polje"
 
 #: ../wpgform-post-type.php:898
-#, fuzzy
 msgid "Form Name"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Ime forme"
 
 #: ../wpgform-post-type.php:903
-#, fuzzy
 msgid "Short Code"
-msgstr "Traitement des shortcodes"
+msgstr "Short Code"
 
 #: ../wpgform-post-type.php:904
-#, fuzzy
 msgid "Form Description"
-msgstr "Description"
+msgstr "Opis forme"
 
 #: ../wpgform-post-type.php:994
-#, fuzzy
 msgid "Enter WordPress Google Form Title"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Uneti  WordPress Google Form naslov"

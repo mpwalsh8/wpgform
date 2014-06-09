@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Google Form\n"
-"POT-Creation-Date: 2014-02-21 19:49-0000\n"
-"PO-Revision-Date: 2014-02-21 19:49-0000\n"
+"POT-Creation-Date: 2014-06-09 14:50-0000\n"
+"PO-Revision-Date: 2014-06-09 14:50-0000\n"
 "Last-Translator: Mike Walsh <mpwalsh8@gmail.com>\n"
 "Language-Team: Mike Walsh (@mpwalsh8) <mpwalsh8@gmail.com>\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.5\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -60,184 +60,192 @@ msgstr ""
 msgid "Form Submission Log"
 msgstr ""
 
-#: ../wpgform-core.php:476 ../wpgform-core.php:490
+#: ../wpgform-core.php:491 ../wpgform-core.php:505
 msgid "Unable to process Google Form short code."
 msgstr ""
 
-#: ../wpgform-core.php:655
+#: ../wpgform-core.php:670
 msgid "Unable to process Google Form."
 msgstr ""
 
-#: ../wpgform-core.php:656
+#: ../wpgform-core.php:671
 msgid "Server is responding with"
 msgstr ""
 
-#: ../wpgform-core.php:657
+#: ../wpgform-core.php:672
 msgid "403 Permission Denied"
 msgstr ""
 
-#: ../wpgform-core.php:657
+#: ../wpgform-core.php:672
 msgid "error"
 msgstr ""
 
-#: ../wpgform-core.php:703
+#: ../wpgform-core.php:718
 msgid "Email Address"
 msgstr ""
 
-#: ../wpgform-core.php:753 ../wpgform-core.php:755
+#: ../wpgform-core.php:768 ../wpgform-core.php:770
 msgid "What is"
 msgstr ""
 
-#: ../wpgform-core.php:900
+#: ../wpgform-core.php:922
 msgid "Unable to retrieve Google Form.  Please try reloading this page."
 msgstr ""
 
-#: ../wpgform-core.php:1011
+#: ../wpgform-core.php:1034
 msgid "Unexpected content encountered, unable to retrieve Google Form."
 msgstr ""
 
-#: ../wpgform-core.php:1199
+#: ../wpgform-core.php:1218
 msgid "A valid email address is required."
 msgstr ""
 
-#: ../wpgform-core.php:1218
+#: ../wpgform-core.php:1237
 msgid "Incorrect answer."
 msgstr ""
 
-#: ../wpgform-core.php:1302 ../wpgform-core.php:1528
+#: ../wpgform-core.php:1288
+msgid "Please check your input."
+msgstr ""
+
+#: ../wpgform-core.php:1338 ../wpgform-core.php:1567
 msgid "Unknown"
 msgstr ""
 
-#: ../wpgform-core.php:1474
+#: ../wpgform-core.php:1513
 msgid "Warning:  You are using an insecure browser!"
 msgstr ""
 
-#: ../wpgform-core.php:1477
+#: ../wpgform-core.php:1516
 msgid "Warning:  Your browser is out of date!  Please update now."
 msgstr ""
 
-#: ../wpgform-core.php:1493
+#: ../wpgform-core.php:1532
 msgid "Form Id:"
 msgstr ""
 
-#: ../wpgform-core.php:1495
+#: ../wpgform-core.php:1534
 msgid "Submitted Form Id"
 msgstr ""
 
-#: ../wpgform-core.php:1498
+#: ../wpgform-core.php:1537
 msgid "No Submitted Form Id"
 msgstr ""
 
-#: ../wpgform-core.php:1720
+#: ../wpgform-core.php:1759
 msgid "Unable to submit Google Form.  Please try reloading this page."
 msgstr ""
 
-#: ../wpgform-core.php:1802
+#: ../wpgform-core.php:1842
 msgid "View Form Results"
 msgstr ""
 
-#: ../wpgform-core.php:1856
+#: ../wpgform-core.php:1892
 msgid "A form was submitted on your web site."
 msgstr ""
 
-#: ../wpgform-core.php:1857 ../wpgform-core.php:1869
+#: ../wpgform-core.php:1893 ../wpgform-core.php:1905
 msgid "Form"
 msgstr ""
 
-#: ../wpgform-core.php:1858 ../wpgform-core.php:1870
+#: ../wpgform-core.php:1894 ../wpgform-core.php:1906
 #: ../wpgform-logging.php:182
 msgid "URL"
 msgstr ""
 
-#: ../wpgform-core.php:1859 ../wpgform-core.php:1871
+#: ../wpgform-core.php:1895 ../wpgform-core.php:1907
 msgid "Responses"
 msgstr ""
 
-#: ../wpgform-core.php:1860 ../wpgform-core.php:1872
+#: ../wpgform-core.php:1896 ../wpgform-core.php:1908
 msgid "Date"
 msgstr ""
 
-#: ../wpgform-core.php:1861 ../wpgform-core.php:1873
+#: ../wpgform-core.php:1897 ../wpgform-core.php:1909
 msgid "Time"
 msgstr ""
 
-#: ../wpgform-core.php:1862 ../wpgform-core.php:1875
+#: ../wpgform-core.php:1898 ../wpgform-core.php:1911
 msgid "Thank you"
 msgstr ""
 
-#: ../wpgform-core.php:1868
+#: ../wpgform-core.php:1904
 msgid "A form was submitted on your web site"
 msgstr ""
 
-#: ../wpgform-core.php:1939
+#: ../wpgform-core.php:1975
 msgid "This field is required."
 msgstr ""
 
-#: ../wpgform-core.php:1940
+#: ../wpgform-core.php:1976
 msgid "Please fix this field."
 msgstr ""
 
-#: ../wpgform-core.php:1941
+#: ../wpgform-core.php:1977
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: ../wpgform-core.php:1942
+#: ../wpgform-core.php:1978
 msgid "Please enter a valid URL."
 msgstr ""
 
-#: ../wpgform-core.php:1943
+#: ../wpgform-core.php:1979
 msgid "Please enter a valid date."
 msgstr ""
 
-#: ../wpgform-core.php:1944
+#: ../wpgform-core.php:1980
 msgid "Please enter a valid date (ISO)."
 msgstr ""
 
-#: ../wpgform-core.php:1945
+#: ../wpgform-core.php:1981
 msgid "Please enter a valid number."
 msgstr ""
 
-#: ../wpgform-core.php:1946
+#: ../wpgform-core.php:1982
 msgid "Please enter only digits."
 msgstr ""
 
-#: ../wpgform-core.php:1947
+#: ../wpgform-core.php:1983
 msgid "Please enter a valid credit card number."
 msgstr ""
 
-#: ../wpgform-core.php:1948
+#: ../wpgform-core.php:1984
 msgid "Please enter the same value again.,"
 msgstr ""
 
-#: ../wpgform-core.php:1949
+#: ../wpgform-core.php:1985
 msgid "Please enter a value with a valid extension."
 msgstr ""
 
-#: ../wpgform-core.php:1950
+#: ../wpgform-core.php:1986
 msgid "Please enter no more than {0} characters."
 msgstr ""
 
-#: ../wpgform-core.php:1951
+#: ../wpgform-core.php:1987
 msgid "Please enter at least {0} characters."
 msgstr ""
 
-#: ../wpgform-core.php:1952
+#: ../wpgform-core.php:1988
 msgid "Please enter a value between {0} and {1} characters long."
 msgstr ""
 
-#: ../wpgform-core.php:1953
+#: ../wpgform-core.php:1989
 msgid "Please enter a value between {0} and {1}."
 msgstr ""
 
-#: ../wpgform-core.php:1954
+#: ../wpgform-core.php:1990
 msgid "Please enter a value less than or equal to {0}."
 msgstr ""
 
-#: ../wpgform-core.php:1955
+#: ../wpgform-core.php:1991
 msgid "Please enter a value greater than or equal to {0}."
 msgstr ""
 
-#: ../wpgform-core.php:2015
+#: ../wpgform-core.php:1992
+msgid "Please enter a value which matches {0}."
+msgstr ""
+
+#: ../wpgform-core.php:2052
 #, php-format
 msgid ""
 "This notification may be hidden via a setting on the <a href=\"%s\">Google "
@@ -337,280 +345,280 @@ msgstr ""
 msgid "No Google Forms Found In Trash"
 msgstr ""
 
-#: ../wpgform-post-type.php:102
+#: ../wpgform-post-type.php:109
 msgid "Google Form Details"
 msgstr ""
 
-#: ../wpgform-post-type.php:108
+#: ../wpgform-post-type.php:115
 msgid "Form URL"
 msgstr ""
 
-#: ../wpgform-post-type.php:109
+#: ../wpgform-post-type.php:116
 msgid "The full URL to the published Google Form"
 msgstr ""
 
-#: ../wpgform-post-type.php:113
+#: ../wpgform-post-type.php:120
 msgid "Google Form URL"
 msgstr ""
 
-#: ../wpgform-post-type.php:117
+#: ../wpgform-post-type.php:124
 msgid "Confirm URL"
 msgstr ""
 
-#: ../wpgform-post-type.php:118
+#: ../wpgform-post-type.php:125
 msgid "The full URL to the optional Confirmation Page"
 msgstr ""
 
-#: ../wpgform-post-type.php:122
+#: ../wpgform-post-type.php:129
 msgid "Confirmation Page URL"
 msgstr ""
 
-#: ../wpgform-post-type.php:126
+#: ../wpgform-post-type.php:133
 msgid "Style"
 msgstr ""
 
-#: ../wpgform-post-type.php:127
+#: ../wpgform-post-type.php:134
 msgid "Custom Confirmation Page Style"
 msgstr ""
 
-#: ../wpgform-post-type.php:135
+#: ../wpgform-post-type.php:142
 msgid "Alert"
 msgstr ""
 
-#: ../wpgform-post-type.php:136
+#: ../wpgform-post-type.php:143
 msgid "Javascript Alert Box message displayed upon submission"
 msgstr ""
 
-#: ../wpgform-post-type.php:140
+#: ../wpgform-post-type.php:147
 msgid "Alert Message"
 msgstr ""
 
-#: ../wpgform-post-type.php:144
+#: ../wpgform-post-type.php:151
 msgid "Class"
 msgstr ""
 
-#: ../wpgform-post-type.php:145
+#: ../wpgform-post-type.php:152
 msgid "CSS class(es) to add to the form's containing DIV"
 msgstr ""
 
-#: ../wpgform-post-type.php:152
+#: ../wpgform-post-type.php:159
 msgid "Email"
 msgstr ""
 
-#: ../wpgform-post-type.php:153
+#: ../wpgform-post-type.php:160
 msgid "Send email upon form submission"
 msgstr ""
 
-#: ../wpgform-post-type.php:156 ../wpgform-post-type.php:183
-#: ../wpgform-post-type.php:231 ../wpgform-post-type.php:250
-#: ../wpgform-post-type.php:260 ../wpgform-post-type.php:270
-#: ../wpgform-post-type.php:280 ../wpgform-post-type.php:306
-#: ../wpgform-post-type.php:316 ../wpgform-post-type.php:326
-#: ../wpgform-post-type.php:356 ../wpgform-post-type.php:470
+#: ../wpgform-post-type.php:163 ../wpgform-post-type.php:190
+#: ../wpgform-post-type.php:238 ../wpgform-post-type.php:257
+#: ../wpgform-post-type.php:267 ../wpgform-post-type.php:277
+#: ../wpgform-post-type.php:287 ../wpgform-post-type.php:313
+#: ../wpgform-post-type.php:323 ../wpgform-post-type.php:333
+#: ../wpgform-post-type.php:363 ../wpgform-post-type.php:478
 msgid "On"
 msgstr ""
 
-#: ../wpgform-post-type.php:156 ../wpgform-post-type.php:183
-#: ../wpgform-post-type.php:231 ../wpgform-post-type.php:250
-#: ../wpgform-post-type.php:260 ../wpgform-post-type.php:270
-#: ../wpgform-post-type.php:280 ../wpgform-post-type.php:306
-#: ../wpgform-post-type.php:316 ../wpgform-post-type.php:326
-#: ../wpgform-post-type.php:356 ../wpgform-post-type.php:470
+#: ../wpgform-post-type.php:163 ../wpgform-post-type.php:190
+#: ../wpgform-post-type.php:238 ../wpgform-post-type.php:257
+#: ../wpgform-post-type.php:267 ../wpgform-post-type.php:277
+#: ../wpgform-post-type.php:287 ../wpgform-post-type.php:313
+#: ../wpgform-post-type.php:323 ../wpgform-post-type.php:333
+#: ../wpgform-post-type.php:363 ../wpgform-post-type.php:478
 msgid "Off"
 msgstr ""
 
-#: ../wpgform-post-type.php:162
+#: ../wpgform-post-type.php:169
 msgid "Send To"
 msgstr ""
 
-#: ../wpgform-post-type.php:163
+#: ../wpgform-post-type.php:170
 msgid "Email address send submission email to"
 msgstr ""
 
-#: ../wpgform-post-type.php:170
+#: ../wpgform-post-type.php:177
 msgid "Form CSS"
 msgstr ""
 
-#: ../wpgform-post-type.php:171
+#: ../wpgform-post-type.php:178
 msgid "Form specific CSS rules"
 msgstr ""
 
-#: ../wpgform-post-type.php:179
+#: ../wpgform-post-type.php:186
 msgid "Form Caching"
 msgstr ""
 
-#: ../wpgform-post-type.php:180
+#: ../wpgform-post-type.php:187
 msgid "Enable Form Caching using Wordpress Transient API"
 msgstr ""
 
-#: ../wpgform-post-type.php:189
+#: ../wpgform-post-type.php:196
 msgid "Form Caching Timeout"
 msgstr ""
 
-#: ../wpgform-post-type.php:190
+#: ../wpgform-post-type.php:197
 msgid "How often will the forms reloaded (in minutes)"
 msgstr ""
 
-#: ../wpgform-post-type.php:198
+#: ../wpgform-post-type.php:205
 msgid "Reset Form Cache?"
 msgstr ""
 
-#: ../wpgform-post-type.php:199
+#: ../wpgform-post-type.php:206
 msgid "This will force reloading the form from Google Drive"
 msgstr ""
 
-#: ../wpgform-post-type.php:221
+#: ../wpgform-post-type.php:228
 msgid "Google Form Options"
 msgstr ""
 
-#: ../wpgform-post-type.php:227 ../wpgform-post-type.php:228
+#: ../wpgform-post-type.php:234 ../wpgform-post-type.php:235
 msgid "CAPTCHA"
 msgstr ""
 
-#: ../wpgform-post-type.php:237
+#: ../wpgform-post-type.php:244
 msgid "Columns"
 msgstr ""
 
-#: ../wpgform-post-type.php:238
+#: ../wpgform-post-type.php:245
 msgid "Split form into columns"
 msgstr ""
 
-#: ../wpgform-post-type.php:246
+#: ../wpgform-post-type.php:253
 msgid "Email End User"
 msgstr ""
 
-#: ../wpgform-post-type.php:247
+#: ../wpgform-post-type.php:254
 msgid "Send email to end user upon form submission"
 msgstr ""
 
-#: ../wpgform-post-type.php:256
+#: ../wpgform-post-type.php:263
 msgid "Legal"
 msgstr ""
 
-#: ../wpgform-post-type.php:257
+#: ../wpgform-post-type.php:264
 msgid "Google Legal Disclaimer"
 msgstr ""
 
-#: ../wpgform-post-type.php:266
+#: ../wpgform-post-type.php:273
 msgid "Read Only"
 msgstr ""
 
-#: ../wpgform-post-type.php:267
+#: ../wpgform-post-type.php:274
 msgid "Set the form Read Only"
 msgstr ""
 
-#: ../wpgform-post-type.php:276
+#: ../wpgform-post-type.php:283
 msgid "BR"
 msgstr ""
 
-#: ../wpgform-post-type.php:277
+#: ../wpgform-post-type.php:284
 msgid "Insert &lt;BR&gt; tags between labels and input box"
 msgstr ""
 
-#: ../wpgform-post-type.php:286
+#: ../wpgform-post-type.php:293
 msgid "CSS Prefix"
 msgstr ""
 
-#: ../wpgform-post-type.php:287
+#: ../wpgform-post-type.php:294
 msgid "Prefix to add to all Google CSS classes"
 msgstr ""
 
-#: ../wpgform-post-type.php:294
+#: ../wpgform-post-type.php:301
 msgid "CSS Suffix"
 msgstr ""
 
-#: ../wpgform-post-type.php:295
+#: ../wpgform-post-type.php:302
 msgid "Suffix to add to all Google CSS classes"
 msgstr ""
 
-#: ../wpgform-post-type.php:302
+#: ../wpgform-post-type.php:309
 msgid "Title"
 msgstr ""
 
-#: ../wpgform-post-type.php:303
+#: ../wpgform-post-type.php:310
 msgid "Show or Hide the Google Form's title"
 msgstr ""
 
-#: ../wpgform-post-type.php:312
+#: ../wpgform-post-type.php:319
 msgid "Map H1 to H2"
 msgstr ""
 
-#: ../wpgform-post-type.php:313
+#: ../wpgform-post-type.php:320
 msgid "Map H1 elements to H2 elements"
 msgstr ""
 
-#: ../wpgform-post-type.php:322 ../wpgform-post-type.php:323
+#: ../wpgform-post-type.php:329 ../wpgform-post-type.php:330
 msgid "Unite Theme Hack"
 msgstr ""
 
-#: ../wpgform-post-type.php:346
+#: ../wpgform-post-type.php:353
 msgid "Google Form Field Validation"
 msgstr ""
 
-#: ../wpgform-post-type.php:352
+#: ../wpgform-post-type.php:359
 msgid "Validation"
 msgstr ""
 
-#: ../wpgform-post-type.php:353
+#: ../wpgform-post-type.php:360
 msgid "Enable default jQuery Validation on all required fields"
 msgstr ""
 
-#: ../wpgform-post-type.php:362 ../wpgform-post-type.php:428
-#: ../wpgform-post-type.php:476
+#: ../wpgform-post-type.php:369 ../wpgform-post-type.php:436
+#: ../wpgform-post-type.php:484
 msgid "Form Fields"
 msgstr ""
 
-#: ../wpgform-post-type.php:363
+#: ../wpgform-post-type.php:370
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.) - <a href=\"http://jqueryvalidation.org/rules\">Additional details on "
 "jQuery Rules</a>"
 msgstr ""
 
-#: ../wpgform-post-type.php:391 ../wpgform-post-type.php:497
-#: ../wpgform-post-type.php:681 ../wpgform-post-type.php:703
+#: ../wpgform-post-type.php:399 ../wpgform-post-type.php:505
+#: ../wpgform-post-type.php:689 ../wpgform-post-type.php:711
 msgid "Type"
 msgstr ""
 
-#: ../wpgform-post-type.php:392
+#: ../wpgform-post-type.php:400
 msgid "Type of validation"
 msgstr ""
 
-#: ../wpgform-post-type.php:399 ../wpgform-post-type.php:438
-#: ../wpgform-post-type.php:505 ../wpgform-post-type.php:690
-#: ../wpgform-post-type.php:692 ../wpgform-post-type.php:712
-#: ../wpgform-post-type.php:714
+#: ../wpgform-post-type.php:407 ../wpgform-post-type.php:446
+#: ../wpgform-post-type.php:513 ../wpgform-post-type.php:698
+#: ../wpgform-post-type.php:700 ../wpgform-post-type.php:720
+#: ../wpgform-post-type.php:722
 msgid "Value"
 msgstr ""
 
-#: ../wpgform-post-type.php:400 ../wpgform-post-type.php:439
+#: ../wpgform-post-type.php:408 ../wpgform-post-type.php:447
 msgid "Value to validate against"
 msgstr ""
 
-#: ../wpgform-post-type.php:422
+#: ../wpgform-post-type.php:430
 msgid "Google Form Field Placeholder"
 msgstr ""
 
-#: ../wpgform-post-type.php:429
+#: ../wpgform-post-type.php:437
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.) - <a href=\"http://www.w3schools.com/tags/att_input_placeholder.asp"
 "\">Additional details on Placeholders</a>"
 msgstr ""
 
-#: ../wpgform-post-type.php:460
+#: ../wpgform-post-type.php:468
 msgid "Google Form Hidden Fields"
 msgstr ""
 
-#: ../wpgform-post-type.php:466
+#: ../wpgform-post-type.php:474
 msgid "Hidden Fields"
 msgstr ""
 
-#: ../wpgform-post-type.php:467
+#: ../wpgform-post-type.php:475
 msgid "Configure hidden fields"
 msgstr ""
 
-#: ../wpgform-post-type.php:477
+#: ../wpgform-post-type.php:485
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
 "etc.).  The optional value is only used for fields of type <b><i>value</i></"
@@ -618,38 +626,38 @@ msgid ""
 "types WordPress will set the hidden input to a system derived value."
 msgstr ""
 
-#: ../wpgform-post-type.php:498
+#: ../wpgform-post-type.php:506
 msgid "Type of hiddenfield"
 msgstr ""
 
-#: ../wpgform-post-type.php:506
+#: ../wpgform-post-type.php:514
 msgid "Optional value to use as a preset"
 msgstr ""
 
-#: ../wpgform-post-type.php:677
+#: ../wpgform-post-type.php:685
 msgid "Name"
 msgstr ""
 
-#: ../wpgform-post-type.php:681 ../wpgform-post-type.php:703
+#: ../wpgform-post-type.php:689 ../wpgform-post-type.php:711
 msgid "Check"
 msgstr ""
 
-#: ../wpgform-post-type.php:700
+#: ../wpgform-post-type.php:708
 msgid "Field"
 msgstr ""
 
-#: ../wpgform-post-type.php:890
+#: ../wpgform-post-type.php:898
 msgid "Form Name"
 msgstr ""
 
-#: ../wpgform-post-type.php:895
+#: ../wpgform-post-type.php:903
 msgid "Short Code"
 msgstr ""
 
-#: ../wpgform-post-type.php:896
+#: ../wpgform-post-type.php:904
 msgid "Form Description"
 msgstr ""
 
-#: ../wpgform-post-type.php:986
+#: ../wpgform-post-type.php:994
 msgid "Enter WordPress Google Form Title"
 msgstr ""
