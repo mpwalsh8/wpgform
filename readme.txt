@@ -384,6 +384,7 @@ No known upgrade issues.
 = Version 0.70 =
 * Added Serbo Croation translation (thank you Borisa Djuraskovic / www.webhostinghub.com)
 * Added support for Regular Expression validation check.  Regular expressions can be tricky, YMMV!
+* Fixed a bug which occurs when the Send Email option is enabled but the Send To address isn't specified (should default to admin email).
 
 = Version 0.69 =
 * Fixed bug in generated jQuery for Validation which caused syntax errors which could then interfere with redirect.
