@@ -1488,7 +1488,7 @@ jQuery(document).ready(function($) {
         //  Send email?
         if (self::$posted && is_null($action) && ($email || $user_email))
         {
-            if (is_null($sendto) || is_empty($sendto)) $sendto = get_bloginfo('admin_email') ;
+            if (is_null($sendto) || empty($sendto)) $sendto = get_bloginfo('admin_email') ;
 
             if ($email && is_email($sendto))
                 wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto, $results) ;
