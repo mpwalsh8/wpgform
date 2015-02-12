@@ -147,7 +147,8 @@ div.aria-only-help {
 
 /* 2013-10-30:  Hide default error messages */
 div.error-message {
-    display: none;
+    color: red;
+    /*display: none;*/
 }
 
 /* 2013-10-30:  Attempt to make text entry boxes a reasonable width */
