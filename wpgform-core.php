@@ -119,7 +119,8 @@ function wpgform_init()
 
     //add_filter('the_content', 'wpautop');
     //add_filter('the_content', 'wpgform_the_content');
-    add_action('template_redirect', 'wpgform_head') ;
+    //add_action('template_redirect', 'wpgform_head') ;
+    add_action( 'wp_enqueue_scripts', 'wpgform_head' );
     add_action('wp_footer', 'wpgform_footer') ;
 }
 
@@ -134,6 +135,7 @@ function wpgform_init()
  */
 function wpgform_the_content($content)
 {
+error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     return (WPGFORM_CPT_FORM == get_post_type(get_the_ID())) ?
         sprintf('[wpgform id=\'%s\']', get_the_ID()) : $content ;
 }
@@ -481,9 +483,11 @@ class wpGForm
      *
      * @since 0.1
      * @deprecated
+     * @see http://scribu.net/wordpress/conditional-script-loading-revisited.html
      */
     static function gform_sc($options)
     {
+        wpgform_enqueue_scripts() ;
         if (self::ProcessShortCodeOptions($options))
             return self::ConstructGoogleForm() ;
         else
@@ -495,9 +499,11 @@ class wpGForm
      * 'wpgform' short code handler
      *
      * @since 1.0
+     * @see http://scribu.net/wordpress/conditional-script-loading-revisited.html
      */
     static function wpgform_sc($options)
     {
+        wpgform_enqueue_scripts() ;
         if (self::ProcessWpGFormCPT($options))
             return self::ConstructGoogleForm() ;
         else
@@ -592,7 +598,8 @@ class wpGForm
             wpgform_secondary_meta_box_content(true),
             wpgform_validation_meta_box_content(true),
             wpgform_placeholder_meta_box_content(true),
-            wpgform_hiddenfields_meta_box_content(true)
+            wpgform_hiddenfields_meta_box_content(true),
+            wpgform_text_overrides_meta_box_content(true)
         ) ;
 
         foreach ($fields as $field)
@@ -637,6 +644,8 @@ class wpGForm
      */
     static function ConstructGoogleForm()
     {
+        //wpgform_load_js_css() ;
+
         //  Any preset params?
         $presets = $_GET ;
 
@@ -648,6 +657,11 @@ class wpGForm
 
         //  Property short cut
         $o = &self::$options ;
+
+        //  Account for existing forms not having the override option
+        if (!array_key_exists('override_google_default_text', $o))
+            $o['override_google_default_text'] = 0 ;
+
         //printf('<pre>%s</pre>', print_r($o, true)) ;
 
         $wpgform_options = wpgform_get_plugin_options() ;
@@ -903,10 +917,10 @@ class wpGForm
             echo '<div id="message" class="wpgform-google-error"><p>' . $error_string . '</p></div>';
             if (WPGFORM_DEBUG)
             {
-                printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
-                print '<pre>' ;
-                print_r(self::$response) ;
-                print '</pre>' ;
+                //printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
+                //print '<pre>' ;
+                //print_r(self::$response) ;
+                //print '</pre>' ;
                 wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
                 wpgform_preprint_r(self::$response) ;
             }
@@ -1006,6 +1020,12 @@ class wpGForm
         $patterns[] = '/id="ss-submit"/' ;
         $replacements[] = sprintf('id="%sss-submit"', $uid) ;
 
+        //  Handle "submit another response" link
+        //$patterns[] = '/' . $form . '/' ;
+        error_log($form) ;
+        //$replacements[] = "ZZZ" ;
+
+        //  Process HTML replacements
         $html = preg_replace($patterns, $replacements, $html) ;
 
         if (WPGFORM_DEBUG)
@@ -1093,7 +1113,7 @@ class wpGForm
             $wgformid = self::$wpgform_form_id++ ;
         }
         
-        //  Handle and "placeholders"
+        //  Handle "placeholders"
  
         $fields = wpgform_placeholder_meta_box_content(true) ;
 
@@ -1101,6 +1121,7 @@ class wpGForm
         {
             if ('placeholder' == $field['type'])
             {
+                //var_dump($o) ;
     	        $meta_field = get_post_meta($o['id'], $field['id'], true);
                 $meta_type = get_post_meta($o['id'], $field['type_id'], true);
                 $meta_value = get_post_meta($o['id'], $field['value_id'], true);
@@ -1293,7 +1314,25 @@ jQuery(document).ready(function($) {
         {
             $js .= sprintf('
     $("#%sss-form").validate({
-        errorClass: "wpgform-error",
+        invalidHandler: function(event, validator) {
+            // \'this\' refers to the form
+            var errors = validator.numberOfInvalids();
+            if (errors) {
+              var message = errors == 1
+                ? \'You missed 1 field. It has been highlighted\'
+                : \'You missed \' + errors + \' fields. They have been highlighted\';
+              $("div.error span").html(message);
+              $("div.error").show();
+              //$("div.error-message").show();
+              //alert("errors ...");
+            } else {
+              $("div.error").hide();
+              //$("div.error-message").hide();
+              //alert("no errors ...");
+            }
+          },
+        //errorClass: "wpgform-error",
+        errorClass: "error-message",
         rules: {%s', $uid, PHP_EOL) ;
             if (!empty($extras))
             {
@@ -1340,7 +1379,7 @@ jQuery(document).ready(function($) {
         $values = array(
             'value' => $unknown
            ,'url' => array_key_exists('URL', $_SERVER) ? $_SERVER['URL'] : $unknown
-           ,'timestamp' => date('Y-m-d H:i:s')
+           ,'timestamp' => current_time('Y-m-d H:i:s')
            ,'remote_addr' => array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : $unknown
            ,'remote_host' => array_key_exists('REMOTE_HOST', $_SERVER) ? $_SERVER['REMOTE_HOST'] : $unknown
            ,'http_referer' => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : $unknown
@@ -1396,9 +1435,37 @@ jQuery(document).ready(function($) {
     });
 ', $prefix) ;
 
-        //  Replace Google supplied text?
-        if ($override_google_default_text) $js .= sprintf('
-    //  Replace Google supplied text with "override" values
+        //  Replace Google supplied text?  Form specific or global?
+        if ($o['override_google_default_text']) $js .= sprintf('
+    //  Replace Google supplied text with "form specific override" values
+    $("div.%sss-required-asterisk").text("* %s");
+    $("div.%sss-radio div.%sss-printable-hint").text("%s");
+    if ($("div.%sss-radio label:last+span.%sss-q-other-container").length) {
+        $("div.%sss-radio label:last+span.%sss-q-other-container").prev().contents().filter(function() {
+            return this.nodeType == 3;
+        })[0].nodeValue = "%s";
+    }
+    $("div.%sss-checkbox div.%sss-printable-hint").text("%s");
+    $("div.%sss-form-container :input[name=\"back\"]").attr("value", "\u00ab %s");
+    $("div.%sss-form-container :input[name=\"continue\"]").attr("value", "%s \u00bb");
+    $("div.%sss-form-container :input[name=\"submit\"]").attr("value", "%s");'
+        ,$prefix, $o['required_text_override']
+        ,$prefix, $prefix, $o['radio_buttons_text_override']
+        ,$prefix, $prefix
+        ,$prefix, $prefix, $o['radio_buttons_other_text_override']
+        ,$prefix, $prefix, $o['check_boxes_text_override']
+        ,$prefix, $o['back_button_text_override']
+        ,$prefix, $o['continue_button_text_override']
+        ,$prefix, $o['submit_button_text_override']) ;
+
+        //  Before closing the <script> tag, is the form read only?
+        if ($readonly) $js .= sprintf('
+    //  Put form in read-only mode
+    $("div.%sss-form-container :input").attr("disabled", true);
+        ', $prefix) ;
+
+        elseif ($override_google_default_text) $js .= sprintf('
+    //  Replace Google supplied text with "global override" values
     $("div.%sss-required-asterisk").text("* %s");
     $("div.%sss-radio div.%sss-printable-hint").text("%s");
     if ($("div.%sss-radio label:last+span.%sss-q-other-container").length) {
@@ -1453,6 +1520,14 @@ jQuery(document).ready(function($) {
     $("#%sss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
     $("div.%sss-form-container").after("<div style=\"border: 0px dashed black; clear: both;\"></div>");
         ', $prefix, $uid, $columns, $uid, $prefix) ;
+
+        //  Remap the re-submit form URL
+        $js .= sprintf('
+    //  Change "Submit another response" URL to point to WordPress URL
+    //  Changing the HREF attribute to an empty string results in the URL
+    //  being the page the form is on.
+    $("a.ss-bottom-link").attr("href", "");
+') ;
 
         //  Load the confirmation URL via AJAX?
         if (self::$posted && is_null($action) && !is_null($confirm) &&
@@ -1570,7 +1645,7 @@ jQuery(document).ready(function($) {
 
             $log = array(
                 'url' => array_key_exists('URL', $_SERVER) ? $_SERVER['URL'] : $unknown
-               ,'timestamp' => date('Y-m-d H:i:s')
+               ,'timestamp' => current_time('Y-m-d H:i:s')
                ,'remote_addr' => array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : $unknown
                ,'remote_host' => array_key_exists('REMOTE_HOST', $_SERVER) ? $_SERVER['REMOTE_HOST'] : $unknown
                ,'http_referer' => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : $unknown
@@ -1749,10 +1824,10 @@ jQuery(document).ready(function($) {
                 echo '<div id="message" class="wpgform-google-error"><p>' . $error_string . '</p></div>';
                 if (WPGFORM_DEBUG)
                 {
-                    printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
-                    print '<pre>' ;
-                    print_r(self::$response) ;
-                    print '</pre>' ;
+                    //printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
+                    //print '<pre>' ;
+                    //print_r(self::$response) ;
+                    //print '</pre>' ;
                     wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
                     wpgform_preprint_r(self::$response) ;
                 }
@@ -1895,8 +1970,8 @@ jQuery(document).ready(function($) {
                 __('Form', WPGFORM_I18N_DOMAIN), get_the_title(),
                 __('URL', WPGFORM_I18N_DOMAIN), get_permalink(),
                 __('Responses', WPGFORM_I18N_DOMAIN), $results,
-                __('Date', WPGFORM_I18N_DOMAIN), date('Y-m-d'),
-                __('Time', WPGFORM_I18N_DOMAIN), date('H:i'),
+                __('Date', WPGFORM_I18N_DOMAIN), current_time('Y-m-d'),
+                __('Time', WPGFORM_I18N_DOMAIN), current_time('H:i'),
                 __('Thank you', WPGFORM_I18N_DOMAIN), get_bloginfo('name')) ;
         }
         else
@@ -1913,7 +1988,7 @@ jQuery(document).ready(function($) {
             $plain .= sprintf('%s,', __('Thank you', WPGFORM_I18N_DOMAIN)) . PHP_EOL . PHP_EOL . '%s' . PHP_EOL ;
 
             $message = sprintf($plain, get_the_title(), get_permalink(),
-                $results, date('Y-m-d'), date('H:i'), get_option('blogname')) ;
+                $results, current_time('Y-m-d'), current_time('H:i'), get_option('blogname')) ;
         }
 
         $to = sprintf('%s wpGForm Contact <%s>', get_option('blogname'), $sendto) ;
@@ -1933,8 +2008,24 @@ jQuery(document).ready(function($) {
  * wpgform_head()
  *
  * WordPress header actions
+ * @see http://scribu.net/wordpress/conditional-script-loading-revisited.html
  */
 function wpgform_head()
+{
+    //  Need to enqueue jQuery or inline jQuery script will fail
+    //  Everything else is enqueued if/when the shortcode is processed
+    wp_enqueue_script('jquery') ;
+    wpgform_register_scripts() ;
+    wpgform_enqueue_styles() ;
+}
+
+/**
+ * wpgform_load_js_css()
+ *
+ * WordPress header actions
+ */
+/*
+function wpgform_load_js_css()
 {
     //  wpGForm needs jQuery!
     wp_enqueue_script('jquery') ;
@@ -1953,11 +2044,11 @@ function wpgform_head()
 
     if (defined('SCRIPT_DEBUG')) {
         wp_register_script('jquery-validate',
-            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js',
+            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js',
             array('jquery'), false, true) ;
     } else {
         wp_register_script('jquery-validate',
-            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js',
+            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js',
             array('jquery'), false, true) ;
     }
     wp_enqueue_script('jquery-validate') ;
@@ -1993,6 +2084,95 @@ function wpgform_head()
         'min' => __('Please enter a value greater than or equal to {0}.', WPGFORM_I18N_DOMAIN),
         'regex' => __('Please enter a value which matches {0}.', WPGFORM_I18N_DOMAIN)
     )) ;
+}
+*/
+
+/**
+ * wpgform_register_scripts()
+ *
+ * WordPress script registration for wpgform
+ */
+function wpgform_register_scripts()
+{
+    //  Load the jQuery Validate from the Microsoft CDN, it isn't
+    //  available from the Google CDN or I'd load it from there!
+
+    if (defined('SCRIPT_DEBUG')) {
+        wp_register_script('jquery-validate',
+            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js',
+            array('jquery'), false, true) ;
+    } else {
+        wp_register_script('jquery-validate',
+            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js',
+            array('jquery'), false, true) ;
+    }
+
+    //  Load the jQuery Columnizer script from the plugin
+    wp_register_script('jquery-columnizer',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/js/jquery.columnizer.js')),
+        array('jquery'), false, true) ;
+
+    //  Load the Google Forms jQuery Validate script from the plugin
+    wp_register_script('wpgform-jquery-validate',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/js/wpgform.js')),
+        array('jquery', 'jquery-validate'), false, true) ;
+}
+
+/**
+ * wpgform_enqueue_scripts()
+ *
+ * WordPress script enqueuing for wpgform
+ */
+function wpgform_enqueue_scripts()
+{
+    //  wpGForm needs jQuery!
+    //wp_enqueue_script('jquery') ;
+    
+    //  Enqueue the jQuery Validate script
+    wp_enqueue_script('jquery-validate') ;
+
+    //  Enqueue the jQuery Columnizer script
+    wp_enqueue_script('jquery-columnizer') ;
+
+    //  Enqueue the Google Forms jQuery Validate script from the plugin
+    wp_enqueue_script('wpgform-jquery-validate') ;
+    wp_localize_script('wpgform-jquery-validate', 'wpgform_script_vars', array(
+        'required' => __('This field is required.', WPGFORM_I18N_DOMAIN),
+        'remote' => __('Please fix this field.', WPGFORM_I18N_DOMAIN),
+        'email' => __('Please enter a valid email address.', WPGFORM_I18N_DOMAIN),
+        'url' => __('Please enter a valid URL.', WPGFORM_I18N_DOMAIN),
+        'date' => __('Please enter a valid date.', WPGFORM_I18N_DOMAIN),
+        'dateISO' => __('Please enter a valid date (ISO).', WPGFORM_I18N_DOMAIN),
+        'number' => __('Please enter a valid number.', WPGFORM_I18N_DOMAIN),
+        'digits' => __('Please enter only digits.', WPGFORM_I18N_DOMAIN),
+        'creditcard' => __('Please enter a valid credit card number.', WPGFORM_I18N_DOMAIN),
+        'equalTo' => __('Please enter the same value again.,', WPGFORM_I18N_DOMAIN),
+        'accept' => __('Please enter a value with a valid extension.', WPGFORM_I18N_DOMAIN),
+        'maxlength' => __('Please enter no more than {0} characters.', WPGFORM_I18N_DOMAIN),
+        'minlength' => __('Please enter at least {0} characters.', WPGFORM_I18N_DOMAIN),
+        'rangelength' => __('Please enter a value between {0} and {1} characters long.', WPGFORM_I18N_DOMAIN),
+        'range' => __('Please enter a value between {0} and {1}.', WPGFORM_I18N_DOMAIN),
+        'max' => __('Please enter a value less than or equal to {0}.', WPGFORM_I18N_DOMAIN),
+        'min' => __('Please enter a value greater than or equal to {0}.', WPGFORM_I18N_DOMAIN),
+        'regex' => __('Please enter a value which matches {0}.', WPGFORM_I18N_DOMAIN)
+    )) ;
+}
+
+/**
+ * wpgform_enqueue_styles()
+ *
+ * WordPress style enqueuing for wpgform
+ */
+function wpgform_enqueue_styles()
+{
+    $wpgform_options = wpgform_get_plugin_options() ;
+
+    //  Load default gForm CSS?
+    if ($wpgform_options['default_css'] == 1)
+    {
+        wp_enqueue_style('wpgform-css',
+            plugins_url(plugin_basename(dirname(__FILE__) . '/css/wpgform.css'))) ;
+    }
 }
 
 /**
