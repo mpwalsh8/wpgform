@@ -3,7 +3,7 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
-Tested up to: 3.9.1
+Tested up to: 4.1
 Stable tag: 0.72
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -380,6 +380,13 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.73 =
+*  Added support for form specific button override text.
+*  Updated jQuery Validate to 1.13.1.
+*  Re-worked Javascript loading so only loaded when needed.
+*  Fixed jQuery Script loading problem on Dashboard - script loaded for all Dashboard pages instead of just the Google Form editing page.
+*  Add jQuery to map the "Submit another resonse" URL to the proper WordPress URL.
 
 = Version 0.72 =
 *  Fixed call to non-existant function is_empty(), should be calling empty().
