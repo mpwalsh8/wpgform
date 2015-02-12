@@ -523,6 +523,99 @@ function wpgform_hiddenfields_meta_box_content($fieldsonly = false)
     return $fieldsonly ? $content['fields'] : $content ;
 }
 
+/**
+ * Define the WordPress Google Form Primary Meta Box fields so they
+ * can be used to construct the form as well as validate and save it.
+ *
+ */
+function wpgform_text_overrides_meta_box_content($fieldsonly = false)
+{
+    $content = array(
+        'id' => 'wpgform-button-overrides-meta-box',
+        'title' => __('Google Form Default Text Overrides', WPGFORM_I18N_DOMAIN),
+        'page' => WPGFORM_CPT_FORM,
+        'context' => 'normal',
+        'priority' => 'high',
+        'fields' => array(
+            array(
+                'name' => __('Override', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Override <i><b>Google Default Text</b></i>', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'override_google_default_text',
+                'type' => 'radio',
+                'options' => array('on' => __('On', WPGFORM_I18N_DOMAIN), 'off' => __('Off', WPGFORM_I18N_DOMAIN)),
+                'std' => 'off',
+                'required' => true,
+                'br' => false
+            ),
+            array(
+                'name' => __('Required', WPGFORM_I18N_DOMAIN),
+                'desc' => __('This is text that indicates a field is required.', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'required_text_override',
+                'type' => 'medtext',
+                'std' => __('Required', WPGFORM_I18N_DOMAIN),
+                'placeholder' => __('Required', WPGFORM_I18N_DOMAIN),
+                'required' => true
+            ),
+            array(
+                'name' => __('Submit Button', WPGFORM_I18N_DOMAIN),
+                'desc' => __('This is text used for the Submit button.', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'submit_button_text_override',
+                'type' => 'medtext',
+                'std' => __('Submit', WPGFORM_I18N_DOMAIN),
+                'placeholder' => __('Submit', WPGFORM_I18N_DOMAIN),
+                'required' => true
+            ),
+            array(
+                'name' => __('Back Button', WPGFORM_I18N_DOMAIN),
+                'desc' => __('This is text used for the Back button.', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'back_button_text_override',
+                'type' => 'medtext',
+                'std' => __('Back', WPGFORM_I18N_DOMAIN),
+                'placeholder' => __('Back', WPGFORM_I18N_DOMAIN),
+                'required' => true
+            ),
+            array(
+                'name' => __('Continue Button', WPGFORM_I18N_DOMAIN),
+                'desc' => __('This is text used for the Continue button.', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'continue_button_text_override',
+                'type' => 'medtext',
+                'std' => __('Continue', WPGFORM_I18N_DOMAIN),
+                'placeholder' => __('Continue', WPGFORM_I18N_DOMAIN),
+                'required' => true
+            ),
+            array(
+                'name' => __('Radio Buttons', WPGFORM_I18N_DOMAIN),
+                'desc' => __('This is text used for the Radio Buttons hint.', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'radio_buttons_text_override',
+                'type' => 'medtext',
+                'std' => __('Mark only one oval.', WPGFORM_I18N_DOMAIN),
+                'placeholder' => __('Mark only one oval.', WPGFORM_I18N_DOMAIN),
+                'required' => true
+            ),
+            array(
+                'name' => __('Radio Buttons - Other', WPGFORM_I18N_DOMAIN),
+                'desc' => __('This is text used for the Radio Buttons Other option.', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'radio_buttons_other_text_override',
+                'type' => 'medtext',
+                'std' => __('Other:', WPGFORM_I18N_DOMAIN),
+                'placeholder' => __('Other:', WPGFORM_I18N_DOMAIN),
+                'required' => true
+            ),
+            array(
+                'name' => __('Check Boxes', WPGFORM_I18N_DOMAIN),
+                'desc' => __('This is text used for the Check Boxes hint.', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'check_boxes_text_override',
+                'type' => 'medtext',
+                'std' => __('Mark only one oval.', WPGFORM_I18N_DOMAIN),
+                'placeholder' => __('Check all that apply.', WPGFORM_I18N_DOMAIN),
+                'required' => true
+            ),
+        )
+    ) ;
+
+    return $fieldsonly ? $content['fields'] : $content ;
+}
+
 add_action('admin_menu', 'wpgform_add_primary_meta_box') ;
 //add_action('admin_menu', 'wpgform_add_player_profile_meta_box') ;
 
@@ -553,6 +646,11 @@ function wpgform_add_primary_meta_box()
 
     add_meta_box($mb['id'], $mb['title'],
         'wpgform_show_placeholder_meta_box', $mb['page'], $mb['context'], $mb['priority']);
+
+    $mb = wpgform_text_overrides_meta_box_content() ;
+
+    add_meta_box($mb['id'], $mb['title'],
+        'wpgform_show_text_overrides_meta_box', $mb['page'], $mb['context'], $mb['priority']);
 }
 
 // Callback function to show fields in meta box
@@ -589,6 +687,14 @@ function wpgform_show_placeholder_meta_box()
     $mb = wpgform_placeholder_meta_box_content() ;
     wpgform_build_meta_box($mb) ;
 }
+
+// Callback function to show fields in meta box
+function wpgform_show_text_overrides_meta_box()
+{
+    $mb = wpgform_text_overrides_meta_box_content() ;
+    wpgform_build_meta_box($mb) ;
+}
+
 /**
  * Build meta box form
  *
@@ -805,7 +911,8 @@ function wpgform_save_meta_box_data($post_id)
                 wpgform_secondary_meta_box_content(true),
                 wpgform_validation_meta_box_content(true),
                 wpgform_hiddenfields_meta_box_content(true),
-                wpgform_placeholder_meta_box_content(true)
+                wpgform_placeholder_meta_box_content(true),
+                wpgform_text_overrides_meta_box_content(true)
             ) ;
         else
             return $post_id ;
@@ -956,8 +1063,11 @@ add_filter('manage_edit-wpgform_sortable_columns', 'wpgform_form_sortable_column
 function wpgform_admin_footer_hook()
 {
     global $post ;
+    $screen = get_current_screen() ;
+    error_log(print_r(get_current_screen(), true)) ;
 
-    if (get_post_type($post) == WPGFORM_CPT_FORM)
+    //if (get_post_type($post) == WPGFORM_CPT_FORM)
+    if ($screen->post_type == WPGFORM_CPT_FORM && $screen->id == WPGFORM_CPT_FORM)
     {
         //  wpGForm needs jQuery!
         wp_enqueue_script('jquery') ;
