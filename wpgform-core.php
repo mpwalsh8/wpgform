@@ -1435,15 +1435,18 @@ jQuery(document).ready(function($) {
     });
 ', $prefix) ;
 
+//    if ($("div.%sss-radio label:last+span.%sss-q-other-container").length) {
+//        $("div.%sss-radio label:last+span.%sss-q-other-container").prev().contents().filter(function() {
+//            return this.nodeType == 3;
+//        })[0].nodeValue = "%s";
+//    }
         //  Replace Google supplied text?  Form specific or global?
         if ($o['override_google_default_text']) $js .= sprintf('
     //  Replace Google supplied text with "form specific override" values
     $("div.%sss-required-asterisk").text("* %s");
     $("div.%sss-radio div.%sss-printable-hint").text("%s");
     if ($("div.%sss-radio label:last+span.%sss-q-other-container").length) {
-        $("div.%sss-radio label:last+span.%sss-q-other-container").prev().contents().filter(function() {
-            return this.nodeType == 3;
-        })[0].nodeValue = "%s";
+        $("div.%sss-radio label:last+span.%sss-q-other-container").prev().find("span.%sss-choice-label").text("%s");
     }
     $("div.%sss-checkbox div.%sss-printable-hint").text("%s");
     $("div.%sss-form-container :input[name=\"back\"]").attr("value", "\u00ab %s");
@@ -1452,7 +1455,7 @@ jQuery(document).ready(function($) {
         ,$prefix, $o['required_text_override']
         ,$prefix, $prefix, $o['radio_buttons_text_override']
         ,$prefix, $prefix
-        ,$prefix, $prefix, $o['radio_buttons_other_text_override']
+        ,$prefix, $prefix, $prefix, $o['radio_buttons_other_text_override']
         ,$prefix, $prefix, $o['check_boxes_text_override']
         ,$prefix, $o['back_button_text_override']
         ,$prefix, $o['continue_button_text_override']
