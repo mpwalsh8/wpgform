@@ -135,7 +135,7 @@ function wpgform_init()
  */
 function wpgform_the_content($content)
 {
-error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
+//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     return (WPGFORM_CPT_FORM == get_post_type(get_the_ID())) ?
         sprintf('[wpgform id=\'%s\']', get_the_ID()) : $content ;
 }
@@ -1022,7 +1022,7 @@ class wpGForm
 
         //  Handle "submit another response" link
         //$patterns[] = '/' . $form . '/' ;
-        error_log($form) ;
+        //error_log($form) ;
         //$replacements[] = "ZZZ" ;
 
         //  Process HTML replacements
@@ -1568,9 +1568,13 @@ jQuery(document).ready(function($) {
         {
             if (is_null($sendto) || empty($sendto)) $sendto = get_bloginfo('admin_email') ;
 
-            if ($email && is_email($sendto))
-                wpGForm::SendConfirmationEmail($wpgform_options['email_format'], $sendto, $results) ;
+            //  If sending notification email, need to account for more than one address
+            if ($email)
+                foreach (explode(';', $sendto) as $s)
+                    if (is_email(trim($s)))
+                        wpGForm::SendConfirmationEmail($wpgform_options['email_format'], trim($s), $results) ;
 
+            //  Send confirmation email?
             if ($user_email && is_email(self::$wpgform_user_sendto))
                 wpGForm::SendConfirmationEmail($wpgform_options['email_format'], self::$wpgform_user_sendto) ;
         }
@@ -1994,7 +1998,15 @@ jQuery(document).ready(function($) {
                 $results, current_time('Y-m-d'), current_time('H:i'), get_option('blogname')) ;
         }
 
-        $to = sprintf('%s wpGForm Contact <%s>', get_option('blogname'), $sendto) ;
+        //  TO email address may actually contain multiple addresses.
+        //  Need to split the string using semicolon as a delimiter.
+
+        $to = "" ;
+        $sendto = explode(';', $sendto) ;
+
+        foreach ($sendto as $s)
+            $to .= sprintf('%s wpGForm Contact <%s>', get_option('blogname'), trim($s)) ;
+
         $subject = sprintf('Form Submission from %s', get_option('blogname')) ;
 
         if (WPGFORM_DEBUG) 
