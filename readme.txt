@@ -388,6 +388,7 @@ No known upgrade issues.
 *  Fixed jQuery Script loading problem on Dashboard - script loaded for all Dashboard pages instead of just the Google Form editing page.
 *  Add jQuery to map the "Submit another resonse" URL to the proper WordPress URL.
 *  Fixed bug jQuery script where "Other" label text was not properly selected resulting in duplicate text.  Appears to be due to change in Google generated HTML.
+* Added support for multiple email addresses, separated by semicolon, for email notification.
 
 = Version 0.72 =
 *  Fixed call to non-existant function is_empty(), should be calling empty().
