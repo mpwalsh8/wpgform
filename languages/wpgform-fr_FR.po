@@ -1,171 +1,173 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Google Form\n"
-"POT-Creation-Date: 2014-06-09 14:51-0000\n"
-"PO-Revision-Date: 2014-06-09 14:51-0000\n"
+"POT-Creation-Date: 2015-03-03 03:55-0000\n"
+"PO-Revision-Date: 2015-03-03 03:55-0000\n"
 "Last-Translator: Mike Walsh <mpwalsh8@gmail.com>\n"
 "Language-Team: Mike Walsh (@mpwalsh8) <mpwalsh8@gmail.com>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.7.4\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../wpgform-core.php:178
+#: ../wpgform-core.php:180 ../wpgform-post-type.php:561
+#: ../wpgform-post-type.php:565 ../wpgform-post-type.php:566
 msgid "Required"
 msgstr "Nécessaire"
 
-#: ../wpgform-core.php:179
+#: ../wpgform-core.php:181 ../wpgform-post-type.php:574
+#: ../wpgform-post-type.php:575
 msgid "Submit"
 msgstr "Enregistrer"
 
-#: ../wpgform-core.php:180
+#: ../wpgform-core.php:182 ../wpgform-post-type.php:583
+#: ../wpgform-post-type.php:584
 msgid "Back"
 msgstr "Retour"
 
-#: ../wpgform-core.php:181
+#: ../wpgform-core.php:183 ../wpgform-post-type.php:592
+#: ../wpgform-post-type.php:593
 msgid "Continue"
 msgstr "Continuer"
 
-#: ../wpgform-core.php:182
+#: ../wpgform-core.php:184 ../wpgform-post-type.php:601
+#: ../wpgform-post-type.php:602 ../wpgform-post-type.php:619
 msgid "Mark only one oval."
 msgstr "Choisissez une option"
 
-#: ../wpgform-core.php:183
+#: ../wpgform-core.php:185 ../wpgform-post-type.php:610
+#: ../wpgform-post-type.php:611
 msgid "Other:"
 msgstr "Autre:"
 
-#: ../wpgform-core.php:184
+#: ../wpgform-core.php:186 ../wpgform-post-type.php:620
 msgid "Check all that apply."
 msgstr "Cochez les cases correspondantes"
 
-#: ../wpgform-core.php:251
+#: ../wpgform-core.php:253
 msgid "Reset"
 msgstr "Réinitialiser"
 
-#: ../wpgform-core.php:270 ../wpgform-core.php:271 ../wpgform-post-type.php:46
+#: ../wpgform-core.php:272 ../wpgform-core.php:273 ../wpgform-post-type.php:46
 msgid "Google Forms"
 msgstr "Formulaires Google"
 
-#: ../wpgform-core.php:279
+#: ../wpgform-core.php:281
 #, fuzzy
 msgid "Google Forms Submission Log"
 msgstr "Formulaires Google"
 
-#: ../wpgform-core.php:280
+#: ../wpgform-core.php:282
 #, fuzzy
 msgid "Form Submission Log"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:491 ../wpgform-core.php:505
+#: ../wpgform-core.php:496 ../wpgform-core.php:512
 msgid "Unable to process Google Form short code."
 msgstr "Impossible d'éxecuter le shortcode du Formulaire Google."
 
-#: ../wpgform-core.php:670
+#: ../wpgform-core.php:685
 msgid "Unable to process Google Form."
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:671
+#: ../wpgform-core.php:686
 msgid "Server is responding with"
 msgstr "Le serveur a répondu"
 
-#: ../wpgform-core.php:672
+#: ../wpgform-core.php:687
 msgid "403 Permission Denied"
 msgstr "403 - Accès réservé"
 
-#: ../wpgform-core.php:672
+#: ../wpgform-core.php:687
 msgid "error"
 msgstr "erreur"
 
-#: ../wpgform-core.php:718
+#: ../wpgform-core.php:733
 msgid "Email Address"
 msgstr "Adresse e-mail"
 
-#: ../wpgform-core.php:768 ../wpgform-core.php:770
+#: ../wpgform-core.php:783 ../wpgform-core.php:785
 msgid "What is"
 msgstr "Que font"
 
-#: ../wpgform-core.php:922
+#: ../wpgform-core.php:941
 msgid "Unable to retrieve Google Form.  Please try reloading this page."
 msgstr ""
 "Impossible de récupérer le Fromulaire Google. Essayez de recharger la page."
 
-#: ../wpgform-core.php:1034
+#: ../wpgform-core.php:1059
 msgid "Unexpected content encountered, unable to retrieve Google Form."
 msgstr ""
 "Un contenu inattendu a été rencontré, il est impossible de récupérer le "
 "Formulaire Google."
 
-#: ../wpgform-core.php:1218
+#: ../wpgform-core.php:1244
 msgid "A valid email address is required."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:1237
+#: ../wpgform-core.php:1263
 msgid "Incorrect answer."
 msgstr "Réponse incorrect."
 
-#: ../wpgform-core.php:1288
+#: ../wpgform-core.php:1314
 msgid "Please check your input."
 msgstr ""
 
-#: ../wpgform-core.php:1338 ../wpgform-core.php:1567
+#: ../wpgform-core.php:1382 ../wpgform-core.php:1657
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: ../wpgform-core.php:1513
+#: ../wpgform-core.php:1603
 msgid "Warning:  You are using an insecure browser!"
 msgstr "Avertissement : Vous utilisez un navigateur non sécurisé !"
 
-#: ../wpgform-core.php:1516
+#: ../wpgform-core.php:1606
 msgid "Warning:  Your browser is out of date!  Please update now."
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:1532
+#: ../wpgform-core.php:1622
 #, fuzzy
 msgid "Form Id:"
 msgstr ""
 "En train d'essayer d'envoyer un courriel de notification d'un %s sans "
 "fournir l'ID %s !"
 
-#: ../wpgform-core.php:1534
+#: ../wpgform-core.php:1624
 #, fuzzy
 msgid "Submitted Form Id"
-msgstr ""
-"En train d'essayer d'envoyer un courriel de notification d'un %s sans "
-"fournir l'ID %s !"
+msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:1537
+#: ../wpgform-core.php:1627
 #, fuzzy
 msgid "No Submitted Form Id"
-msgstr ""
-"En train d'essayer d'envoyer un courriel de notification d'un %s sans "
-"fournir l'ID %s !"
+msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:1759
+#: ../wpgform-core.php:1849
 #, fuzzy
 msgid "Unable to submit Google Form.  Please try reloading this page."
 msgstr ""
 "Impossible de récupérer le Fromulaire Google. Essayez de recharger la page."
 
-#: ../wpgform-core.php:1842
+#: ../wpgform-core.php:1932
 #, fuzzy
 msgid "View Form Results"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:1892
+#: ../wpgform-core.php:1982
 #, fuzzy
 msgid "A form was submitted on your web site."
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:1893 ../wpgform-core.php:1905
+#: ../wpgform-core.php:1983 ../wpgform-core.php:1995
 #, fuzzy
 msgid "Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Impossible d'éxecuter le shortcode du Formulaire Google."
 
-#: ../wpgform-core.php:1894 ../wpgform-core.php:1906
+#: ../wpgform-core.php:1984 ../wpgform-core.php:1996
 #: ../wpgform-logging.php:182
 #, fuzzy
 msgid "URL"
@@ -177,35 +179,35 @@ msgstr ""
 "vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
 "%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
 
-#: ../wpgform-core.php:1895 ../wpgform-core.php:1907
+#: ../wpgform-core.php:1985 ../wpgform-core.php:1997
 msgid "Responses"
 msgstr "Réponses"
 
-#: ../wpgform-core.php:1896 ../wpgform-core.php:1908
+#: ../wpgform-core.php:1986 ../wpgform-core.php:1998
 #, fuzzy
 msgid "Date"
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:1897 ../wpgform-core.php:1909
+#: ../wpgform-core.php:1987 ../wpgform-core.php:1999
 #, fuzzy
 msgid "Time"
 msgstr "Vous ne pouvez sélectionner qu'un utilisateur à la fois."
 
-#: ../wpgform-core.php:1898 ../wpgform-core.php:1911
+#: ../wpgform-core.php:1988 ../wpgform-core.php:2001
 msgid "Thank you"
 msgstr "Merci"
 
-#: ../wpgform-core.php:1904
+#: ../wpgform-core.php:1994
 #, fuzzy
 msgid "A form was submitted on your web site"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:1975
+#: ../wpgform-core.php:2161
 #, fuzzy
 msgid "This field is required."
 msgstr "Nécessaire"
 
-#: ../wpgform-core.php:1976
+#: ../wpgform-core.php:2162
 #, fuzzy
 msgid "Please fix this field."
 msgstr ""
@@ -213,91 +215,91 @@ msgstr ""
 "grand nombre d'utilisateurs (certains fournisseurs d'accès interdissent un "
 "trop grand nombre d'adèles dans le champ BCC)."
 
-#: ../wpgform-core.php:1977
+#: ../wpgform-core.php:2163
 #, fuzzy
 msgid "Please enter a valid email address."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:1978
+#: ../wpgform-core.php:2164
 #, fuzzy
 msgid "Please enter a valid URL."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:1979
+#: ../wpgform-core.php:2165
 #, fuzzy
 msgid "Please enter a valid date."
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:1980
+#: ../wpgform-core.php:2166
 #, fuzzy
 msgid "Please enter a valid date (ISO)."
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:1981
+#: ../wpgform-core.php:2167
 #, fuzzy
 msgid "Please enter a valid number."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:1982
+#: ../wpgform-core.php:2168
 #, fuzzy
 msgid "Please enter only digits."
 msgstr "Administrateurs seulement."
 
-#: ../wpgform-core.php:1983
+#: ../wpgform-core.php:2169
 #, fuzzy
 msgid "Please enter a valid credit card number."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:1984
+#: ../wpgform-core.php:2170
 #, fuzzy
 msgid "Please enter the same value again.,"
 msgstr ""
 "Veuillez corriger les erreurs affichées ci-dessus et essayer de nouveau."
 
-#: ../wpgform-core.php:1985
+#: ../wpgform-core.php:2171
 #, fuzzy
 msgid "Please enter a value with a valid extension."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:1986
+#: ../wpgform-core.php:2172
 #, fuzzy
 msgid "Please enter no more than {0} characters."
 msgstr ""
 "ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
 
-#: ../wpgform-core.php:1987
+#: ../wpgform-core.php:2173
 #, fuzzy
 msgid "Please enter at least {0} characters."
 msgstr "Veuillez définir au moins un destinataire."
 
-#: ../wpgform-core.php:1988
+#: ../wpgform-core.php:2174
 #, fuzzy
 msgid "Please enter a value between {0} and {1} characters long."
 msgstr "Veuillez définir un sujet."
 
-#: ../wpgform-core.php:1989
+#: ../wpgform-core.php:2175
 #, fuzzy
 msgid "Please enter a value between {0} and {1}."
 msgstr "Veuillez définir un sujet."
 
-#: ../wpgform-core.php:1990
+#: ../wpgform-core.php:2176
 #, fuzzy
 msgid "Please enter a value less than or equal to {0}."
 msgstr ""
 "ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
 
-#: ../wpgform-core.php:1991
+#: ../wpgform-core.php:2177
 #, fuzzy
 msgid "Please enter a value greater than or equal to {0}."
 msgstr ""
 "ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
 
-#: ../wpgform-core.php:1992
+#: ../wpgform-core.php:2178
 #, fuzzy
 msgid "Please enter a value which matches {0}."
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:2052
+#: ../wpgform-core.php:2255
 #, fuzzy, php-format
 msgid ""
 "This notification may be hidden via a setting on the <a href=\"%s\">Google "
@@ -351,7 +353,7 @@ msgstr ""
 #: ../wpgform-options.php:237
 #, fuzzy, php-format
 msgid "Custom %s CSS"
-msgstr "Sélectionner %s"
+msgstr "Courriel envoyé à %s utilisateur(s)."
 
 #: ../wpgform-options.php:485
 #, fuzzy, php-format
@@ -379,7 +381,7 @@ msgstr ""
 #: ../wpgform-post-type.php:47
 #, fuzzy
 msgid "Google Form"
-msgstr "Impossible d'éxecuter Formulaire Google."
+msgstr "Impossible d'éxecuter le shortcode du Formulaire Google."
 
 #: ../wpgform-post-type.php:48 ../wpgform-post-type.php:49
 #, fuzzy
@@ -492,7 +494,7 @@ msgstr "Impossible d'éxecuter Formulaire Google."
 #: ../wpgform-post-type.php:159
 #, fuzzy
 msgid "Email"
-msgstr "Adresse e-mail"
+msgstr "Une adresse e-mail valide est nécessaire."
 
 #: ../wpgform-post-type.php:160
 #, fuzzy
@@ -500,20 +502,22 @@ msgid "Send email upon form submission"
 msgstr "Envoyer"
 
 #: ../wpgform-post-type.php:163 ../wpgform-post-type.php:190
-#: ../wpgform-post-type.php:238 ../wpgform-post-type.php:257
-#: ../wpgform-post-type.php:267 ../wpgform-post-type.php:277
-#: ../wpgform-post-type.php:287 ../wpgform-post-type.php:313
-#: ../wpgform-post-type.php:323 ../wpgform-post-type.php:333
-#: ../wpgform-post-type.php:363 ../wpgform-post-type.php:478
+#: ../wpgform-post-type.php:238 ../wpgform-post-type.php:267
+#: ../wpgform-post-type.php:277 ../wpgform-post-type.php:287
+#: ../wpgform-post-type.php:297 ../wpgform-post-type.php:323
+#: ../wpgform-post-type.php:333 ../wpgform-post-type.php:343
+#: ../wpgform-post-type.php:373 ../wpgform-post-type.php:488
+#: ../wpgform-post-type.php:555
 msgid "On"
 msgstr ""
 
 #: ../wpgform-post-type.php:163 ../wpgform-post-type.php:190
-#: ../wpgform-post-type.php:238 ../wpgform-post-type.php:257
-#: ../wpgform-post-type.php:267 ../wpgform-post-type.php:277
-#: ../wpgform-post-type.php:287 ../wpgform-post-type.php:313
-#: ../wpgform-post-type.php:323 ../wpgform-post-type.php:333
-#: ../wpgform-post-type.php:363 ../wpgform-post-type.php:478
+#: ../wpgform-post-type.php:238 ../wpgform-post-type.php:267
+#: ../wpgform-post-type.php:277 ../wpgform-post-type.php:287
+#: ../wpgform-post-type.php:297 ../wpgform-post-type.php:323
+#: ../wpgform-post-type.php:333 ../wpgform-post-type.php:343
+#: ../wpgform-post-type.php:373 ../wpgform-post-type.php:488
+#: ../wpgform-post-type.php:555
 #, fuzzy
 msgid "Off"
 msgstr "Désactivé"
@@ -521,7 +525,7 @@ msgstr "Désactivé"
 #: ../wpgform-post-type.php:169
 #, fuzzy
 msgid "Send To"
-msgstr "Envoyer"
+msgstr "Envoi à des utilisateurs"
 
 #: ../wpgform-post-type.php:170
 #, fuzzy
@@ -588,104 +592,120 @@ msgid "Split form into columns"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
 #: ../wpgform-post-type.php:253
-#, fuzzy
-msgid "Email End User"
-msgstr "Envoyer un courriel à un seul utilisateur."
+msgid "Column Order"
+msgstr ""
 
 #: ../wpgform-post-type.php:254
+msgid "Order Columns Left to Right or Right to Left"
+msgstr ""
+
+#: ../wpgform-post-type.php:257
+msgid "Left-to-Right"
+msgstr ""
+
+#: ../wpgform-post-type.php:257
+msgid "Right-to-Left"
+msgstr ""
+
+#: ../wpgform-post-type.php:263
+#, fuzzy
+msgid "Email End User"
+msgstr "Courriel envoyé à %s utilisateur(s)."
+
+#: ../wpgform-post-type.php:264
 #, fuzzy
 msgid "Send email to end user upon form submission"
 msgstr "Envoyer un courriel à un seul utilisateur."
 
-#: ../wpgform-post-type.php:263
+#: ../wpgform-post-type.php:273
 msgid "Legal"
 msgstr ""
 
-#: ../wpgform-post-type.php:264
+#: ../wpgform-post-type.php:274
 #, fuzzy
 msgid "Google Legal Disclaimer"
 msgstr "Formulaires Google"
 
-#: ../wpgform-post-type.php:273
+#: ../wpgform-post-type.php:283
 #, fuzzy
 msgid "Read Only"
 msgstr "Administrateurs seulement."
 
-#: ../wpgform-post-type.php:274
+#: ../wpgform-post-type.php:284
 #, fuzzy
 msgid "Set the form Read Only"
 msgstr "Administrateurs seulement."
 
-#: ../wpgform-post-type.php:283
+#: ../wpgform-post-type.php:293
 #, fuzzy
 msgid "BR"
-msgstr "Sujet du courriel<br /><em>Valeur par défaut</em>"
+msgstr "Expéditeur du courriel<br /><em>Si définie, utiliser cette valeur</em>"
 
-#: ../wpgform-post-type.php:284
+#: ../wpgform-post-type.php:294
 msgid "Insert &lt;BR&gt; tags between labels and input box"
 msgstr ""
 
-#: ../wpgform-post-type.php:293
+#: ../wpgform-post-type.php:303
 msgid "CSS Prefix"
 msgstr ""
 
-#: ../wpgform-post-type.php:294
+#: ../wpgform-post-type.php:304
 #, fuzzy
 msgid "Prefix to add to all Google CSS classes"
 msgstr "Cochez les cases correspondantes"
 
-#: ../wpgform-post-type.php:301
+#: ../wpgform-post-type.php:311
 msgid "CSS Suffix"
 msgstr ""
 
-#: ../wpgform-post-type.php:302
+#: ../wpgform-post-type.php:312
 #, fuzzy
 msgid "Suffix to add to all Google CSS classes"
 msgstr "Cochez les cases correspondantes"
 
-#: ../wpgform-post-type.php:309
+#: ../wpgform-post-type.php:319
 #, fuzzy
 msgid "Title"
 msgstr "Le titre de l'article à communiquer"
 
-#: ../wpgform-post-type.php:310
+#: ../wpgform-post-type.php:320
 #, fuzzy
 msgid "Show or Hide the Google Form's title"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-post-type.php:319
+#: ../wpgform-post-type.php:329
 msgid "Map H1 to H2"
 msgstr ""
 
-#: ../wpgform-post-type.php:320
+#: ../wpgform-post-type.php:330
 msgid "Map H1 elements to H2 elements"
 msgstr ""
 
-#: ../wpgform-post-type.php:329 ../wpgform-post-type.php:330
+#: ../wpgform-post-type.php:339 ../wpgform-post-type.php:340
 msgid "Unite Theme Hack"
 msgstr ""
 
-#: ../wpgform-post-type.php:353
+#: ../wpgform-post-type.php:363
 #, fuzzy
 msgid "Google Form Field Validation"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-post-type.php:359
+#: ../wpgform-post-type.php:369
 msgid "Validation"
 msgstr ""
 
-#: ../wpgform-post-type.php:360
+#: ../wpgform-post-type.php:370
 #, fuzzy
 msgid "Enable default jQuery Validation on all required fields"
 msgstr "Nécessaire"
 
-#: ../wpgform-post-type.php:369 ../wpgform-post-type.php:436
-#: ../wpgform-post-type.php:484
+#: ../wpgform-post-type.php:379 ../wpgform-post-type.php:446
+#: ../wpgform-post-type.php:494
 #, fuzzy
 msgid "Form Fields"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-post-type.php:370
+#: ../wpgform-post-type.php:380
 #, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
@@ -699,32 +719,32 @@ msgstr ""
 "vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
 "%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
 
-#: ../wpgform-post-type.php:399 ../wpgform-post-type.php:505
-#: ../wpgform-post-type.php:689 ../wpgform-post-type.php:711
+#: ../wpgform-post-type.php:409 ../wpgform-post-type.php:515
+#: ../wpgform-post-type.php:805 ../wpgform-post-type.php:827
 msgid "Type"
 msgstr ""
 
-#: ../wpgform-post-type.php:400
+#: ../wpgform-post-type.php:410
 msgid "Type of validation"
 msgstr ""
 
-#: ../wpgform-post-type.php:407 ../wpgform-post-type.php:446
-#: ../wpgform-post-type.php:513 ../wpgform-post-type.php:698
-#: ../wpgform-post-type.php:700 ../wpgform-post-type.php:720
-#: ../wpgform-post-type.php:722
+#: ../wpgform-post-type.php:417 ../wpgform-post-type.php:456
+#: ../wpgform-post-type.php:523 ../wpgform-post-type.php:814
+#: ../wpgform-post-type.php:816 ../wpgform-post-type.php:836
+#: ../wpgform-post-type.php:838
 msgid "Value"
 msgstr ""
 
-#: ../wpgform-post-type.php:408 ../wpgform-post-type.php:447
+#: ../wpgform-post-type.php:418 ../wpgform-post-type.php:457
 msgid "Value to validate against"
 msgstr ""
 
-#: ../wpgform-post-type.php:430
+#: ../wpgform-post-type.php:440
 #, fuzzy
 msgid "Google Form Field Placeholder"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-post-type.php:437
+#: ../wpgform-post-type.php:447
 #, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
@@ -738,20 +758,20 @@ msgstr ""
 "vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
 "%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
 
-#: ../wpgform-post-type.php:468
+#: ../wpgform-post-type.php:478
 #, fuzzy
 msgid "Google Form Hidden Fields"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-post-type.php:474
+#: ../wpgform-post-type.php:484
 msgid "Hidden Fields"
 msgstr ""
 
-#: ../wpgform-post-type.php:475
+#: ../wpgform-post-type.php:485
 msgid "Configure hidden fields"
 msgstr ""
 
-#: ../wpgform-post-type.php:485
+#: ../wpgform-post-type.php:495
 #, fuzzy
 msgid ""
 "Name of the field on the Google Form (e.g. entry.1.single, entry.12345678, "
@@ -766,27 +786,99 @@ msgstr ""
 "vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
 "%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
 
-#: ../wpgform-post-type.php:506
+#: ../wpgform-post-type.php:516
 msgid "Type of hiddenfield"
 msgstr ""
 
-#: ../wpgform-post-type.php:514
+#: ../wpgform-post-type.php:524
 #, fuzzy
 msgid "Optional value to use as a preset"
 msgstr ""
 "Sélectionnez/désélectionner plusieurs éléments en utilisant la touche CTRL"
 
-#: ../wpgform-post-type.php:685
+#: ../wpgform-post-type.php:545
+#, fuzzy
+msgid "Google Form Default Text Overrides"
+msgstr "Impossible d'éxecuter Formulaire Google."
+
+#: ../wpgform-post-type.php:551
+#, fuzzy
+msgid "Override"
+msgstr ""
+"Adèle de l'expéditeur du courriel<br /><em>Si définie, utiliser cette "
+"valeur</em>"
+
+#: ../wpgform-post-type.php:552
+msgid "Override <i><b>Google Default Text</b></i>"
+msgstr ""
+
+#: ../wpgform-post-type.php:562
+#, fuzzy
+msgid "This is text that indicates a field is required."
+msgstr "Nécessaire"
+
+#: ../wpgform-post-type.php:570
+#, fuzzy
+msgid "Submit Button"
+msgstr "Enregistrer"
+
+#: ../wpgform-post-type.php:571
+msgid "This is text used for the Submit button."
+msgstr ""
+
+#: ../wpgform-post-type.php:579
+msgid "Back Button"
+msgstr ""
+
+#: ../wpgform-post-type.php:580
+msgid "This is text used for the Back button."
+msgstr ""
+
+#: ../wpgform-post-type.php:588
+#, fuzzy
+msgid "Continue Button"
+msgstr "Continuer"
+
+#: ../wpgform-post-type.php:589
+msgid "This is text used for the Continue button."
+msgstr ""
+
+#: ../wpgform-post-type.php:597
+msgid "Radio Buttons"
+msgstr ""
+
+#: ../wpgform-post-type.php:598
+msgid "This is text used for the Radio Buttons hint."
+msgstr ""
+
+#: ../wpgform-post-type.php:606
+msgid "Radio Buttons - Other"
+msgstr ""
+
+#: ../wpgform-post-type.php:607
+msgid "This is text used for the Radio Buttons Other option."
+msgstr ""
+
+#: ../wpgform-post-type.php:615
+#, fuzzy
+msgid "Check Boxes"
+msgstr "Cochez les cases correspondantes"
+
+#: ../wpgform-post-type.php:616
+msgid "This is text used for the Check Boxes hint."
+msgstr ""
+
+#: ../wpgform-post-type.php:801
 #, fuzzy
 msgid "Name"
-msgstr "Prénom nom"
+msgstr "Nom public"
 
-#: ../wpgform-post-type.php:689 ../wpgform-post-type.php:711
+#: ../wpgform-post-type.php:805 ../wpgform-post-type.php:827
 #, fuzzy
 msgid "Check"
 msgstr "Cochez les cases correspondantes"
 
-#: ../wpgform-post-type.php:708
+#: ../wpgform-post-type.php:824
 #, fuzzy
 msgid "Field"
 msgstr ""
@@ -794,22 +886,22 @@ msgstr ""
 "grand nombre d'utilisateurs (certains fournisseurs d'accès interdissent un "
 "trop grand nombre d'adèles dans le champ BCC)."
 
-#: ../wpgform-post-type.php:898
+#: ../wpgform-post-type.php:1015
 #, fuzzy
 msgid "Form Name"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-post-type.php:903
+#: ../wpgform-post-type.php:1020
 #, fuzzy
 msgid "Short Code"
-msgstr "Traitement des shortcodes"
+msgstr "Impossible d'éxecuter le shortcode du Formulaire Google."
 
-#: ../wpgform-post-type.php:904
+#: ../wpgform-post-type.php:1021
 #, fuzzy
 msgid "Form Description"
 msgstr "Description"
 
-#: ../wpgform-post-type.php:994
+#: ../wpgform-post-type.php:1114
 #, fuzzy
 msgid "Enter WordPress Google Form Title"
 msgstr "Impossible d'éxecuter Formulaire Google."
