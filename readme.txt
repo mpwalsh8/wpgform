@@ -3,7 +3,7 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
-Tested up to: 4.1
+Tested up to: 4.1.1
 Stable tag: 0.72
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -389,6 +389,7 @@ No known upgrade issues.
 *  Add jQuery to map the "Submit another resonse" URL to the proper WordPress URL.
 *  Fixed bug jQuery script where "Other" label text was not properly selected resulting in duplicate text.  Appears to be due to change in Google generated HTML.
 * Added support for multiple email addresses, separated by semicolon, for email notification.
+* Added support for Right to Left column ordering in multi-column forms.  Useful for right-to-left languages such as Hebrew.
 
 = Version 0.72 =
 *  Fixed call to non-existant function is_empty(), should be calling empty().
