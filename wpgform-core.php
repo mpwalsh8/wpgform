@@ -443,30 +443,31 @@ class wpGForm
      *
      */
     protected static $options = array(
-        'form'           => false,          // Google Form URL
-        'uid'            => '',            // Unique identifier string to prepend to id and name attributes
-        'confirm'        => null,           // Custom confirmation page URL to redirect to
-        'alert'          => null,           // Optional Alert Message
-        'class'          => 'wpgform',      // Container element's custom class value
-        'legal'          => 'on',           // Display Google Legal Stuff
-        'br'             => 'off',          // Insert <br> tags between labels and inputs
-        'columns'        => '1',            // Number of columns to render the form in
-        'suffix'         => null,           // Add suffix character(s) to all labels
-        'prefix'         => null,           // Add suffix character(s) to all labels
-        'readonly'       => 'off',          // Set all form elements to disabled
-        'title'          => 'on',           // Remove the H1 element(s) from the Form
-        'maph1h2'        => 'off',          // Map H1 element(s) on the form to H2 element(s)
-        'email'          => 'off',          // Send an email confirmation to blog admin on submission
-        'sendto'         => null,           // Send an email confirmation to a specific address on submission
-        'user_email'     => 'off',          // Send an email confirmation to user on submission
-        'user_sendto'    => null,           // Send an email confirmation to a specific address on submission
-        'results'        => false,          // Results URL
-        'spreadsheet'    => false,          // Google Spreadsheet URL
-        'captcha'        => 'off',          // Display a CAPTCHA when enabled
-        'validation'     => 'off',          // Use jQuery validation for required fields
-        'unitethemehack' => 'off',          // Send an email confirmation to blog admin on submission
-        'style'          => null,           // How to present the custom confirmation after submit
-        'use_transient'  => false,          // Toogles the use of WP Transient API for form caching
+        'form'           => false,           // Google Form URL
+        'uid'            => '',              // Unique identifier string to prepend to id and name attributes
+        'confirm'        => null,            // Custom confirmation page URL to redirect to
+        'alert'          => null,            // Optional Alert Message
+        'class'          => 'wpgform',       // Container element's custom class value
+        'legal'          => 'on',            // Display Google Legal Stuff
+        'br'             => 'off',           // Insert <br> tags between labels and inputs
+        'columns'        => '1',             // Number of columns to render the form in
+        'columnorder'    => 'left-to-right', // Order to show columns - Left to Right or Right to Left
+        'suffix'         => null,            // Add suffix character(s) to all labels
+        'prefix'         => null,            // Add suffix character(s) to all labels
+        'readonly'       => 'off',           // Set all form elements to disabled
+        'title'          => 'on',            // Remove the H1 element(s) from the Form
+        'maph1h2'        => 'off',           // Map H1 element(s) on the form to H2 element(s)
+        'email'          => 'off',           // Send an email confirmation to blog admin on submission
+        'sendto'         => null,            // Send an email confirmation to a specific address on submission
+        'user_email'     => 'off',           // Send an email confirmation to user on submission
+        'user_sendto'    => null,            // Send an email confirmation to a specific address on submission
+        'results'        => false,           // Results URL
+        'spreadsheet'    => false,           // Google Spreadsheet URL
+        'captcha'        => 'off',           // Display a CAPTCHA when enabled
+        'validation'     => 'off',           // Use jQuery validation for required fields
+        'unitethemehack' => 'off',           // Send an email confirmation to blog admin on submission
+        'style'          => null,            // How to present the custom confirmation after submit
+        'use_transient'  => false,           // Toogles the use of WP Transient API for form caching
         'transient_time' => WPGFORM_FORM_TRANSIENT_EXPIRE,  // Sets how long (in minutes) the forms will be cached using WP Transient
     ) ;
 
@@ -824,6 +825,10 @@ class wpGForm
 
         //  How many columns?
         $columns = $o['columns'] ;
+
+        //  Column order?
+        $columnorder = $o['columnorder'] == 'right-to-left' ? 'right' : 'left' ;
+        error_log(print_r($o, true)) ;
 
         //  The Unite theme from Paralleus mucks with the submit buttons
         //  which breaks the ability to submit the form to Google correctly.
@@ -1515,6 +1520,7 @@ jQuery(document).ready(function($) {
     $(function(){
         $(".wpgform-wrapper").columnize({
             columns : %s,
+            columnFloat : "%s",
             cssClassPrefix : "wpgform"
         });
         //  Wrap each column so it can styled easier
@@ -1522,7 +1528,7 @@ jQuery(document).ready(function($) {
     });
     $("#%sss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
     $("div.%sss-form-container").after("<div style=\"border: 0px dashed black; clear: both;\"></div>");
-        ', $prefix, $uid, $columns, $uid, $prefix) ;
+        ', $prefix, $uid, $columns, $columnorder, $uid, $prefix) ;
 
         //  Remap the re-submit form URL
         $js .= sprintf('

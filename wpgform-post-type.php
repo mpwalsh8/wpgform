@@ -250,6 +250,16 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'required' => true
             ),
             array(
+                'name' => __('Column Order', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Order Columns Left to Right or Right to Left', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'columnorder',
+                'type' => 'select',
+                'options' => array(__('Left-to-Right', WPGFORM_I18N_DOMAIN), __('Right-to-Left', WPGFORM_I18N_DOMAIN)),
+                'std' => 'ltr',
+                'required' => false,
+                'br' => false
+            ),
+            array(
                 'name' => __('Email End User', WPGFORM_I18N_DOMAIN),
                 'desc' => __('Send email to end user upon form submission', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'user_email',
