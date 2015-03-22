@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
 Tested up to: 4.1.1
-Stable tag: 0.72
+Stable tag: 0.73
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
