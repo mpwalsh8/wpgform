@@ -135,7 +135,6 @@ function wpgform_init()
  */
 function wpgform_the_content($content)
 {
-//error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
     return (WPGFORM_CPT_FORM == get_post_type(get_the_ID())) ?
         sprintf('[wpgform id=\'%s\']', get_the_ID()) : $content ;
 }
@@ -828,7 +827,6 @@ class wpGForm
 
         //  Column order?
         $columnorder = $o['columnorder'] == 'right-to-left' ? 'right' : 'left' ;
-        error_log(print_r($o, true)) ;
 
         //  The Unite theme from Paralleus mucks with the submit buttons
         //  which breaks the ability to submit the form to Google correctly.
@@ -1027,7 +1025,6 @@ class wpGForm
 
         //  Handle "submit another response" link
         //$patterns[] = '/' . $form . '/' ;
-        //error_log($form) ;
         //$replacements[] = "ZZZ" ;
 
         //  Process HTML replacements
@@ -1566,9 +1563,6 @@ jQuery(document).ready(function($) {
         //  Tidy up Javascript to ensure it isn't affected by 'the_content' filters
         //$js = preg_replace($patterns, $replacements, $js) . PHP_EOL ;
 
-        //error_log(sprintf('%s::%s --> %s', basename(__FILE__), __LINE__, self::$wpgform_user_sendto)) ;
-        //error_log(sprintf('%s::%s --> %s', basename(__FILE__), __LINE__,
-        //print_r(array(self::$posted, $action, $email, self::$wpgform_user_sendto), true))) ;
         //  Send email?
         if (self::$posted && is_null($action) && ($email || $user_email))
         {

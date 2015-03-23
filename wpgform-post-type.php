@@ -64,7 +64,6 @@ function wpgform_register_post_types()
 /** Perform routine maintenance */
 function wpgform_routine_maintenance()
 {
-    //error_log(sprintf('%s::%s (init)', basename(__FILE__), __LINE__)) ;
     //  Post type is registered, do some hygiene on any that exist in the database.
     //  Insert the "wpgform" shortcode for that post into the post content. This
     //  ensures the form will be displayed properly when viewed through the CPT URL.
@@ -1074,9 +1073,7 @@ function wpgform_admin_footer_hook()
 {
     global $post ;
     $screen = get_current_screen() ;
-    error_log(print_r(get_current_screen(), true)) ;
 
-    //if (get_post_type($post) == WPGFORM_CPT_FORM)
     if ($screen->post_type == WPGFORM_CPT_FORM && $screen->id == WPGFORM_CPT_FORM)
     {
         //  wpGForm needs jQuery!
