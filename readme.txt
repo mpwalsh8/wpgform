@@ -381,6 +381,12 @@ No known upgrade issues.
 
 == Change log ==
 
+= Version 0.75 =
+*  Added new setting to turn off HTML filtering which has been used to "clean" the HTML retrieved from Google.
+
+= Version 0.74 =
+*  More Debugging messages sent to PHP error log removed.
+
 = Version 0.73 =
 *  Debugging messages sent to PHP error log removed.
 

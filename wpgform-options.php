@@ -354,6 +354,23 @@ function wpgform_settings_advanced_options()
 ?>
     <table class="form-table">
         <tr valign="top">
+            <th scope="row"><label><?php _e('Disable HTML Filtering', WPGFORM_I18N_DOMAIN);?></label></th>
+            <td><fieldset>
+            <label for="wpgform_disable_html_filtering">
+            <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+            <td style="padding: 5px 0px; vertical-align: top;">
+            <input name="wpgform_options[disable_html_filtering]" type="checkbox" id="wpgform_disable_html_filtering" value="1" <?php checked('1', $wpgform_options['disable_html_filtering']) ; ?> />
+            </td>
+            <td style="padding: 5px;">
+            <?php _e('Disable HTML Filtering?<br/><small>Google Forms filters HTML retrieved from Google using <a href="https://codex.wordpress.org/Function_Reference/wp_kses">wp_kses()</a> to eliminate unnecessary HTML code.</small>', WPGFORM_I18N_DOMAIN);?>
+            </td>
+            </tr>
+            </table>
+            </label>
+            </fieldset></td>
+        </tr>
+        <tr valign="top">
             <th scope="row"><label><?php _e('Enable Form Submission Logging', WPGFORM_I18N_DOMAIN);?></label></th>
             <td><fieldset>
             <label for="wpgform_form_submission_log">

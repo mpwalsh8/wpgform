@@ -164,6 +164,7 @@ function wpgform_get_default_plugin_options()
        ,'email_format' => WPGFORM_EMAIL_FORMAT_PLAIN
        ,'http_api_timeout' => 5
        ,'form_submission_log' => 0
+       ,'disable_html_filtering' => 0
        ,'browser_check' => 0
        ,'enable_debug' => 0
        ,'serialize_post_vars' => 0
@@ -949,50 +950,55 @@ class wpGForm
             //wpgform_htmlspecialchars_preprint_r($html) ;
         }
 
-        //  Need to filter the HTML retrieved from the form and strip off the stuff
-        //  we don't want.  This gets rid of the HTML wrapper from the Google page.
+        //  Filter the HTML unlesss explicitly told not to
 
-        $allowed_tags = array(
-            'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'class' => array())
-           ,'b' => array()
-           ,'abbr' => array('title' => array()),'acronym' => array('title' => array())
-           ,'code' => array()
-           ,'pre' => array()
-           ,'em' => array()
-           ,'strong' => array()
-           ,'ul' => array()
-           ,'ol' => array()
-           ,'li' => array()
-           ,'p' => array()
-           ,'br' => array()
-           ,'div' => array('class' => array())
-           ,'h1' => array('class' => array())
-           ,'h2' => array('class' => array())
-           ,'h3' => array('class' => array())
-           ,'h4' => array('class' => array())
-           ,'h5' => array('class' => array())
-           ,'h6' => array('class' => array())
-           ,'i' => array()
-           ,'img' => array('class' => array(), 'alt' => array(), 'title' => array(), 'src' => array())
-           ,'label' => array('class' => array(), 'for' => array())
-           ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'checked' => array())
-           ,'select' => array('name' => array(), 'for' => array(), 'checked' => array())
-           ,'option' => array('value' => array(), 'selected' => array())
-           ,'form' => array('id' => array(), 'class' => array(), 'action' => array(), 'method' => array(), 'target' => array(), 'onsubmit' => array())
-           ,'script' => array('type' => array())
-           ,'span' => array('class' => array(), 'style' => array())
-           ,'style' => array()
-           ,'table' => array('class' => array(), 'style' => array())
-           ,'tbody' => array('class' => array(), 'style' => array())
-           ,'textarea' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'rows' => array(), 'cols' => array())
-           ,'thead' => array('class' => array(), 'style' => array())
-           ,'tr' => array('class' => array())
-           ,'td' => array('class' => array(), 'style' => array())
-        ) ;
-
-        //  Process the HTML
-
-        $html = wp_kses($html, $allowed_tags) ;
+        if ((int)$wpgform_options['disable_html_filtering'] !== 1) 
+        {
+            //  Need to filter the HTML retrieved from the form and strip off the stuff
+            //  we don't want.  This gets rid of the HTML wrapper from the Google page.
+    
+            $allowed_tags = array(
+                'a' => array('href' => array(), 'title' => array(), 'target' => array(), 'class' => array())
+               ,'b' => array()
+               ,'abbr' => array('title' => array()),'acronym' => array('title' => array())
+               ,'code' => array()
+               ,'pre' => array()
+               ,'em' => array()
+               ,'strong' => array()
+               ,'ul' => array()
+               ,'ol' => array()
+               ,'li' => array()
+               ,'p' => array()
+               ,'br' => array()
+               ,'div' => array('class' => array())
+               ,'h1' => array('class' => array())
+               ,'h2' => array('class' => array())
+               ,'h3' => array('class' => array())
+               ,'h4' => array('class' => array())
+               ,'h5' => array('class' => array())
+               ,'h6' => array('class' => array())
+               ,'i' => array()
+               ,'img' => array('class' => array(), 'alt' => array(), 'title' => array(), 'src' => array())
+               ,'label' => array('class' => array(), 'for' => array())
+               ,'input' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'checked' => array())
+               ,'select' => array('name' => array(), 'for' => array(), 'checked' => array())
+               ,'option' => array('value' => array(), 'selected' => array())
+               ,'form' => array('id' => array(), 'class' => array(), 'action' => array(), 'method' => array(), 'target' => array(), 'onsubmit' => array())
+               ,'script' => array('type' => array())
+               ,'span' => array('class' => array(), 'style' => array())
+               ,'style' => array()
+               ,'table' => array('class' => array(), 'style' => array())
+               ,'tbody' => array('class' => array(), 'style' => array())
+               ,'textarea' => array('id' => array(), 'name' => array(), 'class' => array(), 'type' => array(), 'value' => array(), 'rows' => array(), 'cols' => array())
+               ,'thead' => array('class' => array(), 'style' => array())
+               ,'tr' => array('class' => array())
+               ,'td' => array('class' => array(), 'style' => array())
+            ) ;
+    
+            //  Process the HTML
+    
+            $html = wp_kses($html, $allowed_tags) ;
+        }
 
         $patterns = array(
             '/entry\.([0-9]+)\.(single|group)\./',
