@@ -521,7 +521,7 @@ class wpGForm
      * @see gform_sc
      * @return boolean - abort processing when false
      */
-    function ProcessShortCodeOptions($options)
+    static function ProcessShortCodeOptions($options)
     {
         //  Property short cut
         $o = &self::$options ;
@@ -1127,9 +1127,12 @@ class wpGForm
 
         foreach ($fields as $field)
         {
+            //printf("<pre>%s</pre>", print_r($field, true)) ;
             if ('placeholder' == $field['type'])
             {
-                //var_dump($o) ;
+                //  When using deprecated gform shortcode there is no meta data
+                if (!array_key_exists('id', $o)) continue ;
+
     	        $meta_field = get_post_meta($o['id'], $field['id'], true);
                 $meta_type = get_post_meta($o['id'], $field['type_id'], true);
                 $meta_value = get_post_meta($o['id'], $field['value_id'], true);
@@ -1277,6 +1280,9 @@ jQuery(document).ready(function($) {
         {
             if ('validation' == $field['type'])
             {
+                //  When using deprecated gform shortcode there is no meta data
+                if (!array_key_exists('id', $o)) continue ;
+
     	        $meta_field = get_post_meta($o['id'], $field['id'], true);
                 $meta_type = get_post_meta($o['id'], $field['type_id'], true);
                 $meta_value = get_post_meta($o['id'], $field['value_id'], true);
@@ -1409,6 +1415,9 @@ jQuery(document).ready(function($) {
         {
             if ('hiddenfield' == $field['type'])
             {
+                //  When using deprecated gform shortcode there is no meta data
+                if (!array_key_exists('id', $o)) continue ;
+
     	        $meta_field = get_post_meta($o['id'], $field['id'], true);
                 $meta_type = get_post_meta($o['id'], $field['type_id'], true);
                 $meta_value = get_post_meta($o['id'], $field['value_id'], true);
