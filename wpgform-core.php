@@ -452,8 +452,8 @@ class wpGForm
         'br'             => 'off',           // Insert <br> tags between labels and inputs
         'columns'        => '1',             // Number of columns to render the form in
         'columnorder'    => 'left-to-right', // Order to show columns - Left to Right or Right to Left
-        'suffix'         => null,            // Add suffix character(s) to all labels
-        'prefix'         => null,            // Add suffix character(s) to all labels
+        'css_suffix'     => null,            // Add suffix character(s) to all labels
+        'css_prefix'     => null,            // Add suffix character(s) to all labels
         'readonly'       => 'off',           // Set all form elements to disabled
         'title'          => 'on',            // Remove the H1 element(s) from the Form
         'maph1h2'        => 'off',           // Map H1 element(s) on the form to H2 element(s)
@@ -663,8 +663,6 @@ class wpGForm
         if (!array_key_exists('override_google_default_text', $o))
             $o['override_google_default_text'] = 0 ;
 
-        //printf('<pre>%s</pre>', print_r($o, true)) ;
-
         $wpgform_options = wpgform_get_plugin_options() ;
 
         if (WPGFORM_DEBUG && $wpgform_options['http_request_timeout'])
@@ -695,8 +693,8 @@ class wpGForm
         {
             $form = $o['form'] ;
             $uid = $o['uid'] ;
-            $prefix = $o['prefix'] ;
-            $suffix = $o['suffix'] ;
+            $prefix = $o['css_prefix'] ;
+            $suffix = $o['css_suffix'] ;
             $confirm = $o['confirm'] ;
             $alert = $o['alert'] ;
             $sendto = $o['sendto'] ;
@@ -921,10 +919,6 @@ class wpGForm
             echo '<div id="message" class="wpgform-google-error"><p>' . $error_string . '</p></div>';
             if (WPGFORM_DEBUG)
             {
-                //printf('<h2>%s::%s</h2>', basename(__FILE__), __LINE__) ;
-                //print '<pre>' ;
-                //print_r(self::$response) ;
-                //print '</pre>' ;
                 wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
                 wpgform_preprint_r(self::$response) ;
             }
@@ -1127,7 +1121,6 @@ class wpGForm
 
         foreach ($fields as $field)
         {
-            //printf("<pre>%s</pre>", print_r($field, true)) ;
             if ('placeholder' == $field['type'])
             {
                 //  When using deprecated gform shortcode there is no meta data

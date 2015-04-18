@@ -383,6 +383,7 @@ No known upgrade issues.
 
 = Version 0.77 =
 *  Minor fixes to eliminate PHP warnings when using deprecated gform shortcode.
+*  Fixed bug with CSS prefix and suffix not being added to CSS classes.
 
 = Version 0.76 =
 *  Retagged to correct version number.
