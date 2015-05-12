@@ -1288,10 +1288,18 @@ jQuery(document).ready(function($) {
 
                         if (!empty($value))
                         {
-                            if ($meta_type[$key] == 'regex') 
+                            if ($meta_type[$key] == 'regex')
                             {
                                 $extras[$value][] = sprintf('%s: "%s"',
                                     $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+                            }
+                            elseif ($meta_type[$key] == 'required')
+                            {
+            //                    $extras[$value][] = sprintf('%s: "%s"',
+            //                        $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
+            $vRules_js[] = sprintf('    "%s": { required: true }', $value) ;
+            if (!empty($meta_value[$key]))
+                $vMsgs_js[] = sprintf('    "%s": "%s"', $value, $meta_value[$key]) ;
                             }
                             else
                             {
@@ -1331,11 +1339,9 @@ jQuery(document).ready(function($) {
               $("div.error span").html(message);
               $("div.error").show();
               //$("div.error-message").show();
-              //alert("errors ...");
             } else {
               $("div.error").hide();
               //$("div.error-message").hide();
-              //alert("no errors ...");
             }
           },
         //errorClass: "wpgform-error",
@@ -1552,7 +1558,6 @@ jQuery(document).ready(function($) {
             //$js .= PHP_EOL . '    $("body").load("' . $confirm . ' body") ;' ;
             $js .= PHP_EOL . '    $.get( "' . $confirm . '", function( data ) {
         $( ".result" ).html( data );
-        //alert( "Load was performed." );
     });' ;
             
         }
