@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
 Tested up to: 4.1.2
-Stable tag: 0.78
+Stable tag: 0.79
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -380,6 +380,10 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.79 =
+*  Bug fix for required email validation field with optional message.
+*  Added user-agent argument to HTTP API remote get and post requests, allows Google to return HTML5 inputs for browsers which support it (with some limitations).
 
 = Version 0.78 =
 *  Bug fix for required validation field with spaces in the optional message.
