@@ -892,7 +892,7 @@ class wpGForm
                 if (false === ( self::$response = get_site_transient( WPGFORM_FORM_TRANSIENT.$o['id'] ) ) ) 
                 {
                     // There was no transient, so let's regenerate the data and save it
-                    self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+                    self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'user-agent' => $_SERVER['HTTP_USER_AGENT'])) ;
                     set_site_transient( WPGFORM_FORM_TRANSIENT.$o['id'], self::$response, $transient_time*MINUTE_IN_SECONDS );
                 }
             }
@@ -901,15 +901,17 @@ class wpGForm
                 if (false === ( self::$response = get_transient( WPGFORM_FORM_TRANSIENT.$o['id'] ) ) ) 
                 {
                     // There was no transient, so let's regenerate the data and save it
-                    self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+                    self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'user-agent' => $_SERVER['HTTP_USER_AGENT'])) ;
                     set_transient( WPGFORM_FORM_TRANSIENT.$o['id'], self::$response, $transient_time*MINUTE_IN_SECONDS );
                 }
             }
             else
             {
-                self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12)) ;
+                self::$response = wp_remote_get($form, array('sslverify' => false, 'timeout' => $timeout, 'redirection' => 12, 'user-agent' => $_SERVER['HTTP_USER_AGENT'])) ;
             }
         }
+
+        error_log($_SERVER['HTTP_USER_AGENT']) ;
 
         //  Retrieve the HTML from the URL
 
@@ -1293,13 +1295,11 @@ jQuery(document).ready(function($) {
                                 $extras[$value][] = sprintf('%s: "%s"',
                                     $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
                             }
-                            elseif ($meta_type[$key] == 'required')
+                            elseif (($meta_type[$key] == 'required') || ($meta_type[$key] == 'email'))
                             {
-            //                    $extras[$value][] = sprintf('%s: "%s"',
-            //                        $meta_type[$key], empty($meta_value[$key]) ? 'true' : $meta_value[$key]) ;
-            $vRules_js[] = sprintf('    "%s": { required: true }', $value) ;
-            if (!empty($meta_value[$key]))
-                $vMsgs_js[] = sprintf('    "%s": "%s"', $value, $meta_value[$key]) ;
+                                $vRules_js[] = sprintf('    "%s": { %s: true }', $value, $meta_type[$key]) ;
+                                if (!empty($meta_value[$key]))
+                                    $vMsgs_js[] = sprintf('    "%s": "%s"', $value, $meta_value[$key]) ;
                             }
                             else
                             {
@@ -1830,7 +1830,7 @@ jQuery(document).ready(function($) {
 
             self::$response = wp_remote_post($action,
                 //array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
-                array('sslverify' => false, 'body' => $q, 'timeout' => $timeout)) ;
+                array('sslverify' => false, 'body' => $q, 'timeout' => $timeout, 'user-agent' => $_SERVER['HTTP_USER_AGENT'])) ;
 
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
 
