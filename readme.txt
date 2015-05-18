@@ -3,8 +3,8 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
-Tested up to: 4.1.2
-Stable tag: 0.79
+Tested up to: 4.2.2
+Stable tag: 0.80
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -380,6 +380,9 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.80 =
+* Resolved a number of PHP Strict Standard notices resulting from calling non-static functions statically.
 
 = Version 0.79 =
 *  Bug fix for required email validation field with optional message.
