@@ -911,8 +911,6 @@ class wpGForm
             }
         }
 
-        error_log($_SERVER['HTTP_USER_AGENT']) ;
-
         //  Retrieve the HTML from the URL
 
         if (is_wp_error(self::$response))
@@ -1353,11 +1351,17 @@ jQuery(document).ready(function($) {
                 {
                     $js .= sprintf('           "%s%s": {', $uid, $key) ;
                     foreach ($value as $vk => $extra)
-                        $js .= sprintf('%s%s', $extra, end(array_keys($value)) === $vk ? '}' : ', ') ;
-                    $js .= sprintf('%s%s%s', end(array_keys($extras)) === $key ? '' : ',', PHP_EOL, end(array_keys($extras)) === $key ? '        ' : '') ;
+                    {
+                        $k = array_keys($value) ;
+                        $js .= sprintf('%s%s', $extra, end($k) === $vk ? '}' : ', ') ;
+                    }
+                    $k = array_keys($extras) ;
+                    $js .= sprintf('%s%s%s', end($k) === $key ? '' : ',', PHP_EOL, end($k) === $key ? '        ' : '') ;
                 }
             }
 
+
+error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             if (!empty($vRules_js))
             {
                 //  Clean up JS if extras were already output
@@ -1365,7 +1369,10 @@ jQuery(document).ready(function($) {
                     $js = sprintf('%s,%s', substr($js, 0, strrpos($js, '}') + 1),  PHP_EOL) ;
 
                 foreach ($vRules_js as $rk => $r)
-                    $js .= sprintf('       %s%s', $r, end(array_keys($vRules_js)) === $rk ? sprintf('%s        },', PHP_EOL) : sprintf(',%s', PHP_EOL)) ;
+                {
+                    $k = array_keys($vRules_js) ;
+                    $js .= sprintf('       %s%s', $r, end($k) === $rk ? sprintf('%s        },', PHP_EOL) : sprintf(',%s', PHP_EOL)) ;
+                }
             }
             else
                 $js .= '},' ;
@@ -1375,14 +1382,17 @@ jQuery(document).ready(function($) {
             if (!empty($vMsgs_js))
             {
                 foreach ($vMsgs_js as $mk => $m)
-                    //$js .= sprintf('       %s%s', $m, end(array_keys($vMsgs_js)) === $mk ? sprintf('%s        },', PHP_EOL) : ', ') ;
-                    $js .= sprintf('       %s%s', $m, end(array_keys($vMsgs_js)) === $mk ? sprintf('%s        },', PHP_EOL) : sprintf(',%s', PHP_EOL)) ;
+                {
+                    $k = array_keys($vMsgs_js) ;
+                    $js .= sprintf('       %s%s', $m, end($k) === $mk ? sprintf('%s        },', PHP_EOL) : sprintf(',%s', PHP_EOL)) ;
+                }
             }
             else
                 $js .= '        }' ;
             $js .= '
     }) ;' . PHP_EOL ;
         }
+error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
  
         //  Handle hidden fields
 
