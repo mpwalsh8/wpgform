@@ -1361,7 +1361,6 @@ jQuery(document).ready(function($) {
             }
 
 
-error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             if (!empty($vRules_js))
             {
                 //  Clean up JS if extras were already output
@@ -1392,7 +1391,6 @@ error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
             $js .= '
     }) ;' . PHP_EOL ;
         }
-error_log(sprintf('%s::%s', basename(__FILE__), __LINE__)) ;
  
         //  Handle hidden fields
 
