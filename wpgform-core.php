@@ -704,6 +704,10 @@ class wpGForm
             //  compatibility.
 
             $results = ($o['spreadsheet'] === false) ? $o['results'] : $o['spreadsheet'] ;
+
+            //  Check to see if form has a Google Form default text overrides - older forms won't
+            if (array_key_exists('override_google_default_text', $o))
+              $override_google_default_text |= $o['override_google_default_text'] === 'on' ;
         }
 
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
@@ -1465,7 +1469,7 @@ jQuery(document).ready(function($) {
 //        })[0].nodeValue = "%s";
 //    }
         //  Replace Google supplied text?  Form specific or global?
-        if ($o['override_google_default_text']) $js .= sprintf('
+        if ($override_google_default_text) $js .= sprintf('
     //  Replace Google supplied text with "form specific override" values
     $("div.%sss-required-asterisk").text("* %s");
     $("div.%sss-radio div.%sss-printable-hint").text("%s");
@@ -1840,7 +1844,12 @@ jQuery(document).ready(function($) {
                 //array('sslverify' => false, 'body' => $body, 'timeout' => $timeout)) ;
                 array('sslverify' => false, 'body' => $q, 'timeout' => $timeout, 'user-agent' => $_SERVER['HTTP_USER_AGENT'])) ;
 
-            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
+            if (WPGFORM_DEBUG)
+            {
+                wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
+                wpgform_preprint_r(array('action' => $action, 'sslverify' => false,
+                    'body' => $q, 'timeout' => $timeout, 'user-agent' => $_SERVER['HTTP_USER_AGENT'])) ;
+            }
 
             //  Double check response from wp_remote_post()
 
@@ -1933,7 +1942,7 @@ jQuery(document).ready(function($) {
      * @param string $sendto - email address to send content to
      * @param string $results - URL of the spreadsheet which holds submitted data
      */
-    function SendConfirmationEmail($format = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false, $results = null)
+    static function SendConfirmationEmail($format = WPGFORM_EMAIL_FORMAT_HTML, $sendto = false, $results = null)
     {
         $headers = array() ;
         $wpgform_options = wpgform_get_plugin_options() ;
