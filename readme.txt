@@ -3,8 +3,8 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 3.7.1
-Tested up to: 4.2.2
-Stable tag: 0.81
+Tested up to: 4.3
+Stable tag: 0.82
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -380,6 +380,10 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.82 =
+* Fixed bug with Google default text always being displayed regardless of global or form specific setting.  This caused some buttons to always appear in English.
+* Added additional debug information to examine wp_remote_post() parameters.
 
 = Version 0.81 =
 * Removed leftover debug code which generated output into the error log.
