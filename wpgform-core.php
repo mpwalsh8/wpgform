@@ -451,6 +451,7 @@ class wpGForm
         'legal'          => 'on',            // Display Google Legal Stuff
         'br'             => 'off',           // Insert <br> tags between labels and inputs
         'columns'        => '1',             // Number of columns to render the form in
+        'minvptwidth'    => '0',             // Minimum viewport width for columnization, 0 to ignore
         'columnorder'    => 'left-to-right', // Order to show columns - Left to Right or Right to Left
         'css_suffix'     => null,            // Add suffix character(s) to all labels
         'css_prefix'     => null,            // Add suffix character(s) to all labels
@@ -827,6 +828,9 @@ class wpGForm
 
         //  How many columns?
         $columns = $o['columns'] ;
+
+        //  Minimum columnize width
+        $minvptwidth = $o['minvptwidth'] ;
 
         //  Column order?
         $columnorder = $o['columnorder'] == 'right-to-left' ? 'right' : 'left' ;
@@ -1539,8 +1543,11 @@ jQuery(document).ready(function($) {
     $("div.%sss-item").addClass("wpgform-dontsplit");
     //  Wrap all of the form content in a DIV so it can be split
     $("#%sss-form").wrapInner("<div style=\"border: 0px dashed blue;\" class=\"wpgform-wrapper\"></div>");
-    //  Columnize the form content.
+    //  Columnize the form content taking into account the new minwidth setting.
     $(function(){
+        var width = $(window).width();
+        var minwidth = %s;
+        if (minwidth == 0 || width > minwidth) {
         $(".wpgform-wrapper").columnize({
             columns : %s,
             columnFloat : "%s",
@@ -1548,10 +1555,11 @@ jQuery(document).ready(function($) {
         });
         //  Wrap each column so it can styled easier
         $(".wpgform-column").wrapInner("<div style=\"border: 0px dashed green;\" class=\"wpgform-column-wrapper\"></div>");
+        }
     });
     $("#%sss-form").append("<div style=\"border: 0px dashed black; clear: both;\"></div>");
     $("div.%sss-form-container").after("<div style=\"border: 0px dashed black; clear: both;\"></div>");
-        ', $prefix, $uid, $columns, $columnorder, $uid, $prefix) ;
+        ', $prefix, $uid, $minvptwidth, $columns, $columnorder, $uid, $prefix) ;
 
         //  Remap the re-submit form URL
         $js .= sprintf('
