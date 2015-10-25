@@ -259,6 +259,14 @@ function wpgform_secondary_meta_box_content($fieldsonly = false)
                 'br' => false
             ),
             array(
+                'name' => __('Columnize Min Width', WPGFORM_I18N_DOMAIN),
+                'desc' => __('Minimum browser viewport width to columnize form (0 to ignore)', WPGFORM_I18N_DOMAIN),
+                'id' => WPGFORM_PREFIX . 'minvptwidth',
+                'type' => 'text',
+                'std' => '0',
+                'required' => false
+            ),
+            array(
                 'name' => __('Email End User', WPGFORM_I18N_DOMAIN),
                 'desc' => __('Send email to end user upon form submission', WPGFORM_I18N_DOMAIN),
                 'id' => WPGFORM_PREFIX . 'user_email',
