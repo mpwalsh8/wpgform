@@ -662,7 +662,7 @@ class wpGForm
 
         //  Account for existing forms not having the override option
         if (!array_key_exists('override_google_default_text', $o))
-            $o['override_google_default_text'] = 0 ;
+            $o['override_google_default_text'] = 'off' ;
 
         $wpgform_options = wpgform_get_plugin_options() ;
 
@@ -674,7 +674,7 @@ class wpGForm
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
 
-        $override_google_default_text = (int)$wpgform_options['override_google_default_text'] === 1 ;
+        $global_override_google_default_text = (int)$wpgform_options['override_google_default_text'] === 1 ;
 
         //  Some servers running ModSecurity issue 403 errors because something
         //  in the form's POST parameters has triggered a positive match on a rule.
@@ -707,8 +707,8 @@ class wpGForm
             $results = ($o['spreadsheet'] === false) ? $o['results'] : $o['spreadsheet'] ;
 
             //  Check to see if form has a Google Form default text overrides - older forms won't
-            if (array_key_exists('override_google_default_text', $o))
-              $override_google_default_text |= $o['override_google_default_text'] === 'on' ;
+            $local_override_google_default_text = (int)(array_key_exists('override_google_default_text', $o)) ?
+                $o['override_google_default_text'] === 'on' : 0 ;
         }
 
         if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
@@ -1473,7 +1473,7 @@ jQuery(document).ready(function($) {
 //        })[0].nodeValue = "%s";
 //    }
         //  Replace Google supplied text?  Form specific or global?
-        if ($override_google_default_text) $js .= sprintf('
+        if ($local_override_google_default_text) $js .= sprintf('
     //  Replace Google supplied text with "form specific override" values
     $("div.%sss-required-asterisk").text("* %s");
     $("div.%sss-radio div.%sss-printable-hint").text("%s");
@@ -1493,13 +1493,7 @@ jQuery(document).ready(function($) {
         ,$prefix, $o['continue_button_text_override']
         ,$prefix, $o['submit_button_text_override']) ;
 
-        //  Before closing the <script> tag, is the form read only?
-        if ($readonly) $js .= sprintf('
-    //  Put form in read-only mode
-    $("div.%sss-form-container :input").attr("disabled", true);
-        ', $prefix) ;
-
-        elseif ($override_google_default_text) $js .= sprintf('
+        elseif ($global_override_google_default_text) $js .= sprintf('
     //  Replace Google supplied text with "global override" values
     $("div.%sss-required-asterisk").text("* %s");
     $("div.%sss-radio div.%sss-printable-hint").text("%s");
