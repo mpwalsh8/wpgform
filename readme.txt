@@ -383,6 +383,7 @@ No known upgrade issues.
 
 = Version 0.83 =
 * Added ability to suppopress columnization of a form when the browser is smaller than some user specified width.
+* Fixed bug with Google Default Text override which prevented form specific overrides from working correctly.
 
 = Version 0.82 =
 * Fixed bug with Google default text always being displayed regardless of global or form specific setting.  This caused some buttons to always appear in English.
