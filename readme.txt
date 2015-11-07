@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 4.0
 Tested up to: 4.3.1
-Stable tag: 0.83
+Stable tag: 0.84
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -380,6 +380,9 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.84 =
+*  Retagged to correct version number.
 
 = Version 0.83 =
 * Added ability to suppopress columnization of a form when the browser is smaller than some user specified width.
