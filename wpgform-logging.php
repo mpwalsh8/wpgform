@@ -347,7 +347,7 @@ class wpGForms_List_Table extends WP_List_Table {
         $totalitems = $this->get_meta_key_count(WPGFORM_LOG_ENTRY_META_KEY);
 
         //Which page is this?
-        $paged = !empty($_GET['paged']) ? mysql_real_escape_string($_GET['paged']) : '';
+        $paged = !empty($_GET['paged']) ? sanitize_text_field($_GET['paged']) : '';
 
         //Page Number
         if (empty($paged) || !is_numeric($paged) || $paged <= 0 ) $paged=1;
@@ -498,7 +498,7 @@ function wpgform_render_list_page(){
         <form id="wpgform-log-entries-filter" method="get">
             <!-- For plugins, we also need to ensure that the form posts back to our current page -->
             <input type="hidden" name="post_type" value="<?php echo WPGFORM_CPT_FORM ?>" />
-            <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+            <input type="hidden" name="page" value="<?php echo $_GET['page'] ?>" />
             <input type="hidden" name="_wp_http_referer" value="<?php echo admin_url('edit.php?post_type=' . WPGFORM_CPT_FORM .  '&amp;page=wpgform-entry-log-page' ); ?>" />
             <!-- Now we can render the completed list table -->
             <?php //$wpgformListTable->search_box(__('Search', WPGFORM_I18N_DOMAIN), 'search_id'); ?>
