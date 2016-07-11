@@ -383,7 +383,8 @@ No known upgrade issues.
 
 = Version 0.85 =
 * Development moved to GitHub.
-* Warning about Google Forms added to Dashboard.
+* Replaced call to deprecated function mysql_real_escape_string().
+* Fixed security issues with _REQUEST flagged by WordPress.org.
 
 = Version 0.84 =
 * Retagged to correct version number.
