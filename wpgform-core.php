@@ -943,7 +943,17 @@ class wpGForm
 
         }
         else
+        {
             $html = self::$response['body'] ;
+            $headers = self::$response['headers'] ;
+
+            if (WPGFORM_DEBUG)
+            {
+                wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm') ;
+                wpgform_preprint_r(array_keys(self::$response)) ;
+                wpgform_preprint_r($headers) ;
+            }
+        }
 
         if (WPGFORM_DEBUG)
         {
