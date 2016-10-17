@@ -141,7 +141,7 @@ function wpgform_options_page()
     if (is_wp_error($readme))
     {
 ?>
-<div class="updated error"><?php _e('Unable to retrive FAQ content from WordPress plugin repository.', WPGFORM_I18N_DOMAIN);?></div>
+<div class="updated fade"><?php _e('Unable to retrive FAQ content from WordPress plugin repository.', WPGFORM_I18N_DOMAIN);?></div>
 <?php
     }
     else
