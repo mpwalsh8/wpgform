@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 4.0
 Tested up to: 4.5.3
-Stable tag: 0.86
+Stable tag: 0.87
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -380,6 +380,10 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.87 =
+* Added check upon Save to make sure Google Form contains expected HTML structure.  Error displayed when HTML is not as expected (e.g. with the new version of Google Forms).
+* Change of error type when content cannot be retrieved from plugin repository.
 
 = Version 0.86 =
 * Retagged to correct version number.
