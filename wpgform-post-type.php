@@ -1003,6 +1003,55 @@ function wpgform_save_meta_box_data($post_id)
 }
 
 /**
+ * CPT Save form - check form URL
+ *
+ * Quickly scan the form to make sure it is the proper
+ * (supported) version of Google Forms.  An error is
+ * generated if the HTML does not match what is expected.
+ *
+ */
+function wpgform_check_form_url($post_id) {  
+    $form = get_post_field('wpgform_form', $post_id) ;
+
+    //  Need the HTTP API timeout value
+    $wpgform_options = wpgform_get_plugin_options() ;
+
+    if (WPGFORM_DEBUG && $wpgform_options['http_request_timeout'])
+        $timeout = $wpgform_options['http_request_timeout_value'] ;
+    else
+        $timeout = $wpgform_options['http_api_timeout'] ;
+
+    //  Retrieve the HTML from Google so it can be scanned
+    $response = wp_remote_get($form, array('sslverify' => false, 
+        'timeout' => $timeout, 'redirection' => 12, 'user-agent' => $_SERVER['HTTP_USER_AGENT'])) ;
+
+    if (is_wp_error($response)) {
+        $error_string = $response->get_error_message();
+        set_transient(WPGFORM_CPT_FORM . '_admin_notice', $error_string, WEEK_IN_SECONDS) ;
+    } else {
+        $html = $response['body'] ;
+        if (false == preg_match_all('/<div\s*class="ss-form-container"\s*>(.*?)<\/div>/', $html, $matchesArray)) {
+            $error_string = __('<p>Google Form does not contain expected HTML.  Google Forms must be downgraded in order to work with this plugin.</p><p>More details can be found <a href="https://support.google.com/docs/answer/6281888?hl=en">here</a> under the <b><i>Opt out of the new Forms</i></b> section.</p>', WPGFORM_I18N_DOMAIN) ;
+            set_transient(WPGFORM_CPT_FORM . '_admin_notice', $error_string, WEEK_IN_SECONDS) ;
+        }
+    }
+}
+add_action('save_post_' . WPGFORM_CPT_FORM, 'wpgform_check_form_url', 10, 1);
+
+/**
+ * CPT Admin Notices - action to note if an invalid form has been detected.
+ */
+function wpgform_invalid_form_error($post_id) {  
+    if (false !== ($value = get_transient(WPGFORM_CPT_FORM . '_admin_notice'))) {
+?>
+<div class="updated error"><?php echo $value ; ?></div>
+<?php
+        delete_transient(WPGFORM_CPT_FORM . '_admin_notice') ;
+    }
+}
+add_action( 'admin_notices', 'wpgform_invalid_form_error', 10, 1 );
+
+/**
  * CPT Update/Edit form
  */
 function wpgform_update_edit_form() {  
