@@ -4,9 +4,9 @@
  * Plugin Name: Google Forms
  * Plugin URI: http://michaelwalsh.org/wordpress/wordpress-plugins/wpgform/
  * Description: Add Google Forms to a WordPress web site.  Display a Google Form directly into your posts, pages or sidebar.  Style the Google Form to match your existing theme and display a custom confirmation page after form submission.
- * Version: 0.87
- * Build: 0.87
- * Last Modified:  7/10/2016
+ * Version: 0.88-beta-1
+ * Build: 0.88-beta-1
+ * Last Modified:  11/13/2016
  * Author: Mike Walsh
  * Author URI: http://www.michaelwalsh.org
  * License: GPL
@@ -17,13 +17,13 @@
  * @author Mike Walsh <mpwalsh8@gmail.com>
  * @package wpGForm
  * @subpackage admin
- * @version 0.87
- * @lastmodified 7/10/2016
+ * @version 0.88-beta-1
+ * @lastmodified 11/13/2016
  * @lastmodifiedby mpwalsh8
  *
  */
 
-define('WPGFORM_VERSION', '0.87') ;
+define('WPGFORM_VERSION', '0.88-beta-1') ;
 
 require_once('wpgform-core.php') ;
 require_once('wpgform-post-type.php') ;

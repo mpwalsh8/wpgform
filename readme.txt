@@ -381,6 +381,10 @@ No known upgrade issues.
 
 == Change log ==
 
+= Version 0.88 =
+* Added WordPress "nonce" to form.
+* Addedded security concern with sanitize_text_field() and esc_attr() on hidden form fields.
+
 = Version 0.87 =
 * Added check upon Save to make sure Google Form contains expected HTML structure.  Error displayed when HTML is not as expected (e.g. with the new version of Google Forms).
 * Change of error type when content cannot be retrieved from plugin repository.
