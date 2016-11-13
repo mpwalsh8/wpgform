@@ -1122,10 +1122,11 @@ class wpGForm
             $action = preg_replace(array('/^action=/i', '/"/'), array('', ''), $action) ;
             $action = base64_encode(serialize($action)) ;
             $wgformid = self::$wpgform_form_id++ ;
+            $nonce = wp_nonce_field('wpgform_submit', 'wpgform_nonce', true, false) ;
 
             //  Add some hidden input fields to faciliate control of subsquent actions
             $html = preg_replace('/<\/form>/i',
-                "<input type=\"hidden\" value=\"{$action}\" name=\"wpgform-action\"><input type=\"hidden\" value=\"{$wgformid}\" name=\"wpgform-form-id\"></form>", $html) ;
+                $nonce . "<input type=\"hidden\" value=\"{$action}\" name=\"wpgform-action\"><input type=\"hidden\" value=\"{$wgformid}\" name=\"wpgform-form-id\"></form>", $html) ;
         } 
         else 
         {
@@ -1173,7 +1174,7 @@ class wpGForm
         //  be referenced if/when needed during form processing.
 
         $html = preg_replace('/<\/form>/i', "<input type=\"hidden\" value=\"" .
-            base64_encode(serialize($o)) . "\" name=\"wpgform-options\"></form>", $html) ;
+            esc_attr(base64_encode(serialize($o))) . "\" name=\"wpgform-options\"></form>", $html) ;
 
         //  Output custom CSS?
 
@@ -1726,6 +1727,12 @@ jQuery(document).ready(function($) {
         if (WPGFORM_DEBUG) wpgform_preprint_r($_POST) ;
         if (!empty($_POST) && array_key_exists('wpgform-action', $_POST))
         {
+            //  Verify WordPress nonce
+            if ( ! isset( $_POST['wpgform_nonce'] ) || ! wp_verify_nonce( $_POST['wpgform_nonce'], 'wpgform_submit' ) ) {
+                wp_die('Sorry, your nonce did not verify.');
+                exit;
+            }
+        
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm') ;
 
             self::$posted = true ;
@@ -1752,9 +1759,10 @@ jQuery(document).ready(function($) {
             unset($_POST['wpgform-form-id']) ;
 
             //  Need the action which was saved during form construction
-            $action = unserialize(base64_decode($_POST['wpgform-action'])) ;
+            $action = unserialize(base64_decode(sanitize_text_field($_POST['wpgform-action']))) ;
             unset($_POST['wpgform-action']) ;
-            $options = $_POST['wpgform-options'] ;
+
+            $options = sanitize_text_field($_POST['wpgform-options']) ;
             unset($_POST['wpgform-options']) ;
             $options = unserialize(base64_decode($options)) ;
 
