@@ -1120,13 +1120,15 @@ class wpGForm
             //$html = str_replace($action, 'action="' . get_permalink(get_the_ID()) . '"', $html) ;
             $html = str_replace($action, 'action=""', $html) ;
             $action = preg_replace(array('/^action=/i', '/"/'), array('', ''), $action) ;
-            $action = base64_encode(serialize($action)) ;
+
+            $action = base64_encode(json_encode($action)) ;
+
             $wgformid = self::$wpgform_form_id++ ;
             $nonce = wp_nonce_field('wpgform_submit', 'wpgform_nonce', true, false) ;
 
             //  Add some hidden input fields to faciliate control of subsquent actions
             $html = preg_replace('/<\/form>/i',
-                $nonce . "<input type=\"hidden\" value=\"{$action}\" name=\"wpgform-action\"><input type=\"hidden\" value=\"{$wgformid}\" name=\"wpgform-form-id\"></form>", $html) ;
+                $nonce . "<input type=\"hidden\" value='{$action}' name=\"wpgform-action\"><input type=\"hidden\" value=\"{$wgformid}\" name=\"wpgform-form-id\"></form>", $html) ;
         } 
         else 
         {
@@ -1759,12 +1761,20 @@ jQuery(document).ready(function($) {
             unset($_POST['wpgform-form-id']) ;
 
             //  Need the action which was saved during form construction
-            $action = unserialize(base64_decode(sanitize_text_field($_POST['wpgform-action']))) ;
+            //$action = unserialize(base64_decode(sanitize_text_field($_POST['wpgform-action']))) ;
+            $action = json_decode(base64_decode(sanitize_text_field($_POST['wpgform-action']))) ;
+
+            error_log(print_r($_POST, true)) ;
+            error_log(sprintf(">%s<", print_r($action, true))) ;
             unset($_POST['wpgform-action']) ;
 
-            $options = sanitize_text_field($_POST['wpgform-options']) ;
+            //$options = sanitize_text_field($_POST['wpgform-options']) ;
+            $options = $_POST['wpgform-options'] ;
             unset($_POST['wpgform-options']) ;
-            $options = unserialize(base64_decode($options)) ;
+            //$options = unserialize(base64_decode($options)) ;
+            $options = json_decode(base64_decode($options)) ;
+
+            error_log(sprintf(">%s<", print_r($options, true))) ;
 
             if (WPGFORM_DEBUG) wpgform_preprint_r($options) ;
             $form = $options['form'] ;
