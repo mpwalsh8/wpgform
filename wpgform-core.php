@@ -1176,7 +1176,7 @@ class wpGForm
         //  be referenced if/when needed during form processing.
 
         $html = preg_replace('/<\/form>/i', "<input type=\"hidden\" value=\"" .
-            esc_attr(base64_encode(serialize($o))) . "\" name=\"wpgform-options\"></form>", $html) ;
+            esc_attr(base64_encode(json_encode($o))) . "\" name=\"wpgform-options\"></form>", $html) ;
 
         //  Output custom CSS?
 
@@ -1761,20 +1761,12 @@ jQuery(document).ready(function($) {
             unset($_POST['wpgform-form-id']) ;
 
             //  Need the action which was saved during form construction
-            //$action = unserialize(base64_decode(sanitize_text_field($_POST['wpgform-action']))) ;
-            $action = json_decode(base64_decode(sanitize_text_field($_POST['wpgform-action']))) ;
+            $action = json_decode(base64_decode(sanitize_text_field($_POST['wpgform-action'])), true) ;
 
-            error_log(print_r($_POST, true)) ;
-            error_log(sprintf(">%s<", print_r($action, true))) ;
             unset($_POST['wpgform-action']) ;
 
-            //$options = sanitize_text_field($_POST['wpgform-options']) ;
-            $options = $_POST['wpgform-options'] ;
+            $options = json_decode(base64_decode(sanitize_text_field($_POST['wpgform-options'])), true) ;
             unset($_POST['wpgform-options']) ;
-            //$options = unserialize(base64_decode($options)) ;
-            $options = json_decode(base64_decode($options)) ;
-
-            error_log(sprintf(">%s<", print_r($options, true))) ;
 
             if (WPGFORM_DEBUG) wpgform_preprint_r($options) ;
             $form = $options['form'] ;
