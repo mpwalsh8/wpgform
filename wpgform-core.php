@@ -1752,12 +1752,12 @@ jQuery(document).ready(function($) {
             //  Need the form ID to handle multiple forms per page
             if (array_key_exists('wpgform-user-email', $_POST))
             {
-                self::$wpgform_user_sendto = $_POST['wpgform-user-email'] ;
+                self::$wpgform_user_sendto = sanitize_email($_POST['wpgform-user-email']) ;
                 unset($_POST['wpgform-user-email']) ;
             }
 
             //  Need the form ID to handle multiple forms per page
-            self::$wpgform_submitted_form_id = $_POST['wpgform-form-id'] ;
+            self::$wpgform_submitted_form_id = absint(sanitize_text_field($_POST['wpgform-form-id'])) ;
             unset($_POST['wpgform-form-id']) ;
 
             //  Need the action which was saved during form construction
