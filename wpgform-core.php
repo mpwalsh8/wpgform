@@ -966,6 +966,12 @@ class wpGForm
 
         if ((int)$wpgform_options['disable_html_filtering'] !== 1) 
         {
+            if (WPGFORM_DEBUG)
+            {
+                wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm (before wp_kses())') ;
+                wpgform_htmlspecialchars_preprint_r($html) ;
+            }
+
             //  Need to filter the HTML retrieved from the form and strip off the stuff
             //  we don't want.  This gets rid of the HTML wrapper from the Google page.
     
@@ -1010,6 +1016,13 @@ class wpGForm
             //  Process the HTML
     
             $html = wp_kses($html, $allowed_tags) ;
+
+            if (WPGFORM_DEBUG)
+            {
+                wpgform_whereami(__FILE__, __LINE__, 'ConstructGoogleForm (after wp_kses())') ;
+                wpgform_htmlspecialchars_preprint_r($html) ;
+            }
+
         }
 
         $patterns = array(
@@ -1764,6 +1777,16 @@ jQuery(document).ready(function($) {
             $action = json_decode(base64_decode(sanitize_text_field($_POST['wpgform-action'])), true) ;
 
             unset($_POST['wpgform-action']) ;
+
+            if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm (action)') ;
+            if (WPGFORM_DEBUG) wpgform_preprint_r($action) ;
+
+            //  As a safety precaution make sure the action provided resolves to Google (docs.google.com drive.google.com).
+            if (!preg_match( '/^(http|https):\\/\\/(docs|drive)\.google\.com/i' ,$action))
+            {
+                wp_die(sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
+                   __('Google Form submit action does not resolve to <b>drive.google.com</b>.  Form submission aborted.', WPGFORM_I18N_DOMAIN))) ;
+            }
 
             $options = json_decode(base64_decode(sanitize_text_field($_POST['wpgform-options'])), true) ;
             unset($_POST['wpgform-options']) ;
