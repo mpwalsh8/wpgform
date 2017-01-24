@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Google Form\n"
-"POT-Creation-Date: 2016-10-17 12:25+0100\n"
-"PO-Revision-Date: 2016-10-17 12:25+0100\n"
+"POT-Creation-Date: 2017-01-24 19:48+0000\n"
+"PO-Revision-Date: 2017-01-24 19:48+0000\n"
 "Last-Translator: Mike Walsh <mpwalsh8@gmail.com>\n"
 "Language-Team: Mike Walsh (@mpwalsh8) <mpwalsh8@gmail.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.10\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
@@ -100,163 +100,169 @@ msgstr ""
 "Error al cargar el Formulario de Google. Por favor inténtalo nuevamente "
 "recargando la página."
 
-#: ../wpgform-core.php:1074
+#: ../wpgform-core.php:1087
 msgid "Unexpected content encountered, unable to retrieve Google Form."
 msgstr ""
 "Error al cargar el Formulario de Google: se encontró contenido no esperado."
 
-#: ../wpgform-core.php:1261
+#: ../wpgform-core.php:1277
 msgid "A valid email address is required."
 msgstr "Se requiere una dirección de correo válida."
 
-#: ../wpgform-core.php:1280
+#: ../wpgform-core.php:1296
 msgid "Incorrect answer."
 msgstr "Respuesta incorrecta."
 
-#: ../wpgform-core.php:1340
+#: ../wpgform-core.php:1356
 msgid "Please check your input."
 msgstr ""
 
-#: ../wpgform-core.php:1416 ../wpgform-core.php:1688
+#: ../wpgform-core.php:1432 ../wpgform-core.php:1704
 msgid "Unknown"
 msgstr ""
 
-#: ../wpgform-core.php:1634
+#: ../wpgform-core.php:1650
 msgid "Warning:  You are using an insecure browser!"
 msgstr "Advertencia: Estás ocupando un navegador no seguro!"
 
-#: ../wpgform-core.php:1637
+#: ../wpgform-core.php:1653
 msgid "Warning:  Your browser is out of date!  Please update now."
 msgstr "Advertencia: Tu navegador está obsoleto. Por favor actualízalo ahora."
 
-#: ../wpgform-core.php:1653
+#: ../wpgform-core.php:1669
 msgid "Form Id:"
 msgstr "Id del Formulario:"
 
-#: ../wpgform-core.php:1655
+#: ../wpgform-core.php:1671
 msgid "Submitted Form Id"
 msgstr "Id de la respuesta al Formulario"
 
-#: ../wpgform-core.php:1658
+#: ../wpgform-core.php:1674
 msgid "No Submitted Form Id"
 msgstr "No se envió un ID de Formulario"
 
-#: ../wpgform-core.php:1885
+#: ../wpgform-core.php:1788
+msgid ""
+"Google Form submit action does not resolve to <b>drive.google.com</b>.  Form "
+"submission aborted."
+msgstr ""
+
+#: ../wpgform-core.php:1918
 msgid "Unable to submit Google Form.  Please try reloading this page."
 msgstr ""
 "Error al enviar la información del Formulario Google. Por favor inténtalo "
 "nuevamente recargando esta página."
 
-#: ../wpgform-core.php:1968
+#: ../wpgform-core.php:2001
 msgid "View Form Results"
 msgstr "Ver los resultados a los formularios"
 
-#: ../wpgform-core.php:2018
+#: ../wpgform-core.php:2051
 msgid "A form was submitted on your web site."
 msgstr "Han respondido un formulario en tu sitio web."
 
-#: ../wpgform-core.php:2019 ../wpgform-core.php:2031
+#: ../wpgform-core.php:2052 ../wpgform-core.php:2064
 msgid "Form"
 msgstr "Formulario"
 
-#: ../wpgform-core.php:2020 ../wpgform-core.php:2032 ../wpgform-logging.php:182
+#: ../wpgform-core.php:2053 ../wpgform-core.php:2065 ../wpgform-logging.php:182
 msgid "URL"
 msgstr "URL"
 
-#: ../wpgform-core.php:2021 ../wpgform-core.php:2033
+#: ../wpgform-core.php:2054 ../wpgform-core.php:2066
 msgid "Responses"
 msgstr "Respuestas"
 
-#: ../wpgform-core.php:2022 ../wpgform-core.php:2034
+#: ../wpgform-core.php:2055 ../wpgform-core.php:2067
 msgid "Date"
 msgstr "Fecha"
 
-#: ../wpgform-core.php:2023 ../wpgform-core.php:2035
+#: ../wpgform-core.php:2056 ../wpgform-core.php:2068
 msgid "Time"
 msgstr "Hora"
 
-#: ../wpgform-core.php:2024 ../wpgform-core.php:2037
+#: ../wpgform-core.php:2057 ../wpgform-core.php:2070
 msgid "Thank you"
 msgstr "Gracias"
 
-#: ../wpgform-core.php:2030
+#: ../wpgform-core.php:2063
 msgid "A form was submitted on your web site"
 msgstr "Han respondido un formulario en tu sitio web"
 
-#: ../wpgform-core.php:2197
+#: ../wpgform-core.php:2230
 msgid "This field is required."
 msgstr "Este campo es obligatorio."
 
-#: ../wpgform-core.php:2198
+#: ../wpgform-core.php:2231
 msgid "Please fix this field."
 msgstr "Por favor arregla este campo."
 
-#: ../wpgform-core.php:2199
+#: ../wpgform-core.php:2232
 msgid "Please enter a valid email address."
 msgstr "Por favor ingresa una dirección de correo válida."
 
-#: ../wpgform-core.php:2200
+#: ../wpgform-core.php:2233
 msgid "Please enter a valid URL."
 msgstr "Por favor ingresa una URL válida."
 
-#: ../wpgform-core.php:2201
+#: ../wpgform-core.php:2234
 msgid "Please enter a valid date."
 msgstr "Por favor ingresa una fecha válida."
 
-#: ../wpgform-core.php:2202
+#: ../wpgform-core.php:2235
 msgid "Please enter a valid date (ISO)."
 msgstr "Por favor ingresa una fecha válida (ISO)."
 
-#: ../wpgform-core.php:2203
+#: ../wpgform-core.php:2236
 msgid "Please enter a valid number."
 msgstr "Por favor ingresa un número válido."
 
-#: ../wpgform-core.php:2204
+#: ../wpgform-core.php:2237
 msgid "Please enter only digits."
 msgstr "Por favor ingresa sólo números."
 
-#: ../wpgform-core.php:2205
+#: ../wpgform-core.php:2238
 msgid "Please enter a valid credit card number."
 msgstr "Por favor ingresa un número de tarjeta de crédito válido."
 
-#: ../wpgform-core.php:2206
+#: ../wpgform-core.php:2239
 msgid "Please enter the same value again.,"
 msgstr "Por favor ingresa el mismo valor nuevamente."
 
-#: ../wpgform-core.php:2207
+#: ../wpgform-core.php:2240
 msgid "Please enter a value with a valid extension."
 msgstr "Por favor ingresa un valor con una extensión válida."
 
-#: ../wpgform-core.php:2208
+#: ../wpgform-core.php:2241
 msgid "Please enter no more than {0} characters."
 msgstr "Por favor ingresa no mas de {0} caracteres."
 
-#: ../wpgform-core.php:2209
+#: ../wpgform-core.php:2242
 msgid "Please enter at least {0} characters."
 msgstr "Por favor ingresa al menos {0} caracteres."
 
-#: ../wpgform-core.php:2210
+#: ../wpgform-core.php:2243
 msgid "Please enter a value between {0} and {1} characters long."
 msgstr "Por favor ingresa al menos entre {0} y {1} caracteres."
 
-#: ../wpgform-core.php:2211
+#: ../wpgform-core.php:2244
 msgid "Please enter a value between {0} and {1}."
 msgstr "Por favor ingresa un número entre {0} y {1}."
 
-#: ../wpgform-core.php:2212
+#: ../wpgform-core.php:2245
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Por favor ingresa un valor menor o igual a {0}."
 
-#: ../wpgform-core.php:2213
+#: ../wpgform-core.php:2246
 msgid "Please enter a value greater than or equal to {0}."
 msgstr "Por favor ingresa un valor mayor o igual a {0}."
 
-#: ../wpgform-core.php:2214
+#: ../wpgform-core.php:2247
 #, fuzzy
 msgid "Please enter a value which matches {0}."
 msgstr "Por favor ingresa un número entre {0} y {1}."
 
-#: ../wpgform-core.php:2291
+#: ../wpgform-core.php:2324
 #, fuzzy, php-format
 msgid ""
 "This notification may be hidden via a setting on the <a href=\"%s\">Google "

@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Google Form\n"
-"POT-Creation-Date: 2016-10-17 12:25+0100\n"
-"PO-Revision-Date: 2016-10-17 12:25+0100\n"
+"POT-Creation-Date: 2017-01-24 19:48+0000\n"
+"PO-Revision-Date: 2017-01-24 19:48+0000\n"
 "Last-Translator: Mike Walsh <mpwalsh8@gmail.com>\n"
 "Language-Team: Mike Walsh (@mpwalsh8) <mpwalsh8@gmail.com>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.10\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
@@ -99,73 +99,79 @@ msgid "Unable to retrieve Google Form.  Please try reloading this page."
 msgstr ""
 "Impossible de récupérer le Fromulaire Google. Essayez de recharger la page."
 
-#: ../wpgform-core.php:1074
+#: ../wpgform-core.php:1087
 msgid "Unexpected content encountered, unable to retrieve Google Form."
 msgstr ""
 "Un contenu inattendu a été rencontré, il est impossible de récupérer le "
 "Formulaire Google."
 
-#: ../wpgform-core.php:1261
+#: ../wpgform-core.php:1277
 msgid "A valid email address is required."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:1280
+#: ../wpgform-core.php:1296
 msgid "Incorrect answer."
 msgstr "Réponse incorrect."
 
-#: ../wpgform-core.php:1340
+#: ../wpgform-core.php:1356
 msgid "Please check your input."
 msgstr ""
 
-#: ../wpgform-core.php:1416 ../wpgform-core.php:1688
+#: ../wpgform-core.php:1432 ../wpgform-core.php:1704
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: ../wpgform-core.php:1634
+#: ../wpgform-core.php:1650
 msgid "Warning:  You are using an insecure browser!"
 msgstr "Avertissement : Vous utilisez un navigateur non sécurisé !"
 
-#: ../wpgform-core.php:1637
+#: ../wpgform-core.php:1653
 msgid "Warning:  Your browser is out of date!  Please update now."
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:1653
+#: ../wpgform-core.php:1669
 #, fuzzy
 msgid "Form Id:"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:1655
+#: ../wpgform-core.php:1671
 #, fuzzy
 msgid "Submitted Form Id"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:1658
+#: ../wpgform-core.php:1674
 #, fuzzy
 msgid "No Submitted Form Id"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:1885
+#: ../wpgform-core.php:1788
+msgid ""
+"Google Form submit action does not resolve to <b>drive.google.com</b>.  Form "
+"submission aborted."
+msgstr ""
+
+#: ../wpgform-core.php:1918
 #, fuzzy
 msgid "Unable to submit Google Form.  Please try reloading this page."
 msgstr ""
 "Impossible de récupérer le Fromulaire Google. Essayez de recharger la page."
 
-#: ../wpgform-core.php:1968
+#: ../wpgform-core.php:2001
 #, fuzzy
 msgid "View Form Results"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:2018
+#: ../wpgform-core.php:2051
 #, fuzzy
 msgid "A form was submitted on your web site."
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:2019 ../wpgform-core.php:2031
+#: ../wpgform-core.php:2052 ../wpgform-core.php:2064
 #, fuzzy
 msgid "Form"
 msgstr "Impossible d'éxecuter le shortcode du Formulaire Google."
 
-#: ../wpgform-core.php:2020 ../wpgform-core.php:2032 ../wpgform-logging.php:182
+#: ../wpgform-core.php:2053 ../wpgform-core.php:2065 ../wpgform-logging.php:182
 #, fuzzy
 msgid "URL"
 msgstr ""
@@ -176,35 +182,35 @@ msgstr ""
 "vers l'article : <a href=\"%POST_URL%\">%POST_URL%</a></li><li>Lien vers "
 "%BLOG_NAME%: <a href=\"%BLOG_URL%\">%BLOG_URL%</a></li></ul>"
 
-#: ../wpgform-core.php:2021 ../wpgform-core.php:2033
+#: ../wpgform-core.php:2054 ../wpgform-core.php:2066
 msgid "Responses"
 msgstr "Réponses"
 
-#: ../wpgform-core.php:2022 ../wpgform-core.php:2034
+#: ../wpgform-core.php:2055 ../wpgform-core.php:2067
 #, fuzzy
 msgid "Date"
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:2023 ../wpgform-core.php:2035
+#: ../wpgform-core.php:2056 ../wpgform-core.php:2068
 #, fuzzy
 msgid "Time"
 msgstr "Vous ne pouvez sélectionner qu'un utilisateur à la fois."
 
-#: ../wpgform-core.php:2024 ../wpgform-core.php:2037
+#: ../wpgform-core.php:2057 ../wpgform-core.php:2070
 msgid "Thank you"
 msgstr "Merci"
 
-#: ../wpgform-core.php:2030
+#: ../wpgform-core.php:2063
 #, fuzzy
 msgid "A form was submitted on your web site"
 msgstr "Impossible d'éxecuter Formulaire Google."
 
-#: ../wpgform-core.php:2197
+#: ../wpgform-core.php:2230
 #, fuzzy
 msgid "This field is required."
 msgstr "Nécessaire"
 
-#: ../wpgform-core.php:2198
+#: ../wpgform-core.php:2231
 #, fuzzy
 msgid "Please fix this field."
 msgstr ""
@@ -212,91 +218,91 @@ msgstr ""
 "grand nombre d'utilisateurs (certains fournisseurs d'accès interdissent un "
 "trop grand nombre d'adèles dans le champ BCC)."
 
-#: ../wpgform-core.php:2199
+#: ../wpgform-core.php:2232
 #, fuzzy
 msgid "Please enter a valid email address."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:2200
+#: ../wpgform-core.php:2233
 #, fuzzy
 msgid "Please enter a valid URL."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:2201
+#: ../wpgform-core.php:2234
 #, fuzzy
 msgid "Please enter a valid date."
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:2202
+#: ../wpgform-core.php:2235
 #, fuzzy
 msgid "Please enter a valid date (ISO)."
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:2203
+#: ../wpgform-core.php:2236
 #, fuzzy
 msgid "Please enter a valid number."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:2204
+#: ../wpgform-core.php:2237
 #, fuzzy
 msgid "Please enter only digits."
 msgstr "Administrateurs seulement."
 
-#: ../wpgform-core.php:2205
+#: ../wpgform-core.php:2238
 #, fuzzy
 msgid "Please enter a valid credit card number."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:2206
+#: ../wpgform-core.php:2239
 #, fuzzy
 msgid "Please enter the same value again.,"
 msgstr ""
 "Veuillez corriger les erreurs affichées ci-dessus et essayer de nouveau."
 
-#: ../wpgform-core.php:2207
+#: ../wpgform-core.php:2240
 #, fuzzy
 msgid "Please enter a value with a valid extension."
 msgstr "Une adresse e-mail valide est nécessaire."
 
-#: ../wpgform-core.php:2208
+#: ../wpgform-core.php:2241
 #, fuzzy
 msgid "Please enter no more than {0} characters."
 msgstr ""
 "ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
 
-#: ../wpgform-core.php:2209
+#: ../wpgform-core.php:2242
 #, fuzzy
 msgid "Please enter at least {0} characters."
 msgstr "Veuillez définir au moins un destinataire."
 
-#: ../wpgform-core.php:2210
+#: ../wpgform-core.php:2243
 #, fuzzy
 msgid "Please enter a value between {0} and {1} characters long."
 msgstr "Veuillez définir un sujet."
 
-#: ../wpgform-core.php:2211
+#: ../wpgform-core.php:2244
 #, fuzzy
 msgid "Please enter a value between {0} and {1}."
 msgstr "Veuillez définir un sujet."
 
-#: ../wpgform-core.php:2212
+#: ../wpgform-core.php:2245
 #, fuzzy
 msgid "Please enter a value less than or equal to {0}."
 msgstr ""
 "ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
 
-#: ../wpgform-core.php:2213
+#: ../wpgform-core.php:2246
 #, fuzzy
 msgid "Please enter a value greater than or equal to {0}."
 msgstr ""
 "ALERTE : plus de courriels ont été envoyés qu'il n'y a de destinataires."
 
-#: ../wpgform-core.php:2214
+#: ../wpgform-core.php:2247
 #, fuzzy
 msgid "Please enter a value which matches {0}."
 msgstr "Attention : Votre navigateur n'est pas à jour. Faîte le maintenant."
 
-#: ../wpgform-core.php:2291
+#: ../wpgform-core.php:2324
 #, fuzzy, php-format
 msgid ""
 "This notification may be hidden via a setting on the <a href=\"%s\">Google "

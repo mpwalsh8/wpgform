@@ -1,18 +1,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Google Form\n"
-"POT-Creation-Date: 2016-10-17 12:26+0100\n"
-"PO-Revision-Date: 2016-10-17 12:26+0100\n"
+"POT-Creation-Date: 2017-01-24 19:50+0000\n"
+"PO-Revision-Date: 2017-01-24 19:50+0000\n"
 "Last-Translator: Mike Walsh <mpwalsh8@gmail.com>\n"
 "Language-Team: Mike Walsh (@mpwalsh8) <mpwalsh8@gmail.com>\n"
-"Language: en_US\n"
+"Language: sr_ME@latin\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.10\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__\n"
 "X-Poedit-Basepath: .\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
@@ -98,160 +99,166 @@ msgstr "Šta je"
 msgid "Unable to retrieve Google Form.  Please try reloading this page."
 msgstr "Nemoguće je povratiti Google Form. Reloadujte ovu stranicu"
 
-#: ../wpgform-core.php:1074
+#: ../wpgform-core.php:1087
 msgid "Unexpected content encountered, unable to retrieve Google Form."
 msgstr "Neščekivani sadržaj se pojavio, nemoguće je  povratiti Google Form."
 
-#: ../wpgform-core.php:1261
+#: ../wpgform-core.php:1277
 msgid "A valid email address is required."
 msgstr "Validna email adresa je neophodna."
 
-#: ../wpgform-core.php:1280
+#: ../wpgform-core.php:1296
 msgid "Incorrect answer."
 msgstr "Netačan odgovor."
 
-#: ../wpgform-core.php:1340
+#: ../wpgform-core.php:1356
 msgid "Please check your input."
 msgstr ""
 
-#: ../wpgform-core.php:1416 ../wpgform-core.php:1688
+#: ../wpgform-core.php:1432 ../wpgform-core.php:1704
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: ../wpgform-core.php:1634
+#: ../wpgform-core.php:1650
 msgid "Warning:  You are using an insecure browser!"
 msgstr "Upozorenje: Koristite nesiguran pretraživač!"
 
-#: ../wpgform-core.php:1637
+#: ../wpgform-core.php:1653
 msgid "Warning:  Your browser is out of date!  Please update now."
 msgstr "Upozorenje: Vaš pretraživač je istekao! Updateujte ga sada."
 
-#: ../wpgform-core.php:1653
+#: ../wpgform-core.php:1669
 msgid "Form Id:"
 msgstr "Form Id:"
 
-#: ../wpgform-core.php:1655
+#: ../wpgform-core.php:1671
 msgid "Submitted Form Id"
 msgstr "Podneta Form Id"
 
-#: ../wpgform-core.php:1658
+#: ../wpgform-core.php:1674
 msgid "No Submitted Form Id"
 msgstr "Nema podnete Form Id"
 
-#: ../wpgform-core.php:1885
+#: ../wpgform-core.php:1788
+msgid ""
+"Google Form submit action does not resolve to <b>drive.google.com</b>.  Form "
+"submission aborted."
+msgstr ""
+
+#: ../wpgform-core.php:1918
 msgid "Unable to submit Google Form.  Please try reloading this page."
 msgstr "Niste u stanju da podnesete Google Form. Reloadujte stranicu."
 
-#: ../wpgform-core.php:1968
+#: ../wpgform-core.php:2001
 msgid "View Form Results"
 msgstr "Pregledaj rezultate formi"
 
-#: ../wpgform-core.php:2018
+#: ../wpgform-core.php:2051
 msgid "A form was submitted on your web site."
 msgstr "Forma je podneta na vašem sajtu.   "
 
-#: ../wpgform-core.php:2019 ../wpgform-core.php:2031
+#: ../wpgform-core.php:2052 ../wpgform-core.php:2064
 msgid "Form"
 msgstr "Forma"
 
-#: ../wpgform-core.php:2020 ../wpgform-core.php:2032 ../wpgform-logging.php:182
+#: ../wpgform-core.php:2053 ../wpgform-core.php:2065 ../wpgform-logging.php:182
 msgid "URL"
 msgstr "URL"
 
-#: ../wpgform-core.php:2021 ../wpgform-core.php:2033
+#: ../wpgform-core.php:2054 ../wpgform-core.php:2066
 msgid "Responses"
 msgstr "Odgovori"
 
-#: ../wpgform-core.php:2022 ../wpgform-core.php:2034
+#: ../wpgform-core.php:2055 ../wpgform-core.php:2067
 msgid "Date"
 msgstr "Podaci"
 
-#: ../wpgform-core.php:2023 ../wpgform-core.php:2035
+#: ../wpgform-core.php:2056 ../wpgform-core.php:2068
 msgid "Time"
 msgstr "Vreme"
 
-#: ../wpgform-core.php:2024 ../wpgform-core.php:2037
+#: ../wpgform-core.php:2057 ../wpgform-core.php:2070
 msgid "Thank you"
 msgstr "Hvala vam"
 
-#: ../wpgform-core.php:2030
+#: ../wpgform-core.php:2063
 msgid "A form was submitted on your web site"
 msgstr "Forma je podneta na vašem sajtu"
 
-#: ../wpgform-core.php:2197
+#: ../wpgform-core.php:2230
 msgid "This field is required."
 msgstr "Ovo polje je obavezno.."
 
-#: ../wpgform-core.php:2198
+#: ../wpgform-core.php:2231
 msgid "Please fix this field."
 msgstr "Podesite ovo polje."
 
-#: ../wpgform-core.php:2199
+#: ../wpgform-core.php:2232
 msgid "Please enter a valid email address."
 msgstr "Unesite validnu email adresu."
 
-#: ../wpgform-core.php:2200
+#: ../wpgform-core.php:2233
 msgid "Please enter a valid URL."
 msgstr "Unesite validan URL."
 
-#: ../wpgform-core.php:2201
+#: ../wpgform-core.php:2234
 msgid "Please enter a valid date."
 msgstr "Unesite validan datum."
 
-#: ../wpgform-core.php:2202
+#: ../wpgform-core.php:2235
 msgid "Please enter a valid date (ISO)."
 msgstr "Unesite validan datum (ISO)."
 
-#: ../wpgform-core.php:2203
+#: ../wpgform-core.php:2236
 msgid "Please enter a valid number."
 msgstr "Unesite validan broj."
 
-#: ../wpgform-core.php:2204
+#: ../wpgform-core.php:2237
 msgid "Please enter only digits."
 msgstr "Samo unesite cifre."
 
-#: ../wpgform-core.php:2205
+#: ../wpgform-core.php:2238
 msgid "Please enter a valid credit card number."
 msgstr "Unesite validan broj kreditne kartice"
 
-#: ../wpgform-core.php:2206
+#: ../wpgform-core.php:2239
 msgid "Please enter the same value again.,"
 msgstr "Unesite istu vrednost opet.,"
 
-#: ../wpgform-core.php:2207
+#: ../wpgform-core.php:2240
 msgid "Please enter a value with a valid extension."
 msgstr "Unesite vrednost sa validnim produžetkom."
 
-#: ../wpgform-core.php:2208
+#: ../wpgform-core.php:2241
 msgid "Please enter no more than {0} characters."
 msgstr "Please enter no more than {0} characters."
 
-#: ../wpgform-core.php:2209
+#: ../wpgform-core.php:2242
 msgid "Please enter at least {0} characters."
 msgstr "Unesite najmanje {0} karaktera"
 
-#: ../wpgform-core.php:2210
+#: ../wpgform-core.php:2243
 msgid "Please enter a value between {0} and {1} characters long."
 msgstr "Unesite vrednost izmedju {0} i {1} karaktera"
 
-#: ../wpgform-core.php:2211
+#: ../wpgform-core.php:2244
 msgid "Please enter a value between {0} and {1}."
 msgstr "Uneti vrednost izmedju  {0} i {1}."
 
-#: ../wpgform-core.php:2212
+#: ../wpgform-core.php:2245
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Unesite vrednost manju od ili jednaku {0}."
 
-#: ../wpgform-core.php:2213
+#: ../wpgform-core.php:2246
 msgid "Please enter a value greater than or equal to {0}."
 msgstr "Unesite vrednost veću od ili jednaku {0}."
 
-#: ../wpgform-core.php:2214
+#: ../wpgform-core.php:2247
 #, fuzzy
 msgid "Please enter a value which matches {0}."
 msgstr "Unesite validan datum."
 
-#: ../wpgform-core.php:2291
+#: ../wpgform-core.php:2324
 #, php-format
 msgid ""
 "This notification may be hidden via a setting on the <a href=\"%s\">Google "
