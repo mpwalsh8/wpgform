@@ -3,8 +3,8 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 4.0
-Tested up to: 4.5.3
-Stable tag: 0.88
+Tested up to: 4.7.1
+Stable tag: 0.89
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -381,9 +381,14 @@ No known upgrade issues.
 
 == Change log ==
 
+= Version 0.89 =
+* Added additional security checking to ensure form action resolves to drive.google.com.
+* Added additional sanitization and validation of submitted form data.
+* Added additional debug information to allow review of form HTML before and after wp_kses().
+
 = Version 0.88 =
 * Added WordPress "nonce" to form.
-* Addedded security concern with sanitize_text_field() and esc_attr() on hidden form fields.
+* Added security concern with sanitize_text_field() and esc_attr() on hidden form fields.
 
 = Version 0.87 =
 * Added check upon Save to make sure Google Form contains expected HTML structure.  Error displayed when HTML is not as expected (e.g. with the new version of Google Forms).
