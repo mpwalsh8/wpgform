@@ -475,10 +475,10 @@ class wpGForm
     /**
      * Constructor
      */
-    function wpGForm()
-    {
-        // empty for now
-    }
+    //function wpGForm()
+    //{
+    //    // empty for now - this syntax is deprecated in PHP7!
+    //}
 
     /**
      * 'gform' short code handler
