@@ -381,6 +381,10 @@ No known upgrade issues.
 
 == Change log ==
 
+= Version 0.92 =
+* Fixed collision with global $post variable resulting in media uploads being places in the wrong folder.
+* Improved regular expression check to ensure form action comes from google.com and not a spoofed domain.
+
 = Version 0.91 =
 * Retagged to correct version number.
 
