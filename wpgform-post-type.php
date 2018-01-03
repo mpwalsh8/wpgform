@@ -64,6 +64,12 @@ function wpgform_register_post_types()
 /** Perform routine maintenance */
 function wpgform_routine_maintenance()
 {
+    global $post;
+
+    //  Save the state of the global $post variable as the query will change it.
+
+    $gblpost = $post;
+
     //  Post type is registered, do some hygiene on any that exist in the database.
     //  Insert the "wpgform" shortcode for that post into the post content. This
     //  ensures the form will be displayed properly when viewed through the CPT URL.
@@ -85,6 +91,12 @@ function wpgform_routine_maintenance()
 
     // re-hook this function
     add_action('save_post_' . WPGFORM_CPT_FORM, 'wpgform_save_meta_box_data');
+
+    //  Reset the Post Data after running WP_Query ...
+    wp_reset_postdata() ;
+
+    //  Restore the state of the global $post variable
+    $post = $gblpost;
 }
 
 //  Build custom meta box support
