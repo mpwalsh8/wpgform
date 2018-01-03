@@ -1781,11 +1781,13 @@ jQuery(document).ready(function($) {
             if (WPGFORM_DEBUG) wpgform_whereami(__FILE__, __LINE__, 'ProcessGoogleForm (action)') ;
             if (WPGFORM_DEBUG) wpgform_preprint_r($action) ;
 
-            //  As a safety precaution make sure the action provided resolves to Google (docs.google.com drive.google.com).
-            if (!preg_match( '/^(http|https):\\/\\/(docs|drive)\.google\.com/i' ,$action))
+            //  As a safety precaution make sure the action provided resolves to Google.com
+            //  (docs.google.com drive.google.com) - make sure the trailing slash is present
+            //  to catch spoofed domains.
+            if (!preg_match( '/^(http|https):\\/\\/(docs|drive)\.google\.com\\//i' ,$action))
             {
-                wp_die(sprintf('<div class="wpgform-google-error gform-google-error">%s</div>',
-                   __('Google Form submit action does not resolve to <b>drive.google.com</b>.  Form submission aborted.', WPGFORM_I18N_DOMAIN))) ;
+                wp_die(sprintf('<div class="wpgform-google-error gform-google-error">%s (%s)</div>',
+                   __('Google Form submit action does not resolve to <b>google.com</b>.  Form submission aborted.', WPGFORM_I18N_DOMAIN), $action)) ;
             }
 
             $options = json_decode(base64_decode(sanitize_text_field($_POST['wpgform-options'])), true) ;
