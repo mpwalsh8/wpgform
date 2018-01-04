@@ -1784,7 +1784,8 @@ jQuery(document).ready(function($) {
             //  As a safety precaution make sure the action provided resolves to Google.com
             //  (docs.google.com drive.google.com) - make sure the trailing slash is present
             //  to catch spoofed domains.
-            if (!preg_match( '/^(http|https):\\/\\/(docs|drive)\.google\.com\\//i' ,$action))
+
+            if (!in_array(parse_url($action, PHP_URL_HOST), array('drive.google.com', 'docs.google.com')))
             {
                 wp_die(sprintf('<div class="wpgform-google-error gform-google-error">%s (%s)</div>',
                    __('Google Form submit action does not resolve to <b>google.com</b>.  Form submission aborted.', WPGFORM_I18N_DOMAIN), $action)) ;
