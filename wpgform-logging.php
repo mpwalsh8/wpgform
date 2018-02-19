@@ -99,10 +99,11 @@ class wpGForms_List_Table extends WP_List_Table {
             case 'remote_addr':
             case 'remote_host':
             case 'http_referer':
-            case 'http_user_agent':
             case 'form':
             case 'post_id':
                 return $item->$column_name;
+            case 'http_user_agent':
+                return esc_html($item->$column_name);
             default:
                 return print_r($item,true); //Show the whole array for troubleshooting purposes
         }

@@ -381,6 +381,10 @@ No known upgrade issues.
 
 == Change log ==
 
+= Version 0.94 =
+* Added sanitization of user agent field in submission log.
+* Replaced use of eval() in CAPTCHA calculation with alternate solution to address security concerns.
+
 = Version 0.93 =
 * Retagged to correct version number.
 

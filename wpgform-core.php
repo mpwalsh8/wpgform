@@ -514,6 +514,21 @@ class wpGForm
     }
 
     /**
+     * wpgform_calc2() - perform math form CAPTCHA
+     *
+     * @since 0.94
+     * @see https://wordpress.org/support/topic/warning-about-eval/#post-9941118
+     */
+    static function wpgform_calc2( $a, $op, $b ) {
+        switch( $op ){
+            case '+': return $a + $b;
+            case '-': return $a - $b;
+            case '*': return $a * $b;
+        }
+        return null;
+    }
+
+    /**
      * Function ProcessShortcode loads HTML from a Google Form URL,
      * processes it, and inserts it into a WordPress filter to output
      * as part of a post, page, or widget.
@@ -770,10 +785,24 @@ class wpGForm
             //  Generate a random value for C only when using 3 terms, use 0 otherwise
             $c = ((int)$wpgform_options['captcha_terms'] === 3) ? rand(0, 19) : 0 ;
 
+            /**
+             *  eval() replacement from Support Forum
+             *
+             *  @see https://wordpress.org/support/topic/warning-about-eval/#post-9941118
+             */
+            if ((int)$wpgform_options['captcha_terms'] === 2)
+                $x = self::wpgform_calc2( $a, $op1, $b );
+            else if( $op1 == '*' || $op2 == '-' )
+                $x = self::wpgform_calc2( calculate2( $a, $op1, $b ), $op2, $c );
+            else
+                $x = self::wpgform_calc2( $a, $op1, calculate2( $b, $op2, $c ) );
+            
+            /**
             if ((int)$wpgform_options['captcha_terms'] === 2)
                 $x = eval('return sprintf("%s%s%s", $a, $op1, $b);') ;
             else
                 $x = eval('return sprintf("%s%s%s%s%s", $a, $op1, $b, $op2, $c);') ;
+             */
 
             self::$wpgform_captcha = array('a' => $a, 'b' => $b, 'c' => $c, 'x' => $x) ;
 
@@ -1438,7 +1467,7 @@ jQuery(document).ready(function($) {
            ,'remote_addr' => array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : $unknown
            ,'remote_host' => array_key_exists('REMOTE_HOST', $_SERVER) ? $_SERVER['REMOTE_HOST'] : $unknown
            ,'http_referer' => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : $unknown
-           ,'http_user_agent' => array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : $unknown
+           ,'http_user_agent' => array_key_exists('HTTP_USER_AGENT', $_SERVER) ? esc_html($_SERVER['HTTP_USER_AGENT']) : $unknown
            ,'user_email' => ($u instanceof WP_User) ? $u->user_email : $unknown
            ,'user_login' => ($u instanceof WP_User) ? $u->user_login : $unknown
         ) ;
@@ -1709,7 +1738,7 @@ jQuery(document).ready(function($) {
                ,'remote_addr' => array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : $unknown
                ,'remote_host' => array_key_exists('REMOTE_HOST', $_SERVER) ? $_SERVER['REMOTE_HOST'] : $unknown
                ,'http_referer' => array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REFERER'] : $unknown
-               ,'http_user_agent' => array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : $unknown
+               ,'http_user_agent' => array_key_exists('HTTP_USER_AGENT', $_SERVER) ? esc_html($_SERVER['HTTP_USER_AGENT']) : $unknown
                ,'form' => array_key_exists('id', $o) ? $o['id'] : null
                ,'post_id' => get_the_ID()
             ) ;

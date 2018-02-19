@@ -23,7 +23,7 @@
  *
  */
 
-define('WPGFORM_VERSION', '0.93') ;
+define('WPGFORM_VERSION', '0.94-beta-1') ;
 
 require_once('wpgform-core.php') ;
 require_once('wpgform-post-type.php') ;
