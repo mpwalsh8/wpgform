@@ -67,7 +67,7 @@ function wpgform_options_print_styles()
     //  Load them from Google - should not be an issue since
     //  this plugin is all about consuming Google content!
 
-    wp_enqueue_style('xtra-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/themes/base/jquery-ui.css') ;
+    wp_enqueue_style('xtra-jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css') ;
 }
 
 /**
@@ -83,7 +83,7 @@ function wpgform_options_page()
 <div class="wrap">
 
 <?php
-    if (function_exists('screen_icon')) screen_icon() ;
+    if (function_exists('screen_icon') && version_compare(get_bloginfo('version'),'3.8', '<=')) screen_icon() ;
 ?>
 <h2><?php _e('WordPress Google Form Plugin Settings') ; ?></h2>
 <?php

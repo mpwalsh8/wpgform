@@ -2221,11 +2221,11 @@ function wpgform_register_scripts()
 
     if (defined('SCRIPT_DEBUG')) {
         wp_register_script('jquery-validate',
-            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js',
+            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.js',
             array('jquery'), false, true) ;
     } else {
         wp_register_script('jquery-validate',
-            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js',
+            '//ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js',
             array('jquery'), false, true) ;
     }
 
