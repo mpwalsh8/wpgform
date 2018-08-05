@@ -2365,4 +2365,20 @@ function wpgform_curl_transport_missing_notice()
 }
 
 add_action( 'admin_notices', 'wpgform_curl_transport_missing_notice' );
+
+//
+//  EOL Notice - show waring before 8/22/18, error after.
+//
+function wpgform_eol_notification_warning() {
+    if ( strtotime('now') > strtotime('2018-08-22') )
+	    $class = 'notice notice-error is-dismissible';
+    else
+	    $class = 'notice notice-warning is-dismissible';
+
+	$message = __( 'Google has announced plans to <a href="https://gsuiteupdates.googleblog.com/2018/07/migration-to-new-google-forms-ui_19.html">remove the Google Forms downgrade option</a>.  The <a href="https://wordpress.org/plugins/wpgform/">Google Forms plugin</a> may no longer work after August 22, 2018.  The <a href="https://wordpress.org/plugins/wpgform/">Google Forms plugin</a> does not work with the new version of Google Forms.', WPGFORM_I18N_DOMAIN );
+
+	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), $message ); 
+}
+add_action( 'admin_notices', 'wpgform_eol_notification_warning' );
+
 ?>

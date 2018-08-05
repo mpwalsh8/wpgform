@@ -3,8 +3,8 @@ Contributors: mpwalsh8
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DK4MS3AA983CC
 Tags: Google Forms, Google Docs, Google, Spreadsheet, shortcode, forms
 Requires at least: 4.0
-Tested up to: 4.9.1
-Stable tag: 0.94
+Tested up to: 4.9.8
+Stable tag: 0.95
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -380,6 +380,9 @@ div.ss-form-container div.required-message {
 No known upgrade issues.
 
 == Change log ==
+
+= Version 0.95 =
+* Added warning/error regarding Google's plans to drop ability to downgrade form rendering the Google Forms plugin unusable.
 
 = Version 0.94 =
 * Added sanitization of user agent field in submission log.
